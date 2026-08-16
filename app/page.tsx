@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { verifiedWords } from "./data/verified-words";
 
 type SectionId = "home" | "words" | "texts" | "exam" | "resources";
 type Audience = "teacher" | "student";
@@ -74,7 +75,7 @@ export default function Home() {
         </header>
         <div className="page-frame" key={section}>
           {section === "home" && <Dashboard audience={audience} goTo={chooseSection} />}
-          {section === "words" && <WordsLab />}
+          {section === "words" && <WordsLab audience={audience} />}
           {section === "texts" && <ComingSection kind="课" title="按课文复习" round="第四轮" description="从教材篇目进入，串联实词、句式与相关练习。课文原句将在完成教材解析与人工核验后显示。" />}
           {section === "exam" && <ComingSection kind="考" title="高考语义地图" round="第七轮" description="按语境、义项与设题方式整理近十年真题。年份、题干与答案未核验前不展示。" />}
           {section === "resources" && <Resources />}
@@ -91,7 +92,7 @@ function Dashboard({ audience, goTo }: { audience: Audience; goTo: (section: Sec
   return <>
     <section className="hero-panel">
       <div className="hero-copy">
-        <div className="eyebrow"><span />第一轮 · 框架预览</div>
+        <div className="eyebrow"><span />第二轮 · 实词实验室已开放</div>
         <h1>{audience === "teacher" ? "把一个字，讲成一条清楚的义脉" : "从一个字出发，真正读懂文言"}</h1>
         <p>{audience === "teacher" ? "面向课堂大屏的文言学习工作台。沿着字形、本义、义脉、教材、成语与高考语境，让讲解有据可循。" : "先观察，再推测；理解词义怎样生长，最后回到课文和题目中验证。每一步都留下复习线索。"}</p>
         <div className="hero-actions"><button className="primary-button" onClick={() => goTo("words")} type="button">进入实词实验室 <span>→</span></button><button className="text-button" onClick={() => goTo("resources")} type="button">查看已收录资料</button></div>
@@ -107,14 +108,14 @@ function Dashboard({ audience, goTo }: { audience: Audience; goTo: (section: Sec
       <div className="stat-card"><strong>27</strong><span>项已收录资料</span><small>文件已入库，正文待分批解析</small></div>
       <div className="stat-card"><strong>10</strong><span>册语文教材</span><small>初高中教材文件</small></div>
       <div className="stat-card"><strong>7</strong><span>部文字学著作</span><small>字形与本义的重要依据</small></div>
-      <div className="stat-card warning"><strong>0</strong><span>条已发布词条</span><small>核验完成后逐条上线</small></div>
+      <div className="stat-card warning"><strong>6</strong><span>个首批实词</span><small>35个义项已据上传资料录入</small></div>
     </section>
 
     <div className="content-grid">
       <section className="section-card modules-card">
         <div className="section-heading"><div><span className="section-kicker">工作台</span><h2>学习模块</h2></div><span className="quiet-tag">按轮次逐步开放</span></div>
         <div className="module-grid">
-          <ModuleCard glyph="实" title="实词实验室" note="看字形、猜本义、展开义脉" status="第二轮重点" active onClick={() => goTo("words")} />
+          <ModuleCard glyph="实" title="实词实验室" note="首批6字、35个义项已接入" status="现在可用" active onClick={() => goTo("words")} />
           <ModuleCard glyph="课" title="按课文复习" note="从教材原句回看重点词义" status="第四轮" onClick={() => goTo("texts")} />
           <ModuleCard glyph="抽" title="随机抽字" note="课堂提问与课后自测入口" status="第四轮" />
           <ModuleCard glyph="考" title="高考语义地图" note="连接真题语境与命题方式" status="第七轮" onClick={() => goTo("exam")} />
@@ -133,14 +134,78 @@ function ModuleCard({ glyph, title, note, status, active = false, onClick }: { g
   return <button className={`module-card ${active ? "featured" : ""}`} type="button" onClick={onClick}><span className="module-glyph">{glyph}</span><span className="module-copy"><strong>{title}</strong><small>{note}</small></span><span className="module-status">{status}</span></button>;
 }
 
-function WordsLab() {
-  return <section className="workspace-section">
-    <div className="page-heading"><div><span className="section-kicker">第二轮重点模块</span><h1>实词实验室</h1><p>当前先展示完整学习流程与空间结构，词条内容将在下一轮从上传资料中提取、核验后接入。</p></div><span className="stage-badge">框架已就绪</span></div>
+function WordsLab({ audience }: { audience: Audience }) {
+  const [activeCharacter, setActiveCharacter] = useState(verifiedWords[0].character);
+  const [query, setQuery] = useState("");
+  const [grammar, setGrammar] = useState("全部");
+  const [showTranslations, setShowTranslations] = useState(audience === "student");
+  const [focusMode, setFocusMode] = useState(false);
+  const [lessonWords, setLessonWords] = useState<string[]>([]);
+  const activeWord = verifiedWords.find((word) => word.character === activeCharacter) ?? verifiedWords[0];
+  const grammarOptions = ["全部", "名词", "动词", "形容词", "其他"];
+  const filteredWords = verifiedWords.filter((word) => {
+    const haystack = [word.character, word.pinyin, ...word.senses.flatMap((sense) => [sense.meaning, sense.reference])].join(" ");
+    return haystack.toLowerCase().includes(query.trim().toLowerCase());
+  });
+  const visibleSenses = activeWord.senses.filter((sense) => {
+    if (grammar === "全部") return true;
+    if (grammar === "其他") return !["名词", "动词", "形容词"].some((item) => sense.grammar.startsWith(item));
+    return sense.grammar.startsWith(grammar);
+  });
+  const inLesson = lessonWords.includes(activeWord.character);
+  const toggleLesson = () => setLessonWords((words) => inLesson ? words.filter((word) => word !== activeWord.character) : [...words, activeWord.character]);
+
+  return <section className={`workspace-section words-workspace ${focusMode ? "focus-mode" : ""}`}>
+    <div className="page-heading">
+      <div><span className="section-kicker">第二轮 · 首批资料已接入</span><h1>实词实验室</h1><p>首批 6 个实词、35 个义项均据你上传的《120实词归档版》录入。教材页码、古文字形与高考关联尚未交叉核验，暂不展示。</p></div>
+      <span className="stage-badge">6 字 · 35 义项</span>
+    </div>
     <div className="lab-path">{learningPath.map((step, index) => <span className={index === 0 ? "current" : ""} key={step}><i>{index + 1}</i>{step}</span>)}</div>
-    <div className="lab-layout">
-      <aside className="word-drawer"><div className="drawer-heading"><strong>实词目录</strong><span>0 条已发布</span></div><label className="fake-search"><span>⌕</span><input aria-label="搜索实词" placeholder="搜索字、课文或义项" disabled /></label><div className="empty-mini"><span>字</span><p>资料核验后<br />词条将在这里出现</p></div></aside>
-      <article className="experiment-canvas"><div className="canvas-watermark" aria-hidden="true">文</div><span className="empty-label">尚未选择实词</span><h2>先建立证据，再展开义脉</h2><p>下一轮将从已上传的实词归档、教材和文字学著作开始，建立第一批可核验词条。</p><div className="empty-cards"><span>字形依据<small>暂无资料</small></span><span>教材原句<small>暂无资料</small></span><span>高考语境<small>暂无资料</small></span></div></article>
-      <aside className="lesson-panel"><div className="drawer-heading"><strong>课堂工具</strong><span>教师视角</span></div><button type="button" disabled>放大字形</button><button type="button" disabled>隐藏释义</button><button type="button" disabled>加入本课</button><p>选择已核验词条后启用</p></aside>
+    <div className="lab-layout populated">
+      <aside className="word-drawer">
+        <div className="drawer-heading"><strong>实词目录</strong><span>{filteredWords.length} / {verifiedWords.length}</span></div>
+        <label className="fake-search"><span>⌕</span><input aria-label="搜索实词" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="搜索字、篇目或义项" /></label>
+        <div className="word-list" role="list">
+          {filteredWords.map((word) => <button type="button" role="listitem" key={word.character} className={word.character === activeWord.character ? "active" : ""} onClick={() => { setActiveCharacter(word.character); setGrammar("全部"); }}><span>{word.character}</span><div><strong>{word.pinyin}</strong><small>{word.senses.length} 个义项</small></div><i>›</i></button>)}
+          {filteredWords.length === 0 && <p className="no-result">首批词条中没有匹配内容</p>}
+        </div>
+        <div className="drawer-foot"><span>据</span><p>资料来源<br /><strong>《120实词归档版》</strong></p></div>
+      </aside>
+
+      <article className="word-canvas">
+        <header className="word-hero">
+          <div className={`character-block ${focusMode ? "enlarged" : ""}`}><strong>{activeWord.character}</strong><span>{activeWord.pinyin}</span></div>
+          <div className="word-meta"><span className="verified-label">已据上传资料录入</span><h2>{activeWord.senses.length} 个义项</h2><p>{activeWord.readings ?? `读音：${activeWord.pinyin}`}</p></div>
+          <div className="source-status"><span>资料原文</span><strong>已录入</strong><small>教材页码 · 待核验</small><small>古文字形 · 暂无资料</small><small>高考关联 · 暂无资料</small></div>
+        </header>
+
+        <div className="sense-toolbar">
+          <div className="grammar-tabs" role="group" aria-label="按词性筛选">{grammarOptions.map((item) => <button type="button" key={item} onClick={() => setGrammar(item)} className={grammar === item ? "active" : ""}>{item}</button>)}</div>
+          <button type="button" className="translation-toggle" onClick={() => setShowTranslations((show) => !show)}>{showTranslations ? "收起译文" : "展开译文"}</button>
+        </div>
+
+        <div className="sense-list">
+          {visibleSenses.map((sense, index) => <article className="sense-card" key={`${sense.grammar}-${sense.meaning}`}>
+            <div className="sense-index">{String(index + 1).padStart(2, "0")}</div>
+            <div className="sense-body">
+              <div className="sense-title"><span>{sense.grammar}</span><h3>{showTranslations ? sense.meaning : "释义已隐藏"}</h3>{sense.sourceMarksOriginal && <small>资料标注“本意”</small>}</div>
+              <blockquote>{sense.sentence}</blockquote>
+              <div className="sentence-source">— {sense.reference}</div>
+              {showTranslations ? <p className="translation"><span>译</span>{sense.translation}</p> : <button type="button" className="reveal-one" onClick={() => setShowTranslations(true)}>点击揭晓释义与译文</button>}
+            </div>
+          </article>)}
+          {visibleSenses.length === 0 && <div className="no-sense"><span>暂无</span><p>该词在上传资料中没有此词性义项。</p></div>}
+        </div>
+      </article>
+
+      <aside className="lesson-panel active-tools">
+        <div className="drawer-heading"><strong>课堂工具</strong><span>{audience === "teacher" ? "教师视角" : "学生视角"}</span></div>
+        <button type="button" className={focusMode ? "active" : ""} onClick={() => setFocusMode((focus) => !focus)}><span>放</span>{focusMode ? "恢复字形" : "放大字形"}</button>
+        <button type="button" className={!showTranslations ? "active" : ""} onClick={() => setShowTranslations((show) => !show)}><span>隐</span>{showTranslations ? "隐藏释义" : "显示释义"}</button>
+        <button type="button" className={inLesson ? "active" : ""} onClick={toggleLesson}><span>课</span>{inLesson ? "移出本课" : "加入本课"}</button>
+        <div className="lesson-basket"><span>本课字篮</span><strong>{lessonWords.length}</strong><p>{lessonWords.length ? lessonWords.join(" · ") : "尚未添加实词"}</p></div>
+        <div className="tool-note"><strong>下一轮</strong><p>加入“猜本义—展开义脉—教材/成语/高考”分步交互。</p></div>
+      </aside>
     </div>
   </section>;
 }
@@ -158,6 +223,6 @@ function Resources() {
   return <section className="workspace-section">
     <div className="page-heading"><div><span className="section-kicker">知识依据</span><h1>资料库</h1><p>这里仅显示已经收录的文件。当前完成文件级归档，正文解析、页码定位与条目核验将逐步进行。</p></div><span className="stage-badge">27 项已收录</span></div>
     <div className="resource-summary"><span><strong>22</strong>PDF</span><span><strong>5</strong>DOCX</span><span><strong>3</strong>资料分类</span><span><strong>待解析</strong>正文状态</span></div>
-    <div className="resource-groups">{groups.map((group) => <article className="resource-group" key={group.title}><div className="resource-group-head"><span>{group.title.slice(0, 1)}</span><div><h2>{group.title}</h2><p>{group.count} 项资料</p></div></div><ul>{group.items.map((item) => <li key={item}><span>{item}</span><small>已收录 · 待解析</small></li>)}</ul></article>)}</div>
+    <div className="resource-groups">{groups.map((group) => <article className="resource-group" key={group.title}><div className="resource-group-head"><span>{group.title.slice(0, 1)}</span><div><h2>{group.title}</h2><p>{group.count} 项资料</p></div></div><ul>{group.items.map((item) => <li key={item}><span>{item}</span><small>{item === "120实词归档版" ? "已解析 · 首批6字已接入" : "已收录 · 待解析"}</small></li>)}</ul></article>)}</div>
   </section>;
 }
