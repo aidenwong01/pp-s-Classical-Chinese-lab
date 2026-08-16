@@ -201,7 +201,7 @@ function WordsLab({ audience, initialCharacter }: { audience: Audience; initialC
       <article className="word-canvas">
         <header className="word-hero">
           <div className={`character-block ${focusMode ? "enlarged" : ""}`}><strong>{activeWord.character}</strong><span>{activeWord.pinyin}</span></div>
-          <div className="word-meta"><span className="verified-label">第 {activeWord.index} 词 · 已据上传资料录入</span><h2>{activeWord.senses.length} 个义项</h2><p>{activeWord.readings ?? `读音：${activeWord.pinyin}`}</p>{activeWord.verificationNotes?.map((note) => <small className="word-verification-note" key={note}>核验：{note}</small>)}</div>
+          <div className="word-meta"><h2>{activeWord.senses.length} 个义项</h2><p>{activeWord.readings ?? `读音：${activeWord.pinyin}`}</p>{activeWord.verificationNotes?.map((note) => <small className="word-verification-note" key={note}>核验：{note}</small>)}</div>
           <div className="source-status"><span>资料状态</span><strong>实词义项已录入</strong><small>教材原句 · {activeWord.textbookExamples.length ? `已核验 ${activeWord.textbookExamples.length} 条` : "暂无关联"}</small><small>古文字形 · 暂无资料</small><small>高考关联 · 暂无资料</small></div>
         </header>
 
