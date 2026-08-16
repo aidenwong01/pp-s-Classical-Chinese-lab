@@ -394,7 +394,7 @@
     "character": "去",
     "senseIndex": 4,
     "sentence": "舞榭歌台，风流总被雨打风吹去",
-    "title": "《京口北固亭怀古》",
+    "title": "《永遇乐·京口北固亭怀古》",
     "volume": "高中语文必修上",
     "pdfPage": 73,
     "matchedMeaning": "表示动作行为的趋向"
@@ -1338,5 +1338,495 @@
     "volume": "高中语文选择性必修下",
     "pdfPage": 94,
     "matchedMeaning": "往，到"
+  },
+  {
+    "wordIndex": 25,
+    "character": "盖",
+    "senseIndex": 4,
+    "sentence": "乃悟前狼假寐，盖以诱敌",
+    "title": "《狼》",
+    "volume": "七年级上册（2024秋版）",
+    "pdfPage": 132,
+    "matchedMeaning": "表肯定判断，原来是"
+  },
+  {
+    "wordIndex": 45,
+    "character": "就",
+    "senseIndex": 6,
+    "sentence": "更互用之，瞬息可就",
+    "title": "《活板》",
+    "volume": "七年级下册（2025春版）",
+    "pdfPage": 176,
+    "matchedMeaning": "完成，成功"
+  },
+  {
+    "wordIndex": 37,
+    "character": "疾",
+    "senseIndex": 8,
+    "sentence": "虽乘奔御风不以疾也",
+    "title": "《三峡》",
+    "volume": "八年级上册",
+    "pdfPage": 61,
+    "matchedMeaning": "①急速，快捷"
+  },
+  {
+    "wordIndex": 11,
+    "character": "曾",
+    "senseIndex": 2,
+    "sentence": "所以动心忍性，曾益其所不能",
+    "title": "《生于忧患，死于安乐》",
+    "volume": "八年级上册",
+    "pdfPage": 145,
+    "matchedMeaning": "通“增”，增加"
+  },
+  {
+    "wordIndex": 106,
+    "character": "阴",
+    "senseIndex": 0,
+    "sentence": "指通豫南，达于汉阴，可乎",
+    "title": "《愚公移山》",
+    "volume": "八年级上册",
+    "pdfPage": 147,
+    "matchedMeaning": "山的北面，水的南面"
+  },
+  {
+    "wordIndex": 59,
+    "character": "请",
+    "senseIndex": 1,
+    "sentence": "老妪力虽衰，请从吏夜归",
+    "title": "《石壕吏》",
+    "volume": "八年级下册",
+    "pdfPage": 131,
+    "matchedMeaning": "请人允许自己做某事"
+  },
+  {
+    "wordIndex": 36,
+    "character": "或",
+    "senseIndex": 2,
+    "sentence": "或遇其叱咄，色愈恭，礼愈至，不敢出一言以复",
+    "title": "《送东阳马生序》",
+    "volume": "九年级下册",
+    "pdfPage": 62,
+    "matchedMeaning": "有时"
+  },
+  {
+    "wordIndex": 108,
+    "character": "再",
+    "senseIndex": 1,
+    "sentence": "一鼓作气，再而衰，三而竭",
+    "title": "《曹刿论战》",
+    "volume": "九年级下册",
+    "pdfPage": 132,
+    "matchedMeaning": "第二次"
+  },
+  {
+    "wordIndex": 80,
+    "character": "私",
+    "senseIndex": 3,
+    "sentence": "吾妻之美我者，私我也",
+    "title": "《邹忌讽齐王纳谏》",
+    "volume": "九年级下册",
+    "pdfPage": 134,
+    "matchedMeaning": "偏爱"
+  },
+  {
+    "wordIndex": 56,
+    "character": "期",
+    "senseIndex": 5,
+    "sentence": "期年之后，虽欲言，无可进者",
+    "title": "《邹忌讽齐王纳谏》",
+    "volume": "九年级下册",
+    "pdfPage": 135,
+    "matchedMeaning": "满一年"
+  },
+  {
+    "wordIndex": 56,
+    "character": "期",
+    "senseIndex": 0,
+    "sentence": "会天大雨，道不通，度已失期",
+    "title": "《陈涉世家》",
+    "volume": "九年级下册",
+    "pdfPage": 136,
+    "matchedMeaning": "限定或约定的时间"
+  },
+  {
+    "wordIndex": 51,
+    "character": "怜",
+    "senseIndex": 2,
+    "sentence": "项燕为楚将，数有功，爱士卒，楚人怜之",
+    "title": "《陈涉世家》",
+    "volume": "九年级下册",
+    "pdfPage": 137,
+    "matchedMeaning": "爱戴"
+  },
+  {
+    "wordIndex": 33,
+    "character": "恨",
+    "senseIndex": 1,
+    "sentence": "先帝在时，每与臣论此事，未尝不叹息痛恨于桓灵也",
+    "title": "《出师表》",
+    "volume": "九年级下册",
+    "pdfPage": 141,
+    "matchedMeaning": "①遗憾"
+  },
+  {
+    "wordIndex": 66,
+    "character": "善",
+    "senseIndex": 0,
+    "sentence": "咨诹善道，察纳雅言",
+    "title": "《出师表》",
+    "volume": "九年级下册",
+    "pdfPage": 142,
+    "matchedMeaning": "好的，善良的"
+  },
+  {
+    "wordIndex": 113,
+    "character": "治",
+    "senseIndex": 5,
+    "sentence": "不效则治臣之罪，以告先帝之灵",
+    "title": "《出师表》",
+    "volume": "九年级下册",
+    "pdfPage": 142,
+    "matchedMeaning": "惩处，处置"
+  },
+  {
+    "wordIndex": 36,
+    "character": "或",
+    "senseIndex": 1,
+    "sentence": "越人语天姥，云霞明灭或可睹",
+    "title": "《梦游天姥吟留别》",
+    "volume": "高中语文必修上",
+    "pdfPage": 67,
+    "matchedMeaning": "①也许，或许"
+  },
+  {
+    "wordIndex": 119,
+    "character": "左",
+    "senseIndex": 2,
+    "sentence": "予左迁九江郡司马",
+    "title": "《琵琶行》",
+    "volume": "高中语文必修上",
+    "pdfPage": 69,
+    "matchedMeaning": "较低的地位"
+  },
+  {
+    "wordIndex": 48,
+    "character": "堪",
+    "senseIndex": 2,
+    "sentence": "可堪回首，佛狸祠下，一片神鸦社鼓",
+    "title": "《京口北固亭怀古》",
+    "volume": "高中语文必修上",
+    "pdfPage": 73,
+    "matchedMeaning": "能够"
+  },
+  {
+    "wordIndex": 37,
+    "character": "疾",
+    "senseIndex": 9,
+    "sentence": "顺风而呼，声非加疾也，而闻者彰",
+    "title": "《劝学》",
+    "volume": "高中语文必修上",
+    "pdfPage": 91,
+    "matchedMeaning": "强，猛烈"
+  },
+  {
+    "wordIndex": 45,
+    "character": "就",
+    "senseIndex": 1,
+    "sentence": "故木受绳则直，金就砺则利",
+    "title": "《劝学》",
+    "volume": "高中语文必修上",
+    "pdfPage": 91,
+    "matchedMeaning": "靠近，接近"
+  },
+  {
+    "wordIndex": 66,
+    "character": "善",
+    "senseIndex": 3,
+    "sentence": "积善成德，而神明自得，圣心备焉",
+    "title": "《劝学》",
+    "volume": "高中语文必修上",
+    "pdfPage": 91,
+    "matchedMeaning": "好人，好事，好的行为"
+  },
+  {
+    "wordIndex": 116,
+    "character": "族",
+    "senseIndex": 2,
+    "sentence": "士大夫之族，曰师曰弟子云者，则群聚而笑之",
+    "title": "《师说》",
+    "volume": "高中语文必修上",
+    "pdfPage": 93,
+    "matchedMeaning": "类"
+  },
+  {
+    "wordIndex": 104,
+    "character": "贻",
+    "senseIndex": 0,
+    "sentence": "作《师说》以贻之",
+    "title": "《师说》",
+    "volume": "高中语文必修上",
+    "pdfPage": 94,
+    "matchedMeaning": "赠送"
+  },
+  {
+    "wordIndex": 116,
+    "character": "族",
+    "senseIndex": 5,
+    "sentence": "族庖月更刀，折也",
+    "title": "《庖丁解牛》",
+    "volume": "高中语文必修下",
+    "pdfPage": 15,
+    "matchedMeaning": "众，一般"
+  },
+  {
+    "wordIndex": 66,
+    "character": "善",
+    "senseIndex": 9,
+    "sentence": "为之踌躇满志，善刀而藏之",
+    "title": "《庖丁解牛》",
+    "volume": "高中语文必修下",
+    "pdfPage": 16,
+    "matchedMeaning": "通“缮”，修治，引申为擦拭"
+  },
+  {
+    "wordIndex": 116,
+    "character": "族",
+    "senseIndex": 3,
+    "sentence": "每至于族，吾见其难为，怵然为戒",
+    "title": "《庖丁解牛》",
+    "volume": "高中语文必修下",
+    "pdfPage": 16,
+    "matchedMeaning": "（筋骨）丛聚集结之处"
+  },
+  {
+    "wordIndex": 66,
+    "character": "善",
+    "senseIndex": 5,
+    "sentence": "楚左尹项伯者，项羽季父也，素善留侯张良",
+    "title": "《鸿门宴》",
+    "volume": "高中语文必修下",
+    "pdfPage": 20,
+    "matchedMeaning": "交好，亲善"
+  },
+  {
+    "wordIndex": 96,
+    "character": "幸",
+    "senseIndex": 0,
+    "sentence": "今入关，财物无所取，妇女无所幸，此其志不在小",
+    "title": "《鸿门宴》",
+    "volume": "高中语文必修下",
+    "pdfPage": 20,
+    "matchedMeaning": "宠幸"
+  },
+  {
+    "wordIndex": 4,
+    "character": "倍",
+    "senseIndex": 1,
+    "sentence": "愿伯具言臣之不敢倍德也",
+    "title": "《鸿门宴》",
+    "volume": "高中语文必修下",
+    "pdfPage": 21,
+    "matchedMeaning": "违背，背叛"
+  },
+  {
+    "wordIndex": 77,
+    "character": "数",
+    "senseIndex": 7,
+    "sentence": "范增数目项王",
+    "title": "《鸿门宴》",
+    "volume": "高中语文必修下",
+    "pdfPage": 21,
+    "matchedMeaning": "屡次"
+  },
+  {
+    "wordIndex": 96,
+    "character": "幸",
+    "senseIndex": 4,
+    "sentence": "今事有急，故幸来告良",
+    "title": "《鸿门宴》",
+    "volume": "高中语文必修下",
+    "pdfPage": 21,
+    "matchedMeaning": "侥幸、幸亏、幸而"
+  },
+  {
+    "wordIndex": 101,
+    "character": "要",
+    "senseIndex": 7,
+    "sentence": "张良出，要项伯",
+    "title": "《鸿门宴》",
+    "volume": "高中语文必修下",
+    "pdfPage": 21,
+    "matchedMeaning": "通“邀”，邀请"
+  },
+  {
+    "wordIndex": 96,
+    "character": "幸",
+    "senseIndex": 1,
+    "sentence": "缦立远视，而望幸焉",
+    "title": "《阿房宫赋》",
+    "volume": "高中语文必修下",
+    "pdfPage": 156,
+    "matchedMeaning": "皇帝到某处"
+  },
+  {
+    "wordIndex": 116,
+    "character": "族",
+    "senseIndex": 4,
+    "sentence": "族秦者秦也，非天下也",
+    "title": "《阿房宫赋》",
+    "volume": "高中语文必修下",
+    "pdfPage": 156,
+    "matchedMeaning": "灭族"
+  },
+  {
+    "wordIndex": 36,
+    "character": "或",
+    "senseIndex": 0,
+    "sentence": "或曰：“六国互丧，率赂秦耶？”",
+    "title": "《六国论》",
+    "volume": "高中语文必修下",
+    "pdfPage": 157,
+    "matchedMeaning": "有的（有的人，有的事物）"
+  },
+  {
+    "wordIndex": 58,
+    "character": "迁",
+    "senseIndex": 4,
+    "sentence": "齐人未尝赂秦，终继五国迁灭，何哉",
+    "title": "《六国论》",
+    "volume": "高中语文必修下",
+    "pdfPage": 157,
+    "matchedMeaning": "灭亡"
+  },
+  {
+    "wordIndex": 108,
+    "character": "再",
+    "senseIndex": 0,
+    "sentence": "后秦击赵者再，李牧连却之",
+    "title": "《六国论》",
+    "volume": "高中语文必修下",
+    "pdfPage": 157,
+    "matchedMeaning": "两次"
+  },
+  {
+    "wordIndex": 77,
+    "character": "数",
+    "senseIndex": 2,
+    "sentence": "则胜负之数，存亡之理，当与秦相较，或未易量",
+    "title": "《六国论》",
+    "volume": "高中语文必修下",
+    "pdfPage": 158,
+    "matchedMeaning": "法则，规律，命运"
+  },
+  {
+    "wordIndex": 37,
+    "character": "疾",
+    "senseIndex": 5,
+    "sentence": "屈平疾王听之不聪也",
+    "title": "《屈原列传》",
+    "volume": "高中语文选择性必修中",
+    "pdfPage": 87,
+    "matchedMeaning": "痛心"
+  },
+  {
+    "wordIndex": 50,
+    "character": "类",
+    "senseIndex": 1,
+    "sentence": "其称文小而其指极大，举类迩而见义远",
+    "title": "《屈原列传》",
+    "volume": "高中语文选择性必修中",
+    "pdfPage": 88,
+    "matchedMeaning": "事例"
+  },
+  {
+    "wordIndex": 14,
+    "character": "除",
+    "senseIndex": 0,
+    "sentence": "从至雍棫阳宫，扶辇下除",
+    "title": "《苏武传》",
+    "volume": "高中语文选择性必修中",
+    "pdfPage": 95,
+    "matchedMeaning": "台阶"
+  },
+  {
+    "wordIndex": 58,
+    "character": "迁",
+    "senseIndex": 3,
+    "sentence": "然陈涉瓮牖绳枢之子，氓隶之人，而迁徙之徒也",
+    "title": "《过秦论》",
+    "volume": "高中语文选择性必修中",
+    "pdfPage": 100,
+    "matchedMeaning": "放逐，征发"
+  },
+  {
+    "wordIndex": 48,
+    "character": "堪",
+    "senseIndex": 1,
+    "sentence": "不堪吏人妇，岂合令郎君",
+    "title": "《孔雀东南飞》",
+    "volume": "高中语文选择性必修下",
+    "pdfPage": 15,
+    "matchedMeaning": "胜任"
+  },
+  {
+    "wordIndex": 96,
+    "character": "幸",
+    "senseIndex": 2,
+    "sentence": "幸可广问讯，不得便相许",
+    "title": "《孔雀东南飞》",
+    "volume": "高中语文选择性必修下",
+    "pdfPage": 15,
+    "matchedMeaning": "希望"
+  },
+  {
+    "wordIndex": 101,
+    "character": "要",
+    "senseIndex": 9,
+    "sentence": "虽与府吏要，渠会永无缘",
+    "title": "《孔雀东南飞》",
+    "volume": "高中语文选择性必修下",
+    "pdfPage": 15,
+    "matchedMeaning": "相约"
+  },
+  {
+    "wordIndex": 25,
+    "character": "盖",
+    "senseIndex": 0,
+    "sentence": "今已亭亭如盖矣",
+    "title": "《项脊轩志》",
+    "volume": "高中语文选择性必修下",
+    "pdfPage": 80,
+    "matchedMeaning": "①车盖"
+  },
+  {
+    "wordIndex": 67,
+    "character": "少",
+    "senseIndex": 5,
+    "sentence": "群贤毕至，少长咸集",
+    "title": "《兰亭集序》",
+    "volume": "高中语文选择性必修下",
+    "pdfPage": 82,
+    "matchedMeaning": "青年，少年"
+  },
+  {
+    "wordIndex": 34,
+    "character": "胡",
+    "senseIndex": 3,
+    "sentence": "归去来兮！田园将芜胡不归",
+    "title": "《归去来兮辞》",
+    "volume": "高中语文选择性必修下",
+    "pdfPage": 85,
+    "matchedMeaning": "为什么，怎么"
+  },
+  {
+    "wordIndex": 68,
+    "character": "涉",
+    "senseIndex": 4,
+    "sentence": "园日涉以成趣，门虽设而常关",
+    "title": "《归去来兮辞》",
+    "volume": "高中语文选择性必修下",
+    "pdfPage": 85,
+    "matchedMeaning": "漫步，散步"
   }
 ]

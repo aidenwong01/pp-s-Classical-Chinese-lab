@@ -34,7 +34,8 @@ const teachingResources = [
 ];
 
 const learningPath = ["看字形", "猜本义", "理义脉", "回教材", "联成语", "对高考", "再复习"];
-const textbookVolumeOrder = ["七年级上册（2024秋版）", "七年级下册（2025春版）", "八年级上册", "八年级下册", "九年级下册", "高中语文必修上", "高中语文必修下", "高中语文选择性必修中", "高中语文选择性必修下"];
+const textbookVolumeOrder = ["七年级上册（2024秋版）", "七年级下册（2025春版）", "八年级上册", "八年级下册", "九年级下册", "高中语文必修上", "高中语文必修下", "高中语文选择性必修上", "高中语文选择性必修中", "高中语文选择性必修下"];
+const pickRandom = <T,>(items: T[], fallback: T) => items[Math.floor(Math.random() * items.length)] ?? fallback;
 const textbookLessons = (() => {
   const lessons = new Map<string, { id: string; title: string; volume: string; examples: Array<{ character: string; wordIndex: number; sentence: string; pdfPage: number; matchedMeaning: string }> }>();
   verifiedWords.forEach((word) => word.textbookExamples.forEach((example) => {
@@ -191,8 +192,8 @@ function WordsLab({ audience, initialCharacter }: { audience: Audience; initialC
       <aside className="word-drawer">
         <div className="drawer-heading"><strong>实词目录</strong><span>{filteredWords.length} / {verifiedWords.length}</span></div>
         <label className="fake-search"><span>⌕</span><input aria-label="搜索实词" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="搜索字、篇目或义项" /></label>
-        <div className="word-list" role="list">
-          {filteredWords.map((word) => <button type="button" role="listitem" key={word.character} className={word.character === activeWord.character ? "active" : ""} onClick={() => chooseWord(word.character)}><span>{word.character}</span><div><strong>{String(word.index).padStart(3, "0")} · {word.pinyin}</strong><small>{word.senses.length} 个义项</small></div><i>›</i></button>)}
+        <div className="word-list">
+          {filteredWords.map((word) => <button type="button" key={word.character} className={word.character === activeWord.character ? "active" : ""} onClick={() => chooseWord(word.character)}><span>{word.character}</span><div><strong>{String(word.index).padStart(3, "0")} · {word.pinyin}</strong><small>{word.senses.length} 个义项</small></div><i>›</i></button>)}
           {filteredWords.length === 0 && <p className="no-result">120 个词条中没有匹配内容</p>}
         </div>
         <div className="drawer-foot"><span>据</span><p>资料来源<br /><strong>《120实词归档版》</strong></p></div>
@@ -321,19 +322,19 @@ function TextsReview({ audience, openWord }: { audience: Audience; openWord: (ch
     const candidates = fromLesson && activeLesson
       ? [...new Set(activeLesson.examples.map((example) => example.character))]
       : verifiedWords.map((word) => word.character);
-    const picked = candidates[Math.floor(Math.random() * candidates.length)] ?? "爱";
+    const picked = pickRandom(candidates, "爱");
     setRandomCharacter(picked);
     setRandomRevealed(false);
   };
 
   return <section className="workspace-section texts-workspace">
     <div className="page-heading">
-      <div><span className="section-kicker">第四轮 · 第一批教材原句索引</span><h1>按课文复习</h1><p>从教材篇目进入，复习已经逐句匹配的实词。当前只收入能在上传教材 PDF 中精确定位的原句，不确定的近似文本暂不展示。</p></div>
+      <div><span className="section-kicker">第四轮 · 教材原句索引</span><h1>按课文复习</h1><p>从教材篇目进入，复习已经逐句核验的实词。当前只收入能在上传教材 PDF 中定位、且义项可由上传资料支持的原句。</p></div>
       <span className="stage-badge">{textbookLessons.length} 篇 · {totalTextbookExamples} 条关联</span>
     </div>
 
     <div className="text-review-summary">
-      <span><strong>{textbookLessons.length}</strong>篇已建索引</span><span><strong>{new Set(textbookLessons.flatMap((lesson) => lesson.examples.map((example) => example.character))).size}</strong>个实词已回到教材</span><span><strong>{textbookVolumeOrder.filter((item) => textbookLessons.some((lesson) => lesson.volume === item)).length}</strong>册教材有精确匹配</span><span><strong>{totalTextbookExamples}</strong>条原句关联</span>
+      <span><strong>{textbookLessons.length}</strong>篇已建索引</span><span><strong>{new Set(textbookLessons.flatMap((lesson) => lesson.examples.map((example) => example.character))).size}</strong>个实词已回到教材</span><span><strong>{textbookVolumeOrder.filter((item) => textbookLessons.some((lesson) => lesson.volume === item)).length}</strong>册教材已有核验关联</span><span><strong>{totalTextbookExamples}</strong>条原句关联</span>
     </div>
 
     <div className="text-review-layout">

@@ -49,6 +49,27 @@ const manualTextbookExamples: Partial<Record<string, TextbookExample[]>> = {
     { sentence: "越国以鄙远，君知其难也。", title: "《烛之武退秦师》", volume: "高中语文必修下", pdfPage: 18, matchedMeaning: "以……为边邑" },
     { sentence: "肉食者鄙，未能远谋。", title: "《曹刿论战》", volume: "九年级下册", pdfPage: 131, matchedMeaning: "鄙陋，见识浅" },
   ],
+  患: [
+    { sentence: "惠王患之，乃令张仪详去秦。", title: "《屈原列传》", volume: "高中语文选择性必修中", pdfPage: 88, matchedMeaning: "担忧，忧虑" },
+  ],
+  克: [
+    { sentence: "克己复礼为仁。", title: "《〈论语〉十二章》", volume: "高中语文选择性必修上", pdfPage: 50, matchedMeaning: "克制，约束" },
+  ],
+  孰: [
+    { sentence: "人非生而知之者，孰能无惑？", title: "《师说》", volume: "高中语文必修上", pdfPage: 92, matchedMeaning: "谁、什么、哪一个" },
+  ],
+  涕: [
+    { sentence: "儿涕而出。", title: "《促织》", volume: "高中语文必修下", pdfPage: 127, matchedMeaning: "流眼泪，哭泣" },
+  ],
+  宜: [
+    { sentence: "诚宜开张圣听，以光先帝遗德，恢弘志士之气。", title: "《出师表》", volume: "九年级下册", pdfPage: 140, matchedMeaning: "应该，应当" },
+  ],
+  易: [
+    { sentence: "寒暑易节，始一反焉。", title: "《愚公移山》", volume: "八年级上册", pdfPage: 148, matchedMeaning: "改变，更换" },
+  ],
+  诸: [
+    { sentence: "投诸渤海之尾，隐土之北。", title: "《愚公移山》", volume: "八年级上册", pdfPage: 148, matchedMeaning: "相当于‘之于’" },
+  ],
 };
 
 const exactTextbookExamples = exactTextbookLinks.reduce<Partial<Record<string, TextbookExample[]>>>((index, link) => {
@@ -77,8 +98,17 @@ function examplesFor(character: string) {
 
 const pinyinCorrections: Partial<Record<string, { pinyin: string; readings: string; note: string }>> = {
   度: { pinyin: "dù / duó", readings: "读音一：dù；读音二：duó", note: "原资料拼音作“dúo”，已按汉语拼音声调标注规则校为“duó”。" },
+  期: { pinyin: "qī / jī", readings: "读音一：qī；读音二：jī", note: "“期年”读 jī；上传教材注为“满一年”。" },
   数: { pinyin: "shù / shǔ / shuò / cù", readings: "读音一：shù；读音二：shǔ；读音三：shuò；读音四：cù", note: "原资料拼音作“shùo”，已按汉语拼音声调标注规则校为“shuò”。" },
   说: { pinyin: "shuō / shuì / yuè", readings: "读音一：shuō；读音二：shuì；读音三：yuè（通“悦”）", note: "原资料拼音作“shūo、shùi”，已按汉语拼音声调标注规则校为“shuō、shuì”。" },
+};
+
+const sourceVerificationNotes: Partial<Record<string, string[]>> = {
+  克: ["原资料作“克已复礼”，据上传教材核为“克己复礼”。"],
+  类: ["“举类迩而见义远”中，原资料释“事例”，上传教材注“类”为“事物”；页面保留原资料义项并标出差异。"],
+  迁: ["“迁谪”应指贬官；“迁灭”据《六国论》语境应释为灭亡，已据上传教材校正。"],
+  涕: ["原资料作“儿涕而去”，据上传教材《促织》核为“儿涕而出”。"],
+  或: ["原资料将“或王命急宣”的“或”标为“如果”；据上传教材语境核为“有时”。"],
 };
 
 export const verifiedWords: VerifiedWord[] = sourceWords.map((sourceWord) => {
@@ -91,8 +121,63 @@ export const verifiedWords: VerifiedWord[] = sourceWords.map((sourceWord) => {
         verificationNote: "原资料作“我何爱一牛”，据上传教材核为“吾何爱一牛”。",
       };
     }
+    if (sourceWord.character === "克" && sense.sentence.includes("克已复礼")) {
+      return {
+        ...sense,
+        sentence: sense.sentence.replace("克已复礼", "克己复礼"),
+        verificationNote: "原资料作“克已复礼”，据上传教材核为“克己复礼”。",
+      };
+    }
+    if (sourceWord.character === "涕" && sense.sentence.includes("儿涕而去")) {
+      return {
+        ...sense,
+        sentence: sense.sentence.replace("儿涕而去", "儿涕而出"),
+        verificationNote: "原资料作“儿涕而去”，据上传教材《促织》核为“儿涕而出”。",
+      };
+    }
+    if (sourceWord.character === "类" && sense.sentence.includes("举类迩而见义远")) {
+      return {
+        ...sense,
+        verificationNote: "原资料释“事例”；上传教材注“类”为“事物”。",
+      };
+    }
+    if (sourceWord.character === "迁" && sense.sentence.includes("迁谪意")) {
+      return {
+        ...sense,
+        meaning: "贬官，降职",
+        verificationNote: "原资料误列为“升官”，据“迁谪”语境校正。",
+      };
+    }
+    if (sourceWord.character === "迁" && sense.sentence.includes("五国迁灭")) {
+      return {
+        ...sense,
+        meaning: "灭亡",
+        verificationNote: "原资料作“改变，改动”，据上传教材《六国论》语境校正。",
+      };
+    }
+    if (sourceWord.character === "或" && sense.sentence.includes("或王命急宣")) {
+      return {
+        ...sense,
+        grammar: "副词",
+        meaning: "有时",
+        translation: "有时皇帝的命令急速传达，早晨从白帝城出发，晚上就到了江陵。",
+        verificationNote: "原资料标为“如果，假如”，据上传教材语境核为“有时”。",
+      };
+    }
+    if (sourceWord.character === "期" && sense.sentence.includes("期年之后")) {
+      return {
+        ...sense,
+        meaning: "满一年",
+        verificationNote: "原资料释义文字混杂，据上传教材注“期年”为“满一年”。",
+      };
+    }
     return sense;
   });
+
+  const verificationNotes = [
+    ...(pinyinCorrection ? [pinyinCorrection.note] : []),
+    ...(sourceVerificationNotes[sourceWord.character] ?? []),
+  ];
 
   return {
     index: sourceWord.index,
@@ -101,7 +186,7 @@ export const verifiedWords: VerifiedWord[] = sourceWords.map((sourceWord) => {
     readings: pinyinCorrection?.readings ?? sourceWord.readings,
     senses,
     textbookExamples: examplesFor(sourceWord.character),
-    verificationNotes: pinyinCorrection ? [pinyinCorrection.note] : undefined,
+    verificationNotes: verificationNotes.length ? verificationNotes : undefined,
   };
 });
 
