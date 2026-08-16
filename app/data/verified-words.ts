@@ -12,10 +12,17 @@ export type VerifiedWord = {
   pinyin: string;
   readings?: string;
   senses: WordSense[];
+  textbookExamples: Array<{
+    sentence: string;
+    title: string;
+    volume: string;
+    pdfPage: number;
+    matchedMeaning: string;
+  }>;
 };
 
 // 第二轮首批词条。全部逐项录自用户上传的《120实词归档版》；
-// 尚未完成与现行教材页码、文字学著作及高考真题的交叉核验。
+// 教材关联逐句核对上传的统编教材 PDF；古文字形、成语及高考真题关联仍待核验。
 export const verifiedWords: VerifiedWord[] = [
   {
     character: "爱",
@@ -25,8 +32,12 @@ export const verifiedWords: VerifiedWord[] = [
       { grammar: "动词", meaning: "给人恩惠", sentence: "吴广素爱人，士卒多为用者。", reference: "《史记·陈涉世家》", translation: "吴广平素给人恩惠，士兵有很多肯为他所用。" },
       { grammar: "动词", meaning: "喜爱", sentence: "爱其子，择师而教之。", reference: "韩愈《师说》", translation: "喜爱他的儿子，选择良师教他们。", sourceMarksOriginal: true },
       { grammar: "动词", meaning: "怜惜，同情", sentence: "爱其二毛，则如服焉。", reference: "《左传·子鱼论战》", translation: "怜惜那些鬓发斑白的老人，还不如向他们投降。" },
-      { grammar: "动词", meaning: "吝惜，舍不得", sentence: "齐国虽褊小，我何爱一牛？", reference: "《孟子·齐桓晋文之事》", translation: "齐国虽然不算广大富裕，但我怎么会吝惜一头牛呢？" },
+      { grammar: "动词", meaning: "吝惜，舍不得", sentence: "齐国虽褊小，吾何爱一牛？", reference: "《孟子·齐桓晋文之事》", translation: "齐国虽然不算广大富裕，但我怎么会吝惜一头牛呢？" },
       { grammar: "形容词", meaning: "吝啬", sentence: "百姓皆以王为爱也。", reference: "《孟子·齐桓晋文之事》", translation: "百姓都认为您是吝啬啊。" },
+    ],
+    textbookExamples: [
+      { sentence: "爱其子，择师而教之；于其身也，则耻师焉，惑矣。", title: "《师说》", volume: "高中语文必修上", pdfPage: 93, matchedMeaning: "喜爱" },
+      { sentence: "齐国虽褊小，吾何爱一牛？", title: "《齐桓晋文之事》", volume: "高中语文必修下", pdfPage: 11, matchedMeaning: "吝惜，舍不得" },
     ],
   },
   {
@@ -39,6 +50,10 @@ export const verifiedWords: VerifiedWord[] = [
       { grammar: "动词", meaning: "安身", sentence: "衣食所安，弗敢专也，必以分人。", reference: "《左传·曹刿论战》", translation: "使人安身立命的衣物食品，不敢独自占有，一定拿出来分给别人。" },
       { grammar: "动词", meaning: "使……安定", sentence: "既来之，则安之。", reference: "《季氏将伐颛臾》", translation: "使他们到来之后，就要使他们安定下来。" },
       { grammar: "疑问代词", meaning: "怎么，哪里", sentence: "臣死且不避，卮酒安足辞？", reference: "《史记·鸿门宴》", translation: "我对死尚且不躲避，一杯酒哪里值得推辞呢？" },
+    ],
+    textbookExamples: [
+      { sentence: "衣食所安，弗敢专也，必以分人。", title: "《曹刿论战》", volume: "九年级下册", pdfPage: 131, matchedMeaning: "安身" },
+      { sentence: "思国之安者，必积其德义。", title: "《谏太宗十思疏》", volume: "高中语文必修下", pdfPage: 151, matchedMeaning: "安定" },
     ],
   },
   {
@@ -53,6 +68,7 @@ export const verifiedWords: VerifiedWord[] = [
       { grammar: "动词（pī）", meaning: "穿在身上或披在身上", sentence: "将军身被坚执锐，伐无道，诛暴秦。", reference: "《史记·陈涉世家》", translation: "将军您亲身穿着坚固的铠甲，拿着锐利的兵器，攻打无道暴虐的秦王朝。" },
       { grammar: "动词（pī）", meaning: "披散", sentence: "屈原至于江滨，被发行吟泽畔。", reference: "《史记·屈原列传》", translation: "屈原来到江边，披散着头发，在水边一边走一边吟咏诗句。" },
     ],
+    textbookExamples: [],
   },
   {
     character: "倍",
@@ -65,6 +81,7 @@ export const verifiedWords: VerifiedWord[] = [
       { grammar: "量词", meaning: "照原数加一次", sentence: "然言其户口，则视三十年以前增五倍焉。", reference: "《治平篇》", translation: "可是说到住户和人口，就比三十年以前增加了五倍。" },
       { grammar: "副词", meaning: "更加，倍加", sentence: "独在异乡为异客，每逢佳节倍思亲。", reference: "《九月九日忆山东兄弟》", translation: "独自一人在异地客居，每到佳节更加思念亲人。" },
     ],
+    textbookExamples: [],
   },
   {
     character: "本",
@@ -78,6 +95,10 @@ export const verifiedWords: VerifiedWord[] = [
       { grammar: "动词", meaning: "推究本源，考查", sentence: "抑本其成败之迹，而皆自于人欤？", reference: "《伶官传序》", translation: "还是推究他成功与失败的事迹，都由于人为的原因呢？" },
       { grammar: "副词", meaning: "本来", sentence: "臣本布衣，躬耕南阳。", reference: "《出师表》", translation: "我本来是平民百姓，在南阳种地为生。" },
     ],
+    textbookExamples: [
+      { sentence: "臣闻求木之长者，必固其根本。", title: "《谏太宗十思疏》", volume: "高中语文必修下", pdfPage: 151, matchedMeaning: "草木的根" },
+      { sentence: "臣本布衣，躬耕于南阳。", title: "《出师表》", volume: "九年级下册", pdfPage: 141, matchedMeaning: "本来" },
+    ],
   },
   {
     character: "鄙",
@@ -87,6 +108,10 @@ export const verifiedWords: VerifiedWord[] = [
       { grammar: "动词", meaning: "以……为边界（边邑）", sentence: "越国以鄙远，君知其难也。", reference: "《烛之武退秦师》", translation: "越过别的国家，把遥远的地方当作自己的边邑，您知道那是很难的。" },
       { grammar: "动词", meaning: "轻视，瞧不起", sentence: "孔子鄙其小器。", reference: "《训俭示康》", translation: "孔子瞧不起他的器量狭小。" },
       { grammar: "形容词", meaning: "鄙陋，见识浅，庸俗", sentence: "肉食者鄙，未能远谋。", reference: "《曹刿论战》", translation: "那些做官的人见识短浅，不能深谋远虑。" },
+    ],
+    textbookExamples: [
+      { sentence: "越国以鄙远，君知其难也。", title: "《烛之武退秦师》", volume: "高中语文必修下", pdfPage: 18, matchedMeaning: "以……为边邑" },
+      { sentence: "肉食者鄙，未能远谋。", title: "《曹刿论战》", volume: "九年级下册", pdfPage: 131, matchedMeaning: "鄙陋，见识浅" },
     ],
   },
 ];
