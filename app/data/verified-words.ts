@@ -1,4 +1,5 @@
 import sourceWords from "./all-words.json";
+import exactTextbookLinks from "./textbook-links.json";
 
 export type WordSense = {
   grammar: string;
@@ -31,7 +32,7 @@ export type VerifiedWord = {
 
 // 全部 120 词、797 条带例句义项均按用户上传的《120实词归档版》顺序抽取。
 // 教材关联只保留已在上传教材 PDF 中逐句核验的条目；其余不自动推断。
-const textbookExamples: Partial<Record<string, TextbookExample[]>> = {
+const manualTextbookExamples: Partial<Record<string, TextbookExample[]>> = {
   爱: [
     { sentence: "爱其子，择师而教之；于其身也，则耻师焉，惑矣。", title: "《师说》", volume: "高中语文必修上", pdfPage: 93, matchedMeaning: "喜爱" },
     { sentence: "齐国虽褊小，吾何爱一牛？", title: "《齐桓晋文之事》", volume: "高中语文必修下", pdfPage: 11, matchedMeaning: "吝惜，舍不得" },
@@ -49,6 +50,30 @@ const textbookExamples: Partial<Record<string, TextbookExample[]>> = {
     { sentence: "肉食者鄙，未能远谋。", title: "《曹刿论战》", volume: "九年级下册", pdfPage: 131, matchedMeaning: "鄙陋，见识浅" },
   ],
 };
+
+const exactTextbookExamples = exactTextbookLinks.reduce<Partial<Record<string, TextbookExample[]>>>((index, link) => {
+  const examples = index[link.character] ?? [];
+  examples.push({
+    sentence: link.sentence,
+    title: link.title,
+    volume: link.volume,
+    pdfPage: link.pdfPage,
+    matchedMeaning: link.matchedMeaning,
+  });
+  index[link.character] = examples;
+  return index;
+}, {});
+
+function examplesFor(character: string) {
+  const combined = [...(manualTextbookExamples[character] ?? []), ...(exactTextbookExamples[character] ?? [])];
+  const seen = new Set<string>();
+  return combined.filter((example) => {
+    const key = `${example.volume}|${example.pdfPage}|${example.matchedMeaning}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
 
 const pinyinCorrections: Partial<Record<string, { pinyin: string; readings: string; note: string }>> = {
   度: { pinyin: "dù / duó", readings: "读音一：dù；读音二：duó", note: "原资料拼音作“dúo”，已按汉语拼音声调标注规则校为“duó”。" },
@@ -75,9 +100,10 @@ export const verifiedWords: VerifiedWord[] = sourceWords.map((sourceWord) => {
     pinyin: pinyinCorrection?.pinyin ?? sourceWord.pinyin,
     readings: pinyinCorrection?.readings ?? sourceWord.readings,
     senses,
-    textbookExamples: textbookExamples[sourceWord.character] ?? [],
+    textbookExamples: examplesFor(sourceWord.character),
     verificationNotes: pinyinCorrection ? [pinyinCorrection.note] : undefined,
   };
 });
 
 export const totalVerifiedSenses = verifiedWords.reduce((total, word) => total + word.senses.length, 0);
+export const totalTextbookExamples = verifiedWords.reduce((total, word) => total + word.textbookExamples.length, 0);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { totalVerifiedSenses, verifiedWords } from "./data/verified-words";
+import { totalTextbookExamples, totalVerifiedSenses, verifiedWords } from "./data/verified-words";
 
 type SectionId = "home" | "words" | "texts" | "exam" | "resources";
 type Audience = "teacher" | "student";
@@ -34,15 +34,28 @@ const teachingResources = [
 ];
 
 const learningPath = ["看字形", "猜本义", "理义脉", "回教材", "联成语", "对高考", "再复习"];
+const textbookVolumeOrder = ["七年级上册（2024秋版）", "七年级下册（2025春版）", "八年级上册", "八年级下册", "九年级下册", "高中语文必修上", "高中语文必修下", "高中语文选择性必修中", "高中语文选择性必修下"];
+const textbookLessons = (() => {
+  const lessons = new Map<string, { id: string; title: string; volume: string; examples: Array<{ character: string; wordIndex: number; sentence: string; pdfPage: number; matchedMeaning: string }> }>();
+  verifiedWords.forEach((word) => word.textbookExamples.forEach((example) => {
+    const id = `${example.volume}|${example.title}`;
+    const lesson = lessons.get(id) ?? { id, title: example.title, volume: example.volume, examples: [] };
+    lesson.examples.push({ character: word.character, wordIndex: word.index, sentence: example.sentence, pdfPage: example.pdfPage, matchedMeaning: example.matchedMeaning });
+    lessons.set(id, lesson);
+  }));
+  return [...lessons.values()].sort((a, b) => textbookVolumeOrder.indexOf(a.volume) - textbookVolumeOrder.indexOf(b.volume) || a.title.localeCompare(b.title, "zh-CN"));
+})();
 
 export default function Home() {
   const [section, setSection] = useState<SectionId>("home");
   const [audience, setAudience] = useState<Audience>("teacher");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [requestedWord, setRequestedWord] = useState("爱");
   const current = useMemo(() => navItems.find((item) => item.id === section) ?? navItems[0], [section]);
   const chooseSection = (next: SectionId) => {
     setSection(next); setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: "smooth" });
   };
+  const openWord = (character: string) => { setRequestedWord(character); chooseSection("words"); };
 
   return (
     <div className="app-shell">
@@ -75,8 +88,8 @@ export default function Home() {
         </header>
         <div className="page-frame" key={section}>
           {section === "home" && <Dashboard audience={audience} goTo={chooseSection} />}
-          {section === "words" && <WordsLab audience={audience} />}
-          {section === "texts" && <ComingSection kind="课" title="按课文复习" round="第四轮" description="从教材篇目进入，串联实词、句式与相关练习。课文原句将在完成教材解析与人工核验后显示。" />}
+          {section === "words" && <WordsLab audience={audience} initialCharacter={requestedWord} />}
+          {section === "texts" && <TextsReview audience={audience} openWord={openWord} />}
           {section === "exam" && <ComingSection kind="考" title="高考语义地图" round="第七轮" description="按语境、义项与设题方式整理近十年真题。年份、题干与答案未核验前不展示。" />}
           {section === "resources" && <Resources />}
         </div>
@@ -92,7 +105,7 @@ function Dashboard({ audience, goTo }: { audience: Audience; goTo: (section: Sec
   return <>
     <section className="hero-panel">
       <div className="hero-copy">
-        <div className="eyebrow"><span />第三轮 · 分步认知路径已开放</div>
+        <div className="eyebrow"><span />第四轮 · 课文复习与随机抽字已开放</div>
         <h1>{audience === "teacher" ? "把一个字，讲成一条清楚的义脉" : "从一个字出发，真正读懂文言"}</h1>
         <p>{audience === "teacher" ? "面向课堂大屏的文言学习工作台。沿着字形、本义、义脉、教材、成语与高考语境，让讲解有据可循。" : "先观察，再推测；理解词义怎样生长，最后回到课文和题目中验证。每一步都留下复习线索。"}</p>
         <div className="hero-actions"><button className="primary-button" onClick={() => goTo("words")} type="button">进入实词实验室 <span>→</span></button><button className="text-button" onClick={() => goTo("resources")} type="button">查看已收录资料</button></div>
@@ -115,9 +128,9 @@ function Dashboard({ audience, goTo }: { audience: Audience; goTo: (section: Sec
       <section className="section-card modules-card">
         <div className="section-heading"><div><span className="section-kicker">工作台</span><h2>学习模块</h2></div><span className="quiet-tag">按轮次逐步开放</span></div>
         <div className="module-grid">
-          <ModuleCard glyph="实" title="实词实验室" note="观察、猜测、义项、教材分步学习" status="第三轮已更新" active onClick={() => goTo("words")} />
-          <ModuleCard glyph="课" title="按课文复习" note="从教材原句回看重点词义" status="第四轮" onClick={() => goTo("texts")} />
-          <ModuleCard glyph="抽" title="随机抽字" note="课堂提问与课后自测入口" status="第四轮" />
+          <ModuleCard glyph="实" title="实词实验室" note="观察、猜测、义项、教材分步学习" status="120词已接入" active onClick={() => goTo("words")} />
+          <ModuleCard glyph="课" title="按课文复习" note="从教材原句回看重点词义" status="第四轮已开放" onClick={() => goTo("texts")} />
+          <ModuleCard glyph="抽" title="随机抽字" note="课堂提问与课后自测入口" status="第四轮已开放" onClick={() => goTo("texts")} />
           <ModuleCard glyph="考" title="高考语义地图" note="连接真题语境与命题方式" status="第七轮" onClick={() => goTo("exam")} />
         </div>
       </section>
@@ -134,8 +147,8 @@ function ModuleCard({ glyph, title, note, status, active = false, onClick }: { g
   return <button className={`module-card ${active ? "featured" : ""}`} type="button" onClick={onClick}><span className="module-glyph">{glyph}</span><span className="module-copy"><strong>{title}</strong><small>{note}</small></span><span className="module-status">{status}</span></button>;
 }
 
-function WordsLab({ audience }: { audience: Audience }) {
-  const [activeCharacter, setActiveCharacter] = useState(verifiedWords[0].character);
+function WordsLab({ audience, initialCharacter }: { audience: Audience; initialCharacter: string }) {
+  const [activeCharacter, setActiveCharacter] = useState(verifiedWords.some((word) => word.character === initialCharacter) ? initialCharacter : verifiedWords[0].character);
   const [query, setQuery] = useState("");
   const [grammar, setGrammar] = useState("全部");
   const [showTranslations, setShowTranslations] = useState(audience === "student");
@@ -285,11 +298,87 @@ function LearningJourney({ word, stage, advance, guessResult, setGuessResult }: 
   </div>;
 }
 
+function TextsReview({ audience, openWord }: { audience: Audience; openWord: (character: string) => void }) {
+  const volumes = ["全部教材", ...textbookVolumeOrder.filter((volume) => textbookLessons.some((lesson) => lesson.volume === volume))];
+  const [volume, setVolume] = useState("全部教材");
+  const filteredLessons = textbookLessons.filter((lesson) => volume === "全部教材" || lesson.volume === volume);
+  const [lessonId, setLessonId] = useState(textbookLessons[0]?.id ?? "");
+  const activeLesson = filteredLessons.find((lesson) => lesson.id === lessonId) ?? filteredLessons[0] ?? textbookLessons[0];
+  const [randomCharacter, setRandomCharacter] = useState("爱");
+  const [randomRevealed, setRandomRevealed] = useState(false);
+  const randomWord = verifiedWords.find((word) => word.character === randomCharacter) ?? verifiedWords[0];
+
+  const chooseVolume = (nextVolume: string) => {
+    const nextLessons = textbookLessons.filter((lesson) => nextVolume === "全部教材" || lesson.volume === nextVolume);
+    setVolume(nextVolume);
+    setLessonId(nextLessons[0]?.id ?? "");
+  };
+  const drawWord = (fromLesson: boolean) => {
+    const candidates = fromLesson && activeLesson
+      ? [...new Set(activeLesson.examples.map((example) => example.character))]
+      : verifiedWords.map((word) => word.character);
+    const picked = candidates[Math.floor(Math.random() * candidates.length)] ?? "爱";
+    setRandomCharacter(picked);
+    setRandomRevealed(false);
+  };
+
+  return <section className="workspace-section texts-workspace">
+    <div className="page-heading">
+      <div><span className="section-kicker">第四轮 · 第一批教材原句索引</span><h1>按课文复习</h1><p>从教材篇目进入，复习已经逐句匹配的实词。当前只收入能在上传教材 PDF 中精确定位的原句，不确定的近似文本暂不展示。</p></div>
+      <span className="stage-badge">{textbookLessons.length} 篇 · {totalTextbookExamples} 条关联</span>
+    </div>
+
+    <div className="text-review-summary">
+      <span><strong>{textbookLessons.length}</strong>篇已建索引</span><span><strong>{new Set(textbookLessons.flatMap((lesson) => lesson.examples.map((example) => example.character))).size}</strong>个实词已回到教材</span><span><strong>{textbookVolumeOrder.filter((item) => textbookLessons.some((lesson) => lesson.volume === item)).length}</strong>册教材有精确匹配</span><span><strong>{totalTextbookExamples}</strong>条原句关联</span>
+    </div>
+
+    <div className="text-review-layout">
+      <aside className="lesson-directory">
+        <div className="drawer-heading"><strong>教材篇目</strong><span>{filteredLessons.length} 篇</span></div>
+        <label className="volume-filter"><span>册次</span><select value={volume} onChange={(event) => chooseVolume(event.target.value)}>{volumes.map((item) => <option key={item}>{item}</option>)}</select></label>
+        <div className="lesson-list">{filteredLessons.map((lesson) => <button type="button" key={lesson.id} className={lesson.id === activeLesson?.id ? "active" : ""} onClick={() => setLessonId(lesson.id)}><span>{lesson.title}</span><small>{lesson.volume} · {lesson.examples.length} 条关联</small></button>)}</div>
+      </aside>
+
+      <article className="lesson-review-canvas">
+        {activeLesson ? <>
+          <header><span>{activeLesson.volume}</span><h2>{activeLesson.title}</h2><p>{audience === "teacher" ? "可按顺序遮住义项，让学生先结合上下文判断，再点击词卡进入完整义项。" : "先读原句猜词义，再查看核验结果；点击实词可以回到完整学习路径。"}</p></header>
+          <div className="lesson-example-list">{activeLesson.examples.map((example, index) => {
+            const parts = example.sentence.split(example.character);
+            return <article key={`${example.character}-${example.pdfPage}-${index}`}>
+              <div className="example-meta"><span>PDF 第 {example.pdfPage} 页</span><small>第 {example.wordIndex} 词</small></div>
+              <blockquote>{parts.map((part, partIndex) => <span key={`${part}-${partIndex}`}>{part}{partIndex < parts.length - 1 && <mark>{example.character}</mark>}</span>)}</blockquote>
+              <div className="example-answer"><span>{example.character}</span><p><small>对应义项</small><strong>{example.matchedMeaning}</strong></p><button type="button" onClick={() => openWord(example.character)}>进入实词实验室 →</button></div>
+            </article>;
+          })}</div>
+        </> : <div className="empty-evidence"><span>课</span><h3>暂无资料</h3><p>当前筛选范围内还没有完成逐句定位的教材原句。</p></div>}
+      </article>
+
+      <aside className="random-draw-panel">
+        <div className="drawer-heading"><strong>随机抽字</strong><span>课堂工具</span></div>
+        <div className="random-character"><small>第 {randomWord.index} 词</small><strong>{randomWord.character}</strong><span>{randomWord.pinyin}</span></div>
+        {randomRevealed ? <div className="random-answer"><span>资料义项</span><p>{randomWord.senses.slice(0, 3).map((sense) => sense.meaning).join("；")}</p><button type="button" onClick={() => openWord(randomWord.character)}>完整学习此字</button></div> : <button className="reveal-random" type="button" onClick={() => setRandomRevealed(true)}>揭晓义项</button>}
+        <div className="draw-actions"><button type="button" onClick={() => drawWord(false)}>全库抽一字</button><button type="button" disabled={!activeLesson} onClick={() => drawWord(true)}>从本课抽字</button></div>
+        <p className="random-note">抽字只使用已接入的 120 实词；揭晓内容来自《120实词归档版》。</p>
+      </aside>
+    </div>
+  </section>;
+}
+
 function ComingSection({ kind, title, round, description }: { kind: string; title: string; round: string; description: string }) {
   return <section className="workspace-section"><div className="page-heading"><div><span className="section-kicker">{round}计划</span><h1>{title}</h1><p>{description}</p></div><span className="stage-badge muted">待开发</span></div><div className="coming-canvas"><span className="coming-glyph">{kind}</span><div><span className="empty-label">功能占位</span><h2>框架已经预留，内容暂不显示</h2><p>后续迭代会在保留现有功能的基础上逐步加入。</p></div></div></section>;
 }
 
 function Resources() {
+  const indexedTextbooks = new Set([
+    "七年级上册（2024秋版）语文电子课本", "七年级下册（2025春版）语文电子课本", "八年级上册", "八年级下册", "九年级下册",
+    "高中语文必修上", "高中语文必修下", "高中语文选择性必修中", "高中语文选择性必修下",
+  ]);
+  const resourceState = (item: string) => {
+    if (item === "120实词归档版") return `已解析 · 120字 / ${totalVerifiedSenses}条义项已接入`;
+    if (indexedTextbooks.has(item)) return "已解析 · 首批原句索引已接入";
+    if (item === "高中语文选择性必修上") return "已扫描 · 本批暂无精确匹配";
+    return "已收录 · 待解析";
+  };
   const groups = [
     { title: "文字学与汉字学", count: 7, items: researchWorks },
     { title: "专题研讨", count: 5, items: seminars },
@@ -298,6 +387,6 @@ function Resources() {
   return <section className="workspace-section">
     <div className="page-heading"><div><span className="section-kicker">知识依据</span><h1>资料库</h1><p>这里仅显示已经收录的文件。当前完成文件级归档，正文解析、页码定位与条目核验将逐步进行。</p></div><span className="stage-badge">27 项已收录</span></div>
     <div className="resource-summary"><span><strong>22</strong>PDF</span><span><strong>5</strong>DOCX</span><span><strong>3</strong>资料分类</span><span><strong>待解析</strong>正文状态</span></div>
-    <div className="resource-groups">{groups.map((group) => <article className="resource-group" key={group.title}><div className="resource-group-head"><span>{group.title.slice(0, 1)}</span><div><h2>{group.title}</h2><p>{group.count} 项资料</p></div></div><ul>{group.items.map((item) => <li key={item}><span>{item}</span><small>{item === "120实词归档版" ? `已解析 · 120字 / ${totalVerifiedSenses}条义项已接入` : "已收录 · 待解析"}</small></li>)}</ul></article>)}</div>
+    <div className="resource-groups">{groups.map((group) => <article className="resource-group" key={group.title}><div className="resource-group-head"><span>{group.title.slice(0, 1)}</span><div><h2>{group.title}</h2><p>{group.count} 项资料</p></div></div><ul>{group.items.map((item) => <li key={item}><span>{item}</span><small>{resourceState(item)}</small></li>)}</ul></article>)}</div>
   </section>;
 }
