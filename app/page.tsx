@@ -157,7 +157,7 @@ function WordsLab({ audience, initialCharacter }: { audience: Audience; initialC
   const [viewMode, setViewMode] = useState<"journey" | "catalog">("journey");
   const [journeyStage, setJourneyStage] = useState(0);
   const [unlockedStage, setUnlockedStage] = useState(0);
-  const [guessResult, setGuessResult] = useState<"correct" | "wrong" | null>(null);
+  const [guessSelection, setGuessSelection] = useState<string | null>(null);
   const activeWord = verifiedWords.find((word) => word.character === activeCharacter) ?? verifiedWords[0];
   const grammarOptions = ["全部", "名词", "动词", "形容词", "其他"];
   const filteredWords = verifiedWords.filter((word) => {
@@ -172,7 +172,7 @@ function WordsLab({ audience, initialCharacter }: { audience: Audience; initialC
   const inLesson = lessonWords.includes(activeWord.character);
   const toggleLesson = () => setLessonWords((words) => inLesson ? words.filter((word) => word !== activeWord.character) : [...words, activeWord.character]);
   const chooseWord = (character: string) => {
-    setActiveCharacter(character); setGrammar("全部"); setJourneyStage(0); setUnlockedStage(0); setGuessResult(null);
+    setActiveCharacter(character); setGrammar("全部"); setJourneyStage(0); setUnlockedStage(0); setGuessSelection(null);
   };
   const advanceJourney = (next: number) => { setJourneyStage(next); setUnlockedStage((current) => Math.max(current, next)); };
 
@@ -205,7 +205,7 @@ function WordsLab({ audience, initialCharacter }: { audience: Audience; initialC
           <div className="source-status"><span>资料状态</span><strong>实词义项已录入</strong><small>教材原句 · {activeWord.textbookExamples.length ? `已核验 ${activeWord.textbookExamples.length} 条` : "暂无关联"}</small><small>古文字形 · 暂无资料</small><small>高考关联 · 暂无资料</small></div>
         </header>
 
-        {viewMode === "journey" ? <LearningJourney word={activeWord} stage={journeyStage} advance={advanceJourney} guessResult={guessResult} setGuessResult={setGuessResult} /> : <><div className="sense-toolbar">
+        {viewMode === "journey" ? <LearningJourney word={activeWord} stage={journeyStage} advance={advanceJourney} guessSelection={guessSelection} setGuessSelection={setGuessSelection} /> : <><div className="sense-toolbar">
           <div className="grammar-tabs" role="group" aria-label="按词性筛选">{grammarOptions.map((item) => <button type="button" key={item} onClick={() => setGrammar(item)} className={grammar === item ? "active" : ""}>{item}</button>)}</div>
           <button type="button" className="translation-toggle" onClick={() => setShowTranslations((show) => !show)}>{showTranslations ? "收起译文" : "展开译文"}</button>
         </div>
@@ -237,17 +237,18 @@ function WordsLab({ audience, initialCharacter }: { audience: Audience; initialC
   </section>;
 }
 
-function LearningJourney({ word, stage, advance, guessResult, setGuessResult }: {
+function LearningJourney({ word, stage, advance, guessSelection, setGuessSelection }: {
   word: (typeof verifiedWords)[number];
   stage: number;
   advance: (next: number) => void;
-  guessResult: "correct" | "wrong" | null;
-  setGuessResult: (result: "correct" | "wrong" | null) => void;
+  guessSelection: string | null;
+  setGuessSelection: (selection: string | null) => void;
 }) {
   const markedOriginal = word.senses.find((sense) => sense.sourceMarksOriginal);
   const guessOptions = markedOriginal
     ? [markedOriginal, ...word.senses.filter((sense) => sense !== markedOriginal).slice(0, 2)]
-    : [];
+    : word.senses.slice(0, 3);
+  const guessIsCorrect = Boolean(markedOriginal && guessSelection === markedOriginal.meaning);
 
   if (stage === 0) return <div className="journey-panel observation-stage">
     <div className="journey-heading"><span>01 · 看字形</span><h2>先看，不急着解释</h2><p>观察今天通行的字形。上传资料中的古文字图像尚未建立页码索引，因此这里不绘制、不猜测古文字形。</p></div>
@@ -257,12 +258,15 @@ function LearningJourney({ word, stage, advance, guessResult, setGuessResult }: 
   </div>;
 
   if (stage === 1) return <div className="journey-panel guess-stage">
-    <div className="journey-heading"><span>02 · 猜本义</span><h2>哪一个义项最接近资料标注的“本意”？</h2><p>本环节只依据上传资料中的明确标注，不用常识补写。答案揭晓后仍会保留资料边界说明。</p></div>
+    <div className="journey-heading"><span>02 · 猜本义</span><h2>{markedOriginal ? "哪一个义项最接近资料标注的“本意”？" : "你认为哪一个义项最可能接近本义？"}</h2><p>{markedOriginal ? "本环节只依据上传资料中的明确标注，不用常识补写。答案揭晓后仍会保留资料边界说明。" : "先根据字形和已有义项作出假设。当前资料未明确标注标准答案，你的选择只作为学习猜想，不会被写成已核验结论。"}</p></div>
     {markedOriginal ? <>
-      <div className="guess-options">{guessOptions.map((sense) => <button type="button" key={sense.meaning} className={guessResult && sense === markedOriginal ? "correct" : ""} onClick={() => setGuessResult(sense === markedOriginal ? "correct" : "wrong")}><span>{sense.grammar}</span><strong>{sense.meaning}</strong></button>)}</div>
-      {guessResult === "wrong" && <div className="guess-feedback wrong"><strong>再想一想</strong><p>这也是资料收录的义项，但没有被该资料标注为“本意”。</p></div>}
-      {guessResult === "correct" && <div className="guess-feedback correct"><strong>资料标注：{markedOriginal.meaning}</strong><p>依据《120实词归档版》中的“【本意】”标记。文字学专著的进一步核验尚未完成。</p><button className="journey-next" type="button" onClick={() => advance(2)}>展开全部义项 <span>→</span></button></div>}
-    </> : <div className="empty-evidence"><span>本</span><h3>暂无可核验的本义标注</h3><p>《120实词归档版》列出了多个义项，但没有明确标记本义；文字学著作又尚未建立页码索引，因此本轮不指定答案。</p><button className="journey-next" type="button" onClick={() => advance(2)}>跳过猜测，查看义项 <span>→</span></button></div>}
+      <div className="guess-options">{guessOptions.map((sense, index) => <button type="button" key={`${sense.meaning}-${index}`} className={`${guessSelection === sense.meaning ? "selected" : ""} ${guessSelection && sense === markedOriginal ? "correct" : ""}`} onClick={() => setGuessSelection(sense.meaning)}><span>{sense.grammar}</span><strong>{sense.meaning}</strong></button>)}</div>
+      {guessSelection && !guessIsCorrect && <div className="guess-feedback wrong"><strong>再想一想</strong><p>这也是资料收录的义项，但没有被该资料标注为“本意”。</p></div>}
+      {guessIsCorrect && <div className="guess-feedback correct"><strong>资料标注：{markedOriginal.meaning}</strong><p>依据《120实词归档版》中的“【本意】”标记。文字学专著的进一步核验尚未完成。</p><button className="journey-next" type="button" onClick={() => advance(2)}>展开全部义项 <span>→</span></button></div>}
+    </> : <>
+      <div className="guess-options">{guessOptions.map((sense, index) => <button type="button" key={`${sense.meaning}-${index}`} className={guessSelection === sense.meaning ? "selected" : ""} onClick={() => setGuessSelection(sense.meaning)}><span>{sense.grammar}</span><strong>{sense.meaning}</strong></button>)}</div>
+      {guessSelection ? <div className="guess-feedback neutral"><strong>你的猜想：{guessSelection}</strong><p>已记录为本轮学习假设。由于上传资料尚未给出可核验的本义标注，这里不判定对错。</p><button className="journey-next" type="button" onClick={() => advance(2)}>带着猜想展开义项 <span>→</span></button></div> : <div className="evidence-boundary"><span>待核验</span><p>请选择一个义项作为猜想；文字学专著核验完成后，再补充有依据的答案。</p></div>}
+    </>}
   </div>;
 
   if (stage === 2) return <div className="journey-panel meaning-stage">
