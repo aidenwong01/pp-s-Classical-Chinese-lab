@@ -116,6 +116,7 @@ button, input { font: inherit; } button { color: inherit; }
 .lab-path i { width: 19px; height: 19px; border: 1px solid currentColor; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-size: 8px; opacity: .75; }
 .lab-mode-row { min-height: 47px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
 .lab-mode-row > span { color: var(--ink-faint); font-size: 9px; }
+.mobile-word-picker { display: none; }
 .lab-mode-switch { display: flex; padding: 3px; border: 1px solid var(--line); border-radius: 9px; background: rgba(251,250,246,.45); }
 .lab-mode-switch button { border: 0; border-radius: 6px; padding: 7px 12px; background: transparent; color: var(--ink-faint); font-size: 9px; cursor: pointer; }
 .lab-mode-switch button.active { background: var(--paper-light); color: var(--pine); box-shadow: 0 2px 8px rgba(44,40,31,.07); }
@@ -141,7 +142,7 @@ button, input { font: inherit; } button { color: inherit; }
 .lesson-panel p { margin-top: 10px; color: var(--ink-faint); text-align: center; font-size: 8px; }
 
 .lab-layout.populated { min-height: 650px; align-items: stretch; }
-.word-list { display: grid; gap: 6px; margin-top: 15px; }
+.word-list { max-height: 740px; display: grid; gap: 6px; margin-top: 15px; padding-right: 4px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgba(51,77,67,.22) transparent; }
 .word-list button { width: 100%; min-height: 58px; padding: 8px 10px; border: 1px solid transparent; border-radius: 10px; background: transparent; display: grid; grid-template-columns: 38px 1fr auto; align-items: center; gap: 9px; text-align: left; cursor: pointer; transition: background .2s ease, border-color .2s ease; }
 .word-list button:hover { background: rgba(255,255,255,.5); }
 .word-list button.active { background: var(--paper-light); border-color: rgba(51,77,67,.16); box-shadow: 0 5px 14px rgba(44,40,31,.05); }
@@ -167,6 +168,7 @@ button, input { font: inherit; } button { color: inherit; }
 .verified-label::before { content: "✓"; font-size: 8px; }
 .word-meta h2 { margin: 12px 0 5px; font-family: "Songti SC", STSong, serif; font-size: 24px; }
 .word-meta p { margin: 0; color: var(--ink-faint); font-size: 10px; }
+.word-verification-note { max-width: 420px; margin-top: 7px; display: block; color: var(--cinnabar); font-size: 8px; line-height: 1.55; }
 .source-status { min-width: 145px; padding: 13px 15px; border-left: 2px solid var(--cinnabar); background: rgba(241,225,220,.35); display: grid; gap: 5px; }
 .source-status span { color: var(--cinnabar); font-size: 8px; letter-spacing: .12em; }
 .source-status strong { margin-bottom: 2px; font-family: "Songti SC", STSong, serif; font-size: 13px; }
@@ -188,6 +190,7 @@ button, input { font: inherit; } button { color: inherit; }
 .sense-title small { padding: 3px 6px; border: 1px solid rgba(168,67,54,.18); border-radius: 4px; color: var(--cinnabar); font-size: 7px; }
 .sense-card blockquote { margin: 13px 0 5px; color: var(--ink); font-family: "Songti SC", STSong, serif; font-size: 14px; line-height: 1.75; }
 .sentence-source { color: var(--ink-faint); text-align: right; font-family: "Songti SC", STSong, serif; font-size: 9px; }
+.verification-note { margin: 10px 0 0 !important; padding: 8px 10px; border-left: 2px solid var(--cinnabar); background: rgba(241,225,220,.28); color: var(--cinnabar) !important; text-align: left !important; font-size: 8px !important; line-height: 1.6; }
 .translation { margin: 13px 0 0 !important; padding: 10px 12px; border-top: 1px dashed var(--line); color: var(--ink-soft) !important; text-align: left !important; font-size: 10px !important; line-height: 1.7; }
 .translation span { width: 22px; height: 22px; margin-right: 9px; border: 1px solid rgba(51,77,67,.17); display: inline-grid; place-items: center; color: var(--pine); font-family: "Songti SC", STSong, serif; }
 .reveal-one { margin-top: 12px; padding: 6px 9px; border: 1px dashed var(--line); border-radius: 6px; background: transparent; color: var(--ink-faint); font-size: 8px; cursor: pointer; }
@@ -304,6 +307,9 @@ button, input { font: inherit; } button { color: inherit; }
   .mobile-nav button { border: 0; background: transparent; color: var(--ink-faint); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 8px; }
   .mobile-nav button span { font-family: "Songti SC", STSong, serif; font-size: 15px; } .mobile-nav button.active { color: var(--cinnabar); }
   .lab-path { grid-template-columns: repeat(4,1fr); } .lab-path > button { border-top: 1px solid var(--line); } .lab-layout { grid-template-columns: 1fr; } .word-drawer { display: none; }
+  .mobile-word-picker { width: 100%; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 10px; }
+  .mobile-word-picker span { color: var(--ink-faint); font-size: 9px; }
+  .mobile-word-picker select { min-width: 0; width: 100%; padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; background: rgba(251,250,246,.82); color: var(--ink); font-family: "Songti SC", STSong, serif; font-size: 12px; }
   .word-canvas { padding: 24px 22px 35px; }
 }
 @media (max-width: 560px) {

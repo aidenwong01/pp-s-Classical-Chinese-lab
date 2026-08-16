@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { verifiedWords } from "./data/verified-words";
+import { totalVerifiedSenses, verifiedWords } from "./data/verified-words";
 
 type SectionId = "home" | "words" | "texts" | "exam" | "resources";
 type Audience = "teacher" | "student";
@@ -108,7 +108,7 @@ function Dashboard({ audience, goTo }: { audience: Audience; goTo: (section: Sec
       <div className="stat-card"><strong>27</strong><span>项已收录资料</span><small>文件已入库，正文待分批解析</small></div>
       <div className="stat-card"><strong>10</strong><span>册语文教材</span><small>初高中教材文件</small></div>
       <div className="stat-card"><strong>7</strong><span>部文字学著作</span><small>字形与本义的重要依据</small></div>
-      <div className="stat-card warning"><strong>6</strong><span>个首批实词</span><small>35个义项已据上传资料录入</small></div>
+      <div className="stat-card warning"><strong>120</strong><span>个文言实词</span><small>{totalVerifiedSenses} 条带例句义项已据资料接入</small></div>
     </section>
 
     <div className="content-grid">
@@ -148,7 +148,7 @@ function WordsLab({ audience }: { audience: Audience }) {
   const activeWord = verifiedWords.find((word) => word.character === activeCharacter) ?? verifiedWords[0];
   const grammarOptions = ["全部", "名词", "动词", "形容词", "其他"];
   const filteredWords = verifiedWords.filter((word) => {
-    const haystack = [word.character, word.pinyin, ...word.senses.flatMap((sense) => [sense.meaning, sense.reference])].join(" ");
+    const haystack = [word.index, word.character, word.pinyin, ...word.senses.flatMap((sense) => [sense.meaning, sense.sentence, sense.reference])].join(" ");
     return haystack.toLowerCase().includes(query.trim().toLowerCase());
   });
   const visibleSenses = activeWord.senses.filter((sense) => {
@@ -165,12 +165,13 @@ function WordsLab({ audience }: { audience: Audience }) {
 
   return <section className={`workspace-section words-workspace ${focusMode ? "focus-mode" : ""}`}>
     <div className="page-heading">
-      <div><span className="section-kicker">第三轮 · 认知路径交互</span><h1>实词实验室</h1><p>从观察字形开始，经过猜测、义项梳理，再回到已核验教材原句。成语、古文字形和高考关联缺少可靠材料时不补写。</p></div>
-      <span className="stage-badge">学习路径已开放</span>
+      <div><span className="section-kicker">数据补全 · 120 词全量接入</span><h1>实词实验室</h1><p>120 个实词已按上传资料顺序完整接入，可搜索字、读音、篇目、原句或义项。成语、古文字形和高考关联缺少可靠材料时不补写。</p></div>
+      <span className="stage-badge">120 字 · {totalVerifiedSenses} 条义项</span>
     </div>
     <div className="lab-mode-row">
       <div className="lab-mode-switch"><button type="button" className={viewMode === "journey" ? "active" : ""} onClick={() => setViewMode("journey")}>分步探索</button><button type="button" className={viewMode === "catalog" ? "active" : ""} onClick={() => setViewMode("catalog")}>义项全览</button></div>
-      <span>当前：{activeWord.character} · {activeWord.pinyin}</span>
+      <label className="mobile-word-picker"><span>选择实词</span><select aria-label="选择实词" value={activeWord.character} onChange={(event) => chooseWord(event.target.value)}>{verifiedWords.map((word) => <option key={word.character} value={word.character}>{word.index}. {word.character} · {word.pinyin}</option>)}</select></label>
+      <span>当前：第 {activeWord.index} 词 · {activeWord.character} · {activeWord.pinyin}</span>
     </div>
     <div className="lab-path">{learningPath.map((step, index) => <button type="button" disabled={viewMode === "journey" && index > unlockedStage} onClick={() => viewMode === "journey" && setJourneyStage(index)} className={viewMode === "journey" && index === journeyStage ? "current" : index <= unlockedStage ? "unlocked" : ""} key={step}><i>{index + 1}</i>{step}</button>)}</div>
     <div className="lab-layout populated">
@@ -178,8 +179,8 @@ function WordsLab({ audience }: { audience: Audience }) {
         <div className="drawer-heading"><strong>实词目录</strong><span>{filteredWords.length} / {verifiedWords.length}</span></div>
         <label className="fake-search"><span>⌕</span><input aria-label="搜索实词" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="搜索字、篇目或义项" /></label>
         <div className="word-list" role="list">
-          {filteredWords.map((word) => <button type="button" role="listitem" key={word.character} className={word.character === activeWord.character ? "active" : ""} onClick={() => chooseWord(word.character)}><span>{word.character}</span><div><strong>{word.pinyin}</strong><small>{word.senses.length} 个义项</small></div><i>›</i></button>)}
-          {filteredWords.length === 0 && <p className="no-result">首批词条中没有匹配内容</p>}
+          {filteredWords.map((word) => <button type="button" role="listitem" key={word.character} className={word.character === activeWord.character ? "active" : ""} onClick={() => chooseWord(word.character)}><span>{word.character}</span><div><strong>{String(word.index).padStart(3, "0")} · {word.pinyin}</strong><small>{word.senses.length} 个义项</small></div><i>›</i></button>)}
+          {filteredWords.length === 0 && <p className="no-result">120 个词条中没有匹配内容</p>}
         </div>
         <div className="drawer-foot"><span>据</span><p>资料来源<br /><strong>《120实词归档版》</strong></p></div>
       </aside>
@@ -187,7 +188,7 @@ function WordsLab({ audience }: { audience: Audience }) {
       <article className="word-canvas">
         <header className="word-hero">
           <div className={`character-block ${focusMode ? "enlarged" : ""}`}><strong>{activeWord.character}</strong><span>{activeWord.pinyin}</span></div>
-          <div className="word-meta"><span className="verified-label">已据上传资料录入</span><h2>{activeWord.senses.length} 个义项</h2><p>{activeWord.readings ?? `读音：${activeWord.pinyin}`}</p></div>
+          <div className="word-meta"><span className="verified-label">第 {activeWord.index} 词 · 已据上传资料录入</span><h2>{activeWord.senses.length} 个义项</h2><p>{activeWord.readings ?? `读音：${activeWord.pinyin}`}</p>{activeWord.verificationNotes?.map((note) => <small className="word-verification-note" key={note}>核验：{note}</small>)}</div>
           <div className="source-status"><span>资料状态</span><strong>实词义项已录入</strong><small>教材原句 · {activeWord.textbookExamples.length ? `已核验 ${activeWord.textbookExamples.length} 条` : "暂无关联"}</small><small>古文字形 · 暂无资料</small><small>高考关联 · 暂无资料</small></div>
         </header>
 
@@ -197,12 +198,13 @@ function WordsLab({ audience }: { audience: Audience }) {
         </div>
 
         <div className="sense-list">
-          {visibleSenses.map((sense, index) => <article className="sense-card" key={`${sense.grammar}-${sense.meaning}`}>
+          {visibleSenses.map((sense, index) => <article className="sense-card" key={`${sense.grammar}-${sense.meaning}-${index}`}>
             <div className="sense-index">{String(index + 1).padStart(2, "0")}</div>
             <div className="sense-body">
               <div className="sense-title"><span>{sense.grammar}</span><h3>{showTranslations ? sense.meaning : "释义已隐藏"}</h3>{sense.sourceMarksOriginal && <small>资料标注“本意”</small>}</div>
               <blockquote>{sense.sentence}</blockquote>
-              <div className="sentence-source">— {sense.reference}</div>
+              <div className="sentence-source">条目来源：{sense.reference}</div>
+              {sense.verificationNote && <p className="verification-note">核验说明：{sense.verificationNote}</p>}
               {showTranslations ? <p className="translation"><span>译</span>{sense.translation}</p> : <button type="button" className="reveal-one" onClick={() => setShowTranslations(true)}>点击揭晓释义与译文</button>}
             </div>
           </article>)}
@@ -296,6 +298,6 @@ function Resources() {
   return <section className="workspace-section">
     <div className="page-heading"><div><span className="section-kicker">知识依据</span><h1>资料库</h1><p>这里仅显示已经收录的文件。当前完成文件级归档，正文解析、页码定位与条目核验将逐步进行。</p></div><span className="stage-badge">27 项已收录</span></div>
     <div className="resource-summary"><span><strong>22</strong>PDF</span><span><strong>5</strong>DOCX</span><span><strong>3</strong>资料分类</span><span><strong>待解析</strong>正文状态</span></div>
-    <div className="resource-groups">{groups.map((group) => <article className="resource-group" key={group.title}><div className="resource-group-head"><span>{group.title.slice(0, 1)}</span><div><h2>{group.title}</h2><p>{group.count} 项资料</p></div></div><ul>{group.items.map((item) => <li key={item}><span>{item}</span><small>{item === "120实词归档版" ? "已解析 · 首批6字已接入" : "已收录 · 待解析"}</small></li>)}</ul></article>)}</div>
+    <div className="resource-groups">{groups.map((group) => <article className="resource-group" key={group.title}><div className="resource-group-head"><span>{group.title.slice(0, 1)}</span><div><h2>{group.title}</h2><p>{group.count} 项资料</p></div></div><ul>{group.items.map((item) => <li key={item}><span>{item}</span><small>{item === "120实词归档版" ? `已解析 · 120字 / ${totalVerifiedSenses}条义项已接入` : "已收录 · 待解析"}</small></li>)}</ul></article>)}</div>
   </section>;
 }
