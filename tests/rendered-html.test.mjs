@@ -21,10 +21,36 @@ test("server-renders the Wenyan learning workspace", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>pp的文言实验室<\/title>/i);
-  assert.match(html, /第五轮 · 成语关联资料已接入/);
+  assert.match(html, /第七轮 · 高考关联资料已接入/);
   assert.match(html, /1131(?:<!-- -->)?条成语关联已接入/);
-  assert.match(html, /28 项上传资料 · 1 项公开核验源/);
+  assert.match(html, /522(?:<!-- -->)?条标注年份关联/);
+  assert.match(html, /30 项上传资料 · 1 项公开核验源/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/);
+});
+
+test("indexes uploaded real-word and function-word exam links without inventing dates", async () => {
+  const [realText, functionText, wordsText, page] = await Promise.all([
+    readFile(new URL("../app/data/exam-real-words.json", import.meta.url), "utf8"),
+    readFile(new URL("../app/data/exam-function-words.json", import.meta.url), "utf8"),
+    readFile(new URL("../app/data/all-words.json", import.meta.url), "utf8"),
+    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+  ]);
+  const real = JSON.parse(realText);
+  const functionWords = JSON.parse(functionText);
+  const coreSet = new Set(JSON.parse(wordsText).map((word) => word.character));
+  const mappedRealEntries = real.filter((group) => coreSet.has(group.character)).flatMap((group) => group.entries);
+  const functionEntries = functionWords.flatMap((group) => group.entries);
+
+  assert.equal(real.length, 120);
+  assert.equal(real.flatMap((group) => group.entries).length, 470);
+  assert.equal(mappedRealEntries.length, 466);
+  assert.equal(mappedRealEntries.filter((entry) => entry.sourceLabel).length, 411);
+  assert.equal(mappedRealEntries.filter((entry) => !entry.sourceLabel).length, 55);
+  assert.equal(functionWords.length, 18);
+  assert.equal(functionEntries.length, 107);
+  assert.equal(functionEntries.filter((entry) => entry.sourceLabel).length, 107);
+  assert.match(page, /资料未标注年份及卷别/);
+  assert.match(page, /未标注的条目单独提示，不补造考试信息/);
 });
 
 test("keeps the uploaded idiom dataset within verified source boundaries", async () => {

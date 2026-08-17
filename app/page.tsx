@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { totalIdiomCoveredWords, totalIdiomEntries, totalIdiomLinks, totalOfficiallyCheckedIdioms, totalTextbookExamples, totalVerifiedSenses, verifiedWords } from "./data/verified-words";
+import { totalExamCoveredWords, totalExamExamples, totalIdiomCoveredWords, totalIdiomEntries, totalIdiomLinks, totalOfficiallyCheckedIdioms, totalTextbookExamples, totalVerifiedSenses, verifiedWords } from "./data/verified-words";
+import { functionWordExamGroups, realWordExamGroups, totalDatedFunctionWordExamExamples, totalDatedRealWordExamExamples, totalFunctionWordExamExamples, totalRealWordExamExamples, type ExamExample } from "./data/exam-data";
 
 type SectionId = "home" | "words" | "texts" | "exam" | "resources";
 type Audience = "teacher" | "student";
@@ -31,6 +32,7 @@ const teachingResources = [
   "高中语文选择性必修上", "高中语文选择性必修中", "高中语文选择性必修下",
   "高中语文统编版学习任务汇总", "120实词归档版", "文言文实词关联成语120个", "文言文阅读十年汇编（原卷版）",
   "文言文阅读十年汇编（答案版）", "2026高考文学类文本教考衔接资料",
+  "120个文言实词高考真题关联句翻译辅助", "18个文言虚词高考真题关联句翻译辅助",
 ];
 
 const publicReferenceWorks = ["教育部《成语典》2020（2026-06-25 数据版）"];
@@ -94,7 +96,7 @@ export default function Home() {
           {section === "home" && <Dashboard audience={audience} goTo={chooseSection} />}
           {section === "words" && <WordsLab audience={audience} initialCharacter={requestedWord} />}
           {section === "texts" && <TextsReview audience={audience} openWord={openWord} />}
-          {section === "exam" && <ComingSection kind="考" title="高考语义地图" round="第七轮" description="按语境、义项与设题方式整理近十年真题。年份、题干与答案未核验前不展示。" />}
+          {section === "exam" && <ExamMap openWord={openWord} />}
           {section === "resources" && <Resources />}
         </div>
       </main>
@@ -109,7 +111,7 @@ function Dashboard({ audience, goTo }: { audience: Audience; goTo: (section: Sec
   return <>
     <section className="hero-panel">
       <div className="hero-copy">
-        <div className="eyebrow"><span />第五轮 · 成语关联资料已接入</div>
+        <div className="eyebrow"><span />第七轮 · 高考关联资料已接入</div>
         <h1>{audience === "teacher" ? "把一个字，讲成一条清楚的义脉" : "从一个字出发，真正读懂文言"}</h1>
         <p>{audience === "teacher" ? "面向课堂大屏的文言学习工作台。沿着字形、本义、义脉、教材、成语与高考语境，让讲解有据可循。" : "先观察，再推测；理解词义怎样生长，最后回到课文和题目中验证。每一步都留下复习线索。"}</p>
         <div className="hero-actions"><button className="primary-button" onClick={() => goTo("words")} type="button">进入实词实验室 <span>→</span></button><button className="text-button" onClick={() => goTo("resources")} type="button">查看已收录资料</button></div>
@@ -122,7 +124,7 @@ function Dashboard({ audience, goTo }: { audience: Audience; goTo: (section: Sec
     </section>
 
     <section className="stat-row" aria-label="资料库概况">
-      <div className="stat-card"><strong>29</strong><span>项资料依据</span><small>28 项上传资料 · 1 项公开核验源</small></div>
+      <div className="stat-card"><strong>31</strong><span>项资料依据</span><small>30 项上传资料 · 1 项公开核验源</small></div>
       <div className="stat-card"><strong>10</strong><span>册语文教材</span><small>初高中教材文件</small></div>
       <div className="stat-card"><strong>7</strong><span>部文字学著作</span><small>字形与本义的重要依据</small></div>
       <div className="stat-card warning"><strong>120</strong><span>个文言实词</span><small>{totalVerifiedSenses} 条带例句义项已据资料接入</small></div>
@@ -135,7 +137,7 @@ function Dashboard({ audience, goTo }: { audience: Audience; goTo: (section: Sec
           <ModuleCard glyph="实" title="实词实验室" note="观察、猜测、义项、教材与成语" status={`${totalIdiomEntries}条成语关联已接入`} active onClick={() => goTo("words")} />
           <ModuleCard glyph="课" title="按课文复习" note="从教材原句回看重点词义" status="第四轮已开放" onClick={() => goTo("texts")} />
           <ModuleCard glyph="抽" title="随机抽字" note="课堂提问与课后自测入口" status="第四轮已开放" onClick={() => goTo("texts")} />
-          <ModuleCard glyph="考" title="高考语义地图" note="连接真题语境与命题方式" status="第七轮" onClick={() => goTo("exam")} />
+          <ModuleCard glyph="考" title="高考语义地图" note="连接实词、虚词与真题语境" status={`${totalDatedRealWordExamExamples + totalDatedFunctionWordExamExamples}条标注年份关联`} onClick={() => goTo("exam")} />
         </div>
       </section>
       <aside className="section-card guard-card">
@@ -165,7 +167,7 @@ function WordsLab({ audience, initialCharacter }: { audience: Audience; initialC
   const activeWord = verifiedWords.find((word) => word.character === activeCharacter) ?? verifiedWords[0];
   const grammarOptions = ["全部", "名词", "动词", "形容词", "其他"];
   const filteredWords = verifiedWords.filter((word) => {
-    const haystack = [word.index, word.character, word.pinyin, ...word.senses.flatMap((sense) => [sense.meaning, sense.sentence, sense.reference]), ...word.idiomExamples.flatMap((example) => [example.idiom, example.explanation, example.officialVerification?.traditional, example.officialVerification?.sourceTitle])].join(" ");
+    const haystack = [word.index, word.character, word.pinyin, ...word.senses.flatMap((sense) => [sense.meaning, sense.sentence, sense.reference]), ...word.idiomExamples.flatMap((example) => [example.idiom, example.explanation, example.officialVerification?.traditional, example.officialVerification?.sourceTitle]), ...word.examExamples.flatMap((example) => [example.sourceLabel, ...example.paragraphs])].join(" ");
     return haystack.toLowerCase().includes(query.trim().toLowerCase());
   });
   const visibleSenses = activeWord.senses.filter((sense) => {
@@ -182,8 +184,8 @@ function WordsLab({ audience, initialCharacter }: { audience: Audience; initialC
 
   return <section className={`workspace-section words-workspace ${focusMode ? "focus-mode" : ""}`}>
     <div className="page-heading">
-      <div><span className="section-kicker">第五轮 · 成语关联资料</span><h1>实词实验室</h1><p>120 个实词已按上传资料顺序完整接入；“联成语”优先采用新上传的120词成语资料，名单差异与原文件异常均明确标注。</p></div>
-      <span className="stage-badge">120 字 · {totalVerifiedSenses} 条义项 · {totalIdiomEntries} 条成语关联</span>
+      <div><span className="section-kicker">第七轮 · 高考关联资料</span><h1>实词实验室</h1><p>120 个实词已按上传资料顺序完整接入；教材、成语和高考关联分别注明来源，名单差异与原文件异常均明确标注。</p></div>
+      <span className="stage-badge">120 字 · {totalIdiomEntries} 条成语 · {totalExamExamples} 条高考关联</span>
     </div>
     <div className="lab-mode-row">
       <div className="lab-mode-switch"><button type="button" className={viewMode === "journey" ? "active" : ""} onClick={() => setViewMode("journey")}>分步探索</button><button type="button" className={viewMode === "catalog" ? "active" : ""} onClick={() => setViewMode("catalog")}>义项全览</button></div>
@@ -206,7 +208,7 @@ function WordsLab({ audience, initialCharacter }: { audience: Audience; initialC
         <header className="word-hero">
           <div className={`character-block ${focusMode ? "enlarged" : ""}`}><strong>{activeWord.character}</strong><span>{activeWord.pinyin}</span></div>
           <div className="word-meta"><h2>{activeWord.senses.length} 个义项</h2><p>{activeWord.readings ?? `读音：${activeWord.pinyin}`}</p>{activeWord.verificationNotes?.map((note) => <small className="word-verification-note" key={note}>核验：{note}</small>)}</div>
-          <div className="source-status"><span>资料状态</span><strong>实词义项已录入</strong><small>教材原句 · {activeWord.textbookExamples.length ? `已核验 ${activeWord.textbookExamples.length} 条` : "暂无关联"}</small><small>成语 · {activeWord.idiomExamples.length ? `已录入 ${activeWord.idiomExamples.length} 条` : "暂无可靠关联"}</small><small>古文字形 · 暂无资料</small><small>高考关联 · 暂无资料</small></div>
+          <div className="source-status"><span>资料状态</span><strong>实词义项已录入</strong><small>教材原句 · {activeWord.textbookExamples.length ? `已核验 ${activeWord.textbookExamples.length} 条` : "暂无关联"}</small><small>成语 · {activeWord.idiomExamples.length ? `已录入 ${activeWord.idiomExamples.length} 条` : "暂无可靠关联"}</small><small>高考关联 · {activeWord.examExamples.length ? `已录入 ${activeWord.examExamples.length} 条` : "暂无可靠关联"}</small><small>古文字形 · 暂无资料</small></div>
         </header>
 
         {viewMode === "journey" ? <LearningJourney word={activeWord} stage={journeyStage} advance={advanceJourney} guessSelection={guessSelection} setGuessSelection={setGuessSelection} /> : <><div className="sense-toolbar">
@@ -301,15 +303,16 @@ function LearningJourney({ word, stage, advance, guessSelection, setGuessSelecti
   </div>;
 
   if (stage === 5) return <div className="journey-panel">
-    <div className="journey-heading"><span>06 · 对高考</span><h2>把义项放进陌生语境</h2><p>已收录十年真题汇编，但本词与具体年份、题干、答案之间尚未建立可复核关联。</p></div>
-    <div className="empty-evidence"><span>考</span><h3>暂无已核验真题关联</h3><p>不显示推测年份、模拟题或未经核对的真题原句。</p></div>
+    <div className="journey-heading"><span>06 · 对高考</span><h2>把“{word.character}”放进高考语境</h2><p>下列内容来自你上传的《120个文言实词高考真题关联句翻译辅助》。资料明确标出年份和卷别的照录；未标注的条目单独提示，不补造考试信息。</p></div>
+    {word.examExamples.length ? <ExamEntryCards entries={word.examExamples} sourceName="120个文言实词高考真题关联句翻译辅助" /> : <div className="empty-evidence"><span>考</span><h3>暂无可靠高考关联</h3><p>当前上传资料未提供可直接对应此字的条目。</p></div>}
+    {word.examSourceNote && <div className="source-anomaly"><strong>资料核对说明</strong><p>{word.examSourceNote}</p></div>}
     <button className="journey-next" type="button" onClick={() => advance(6)}>完成本轮学习 <span>→</span></button>
   </div>;
 
   return <div className="journey-panel review-stage">
     <div className="journey-heading"><span>07 · 再复习</span><h2>合上答案，再说一次</h2><p>用三个问题检查自己是否真的理解，而不只是“看过”。</p></div>
     <div className="review-summary"><div><span>字</span><strong>{word.character}</strong><small>{word.pinyin}</small></div><ul><li>我能说出至少两个义项吗？</li><li>我能解释一条教材原句吗？</li><li>我知道哪些内容仍待资料核验吗？</li></ul></div>
-    <div className="review-stats"><span><strong>{word.senses.length}</strong>个已录入义项</span><span><strong>{word.textbookExamples.length}</strong>条已核验教材原句</span><span><strong>{word.idiomExamples.length}</strong>条已录入成语关联</span><span><strong>0</strong>条已核验高考关联</span></div>
+    <div className="review-stats"><span><strong>{word.senses.length}</strong>个已录入义项</span><span><strong>{word.textbookExamples.length}</strong>条已核验教材原句</span><span><strong>{word.idiomExamples.length}</strong>条已录入成语关联</span><span><strong>{word.examExamples.length}</strong>条高考关联</span></div>
     <button className="journey-next secondary" type="button" onClick={() => advance(0)}>再走一遍 <span>↺</span></button>
   </div>;
 }
@@ -380,8 +383,39 @@ function TextsReview({ audience, openWord }: { audience: Audience; openWord: (ch
   </section>;
 }
 
-function ComingSection({ kind, title, round, description }: { kind: string; title: string; round: string; description: string }) {
-  return <section className="workspace-section"><div className="page-heading"><div><span className="section-kicker">{round}计划</span><h1>{title}</h1><p>{description}</p></div><span className="stage-badge muted">待开发</span></div><div className="coming-canvas"><span className="coming-glyph">{kind}</span><div><span className="empty-label">功能占位</span><h2>框架已经预留，内容暂不显示</h2><p>后续迭代会在保留现有功能的基础上逐步加入。</p></div></div></section>;
+function ExamEntryCards({ entries, sourceName }: { entries: ExamExample[]; sourceName: string }) {
+  return <div className="exam-entry-cards">{entries.map((entry, index) => {
+    const [lead, ...details] = entry.paragraphs;
+    return <article key={`${entry.sourceItem}-${entry.sourceLabel ?? "undated"}-${index}`}>
+      <div className="exam-entry-head"><span className={entry.sourceLabel ? "dated" : "undated"}>{entry.sourceLabel ?? "资料未标注年份及卷别"}</span><small>原资料第 {entry.sourceItem} 条</small></div>
+      <blockquote>{lead}</blockquote>
+      {details.length ? <details><summary>展开资料中的译文或补充说明</summary><div>{details.map((paragraph, paragraphIndex) => <p key={paragraphIndex}>{paragraph}</p>)}</div></details> : <div className="exam-no-translation">资料未另分译文段落，以上内容按原文件呈现。</div>}
+      <footer>资料来源：《{sourceName}》</footer>
+    </article>;
+  })}</div>;
+}
+
+function ExamMap({ openWord }: { openWord: (character: string) => void }) {
+  const [mode, setMode] = useState<"real" | "function">("real");
+  const [query, setQuery] = useState("");
+  const [realCharacter, setRealCharacter] = useState("爱");
+  const [functionCharacter, setFunctionCharacter] = useState("而");
+  const filteredRealWords = realWordExamGroups.filter((group) => [group.character, ...group.entries.flatMap((entry) => [entry.sourceLabel, ...entry.paragraphs])].join(" ").toLowerCase().includes(query.trim().toLowerCase()));
+  const filteredFunctionWords = functionWordExamGroups.filter((group) => [group.character, ...group.entries.flatMap((entry) => [entry.sourceLabel, ...entry.paragraphs])].join(" ").toLowerCase().includes(query.trim().toLowerCase()));
+  const activeRealGroup = realWordExamGroups.find((group) => group.character === realCharacter) ?? realWordExamGroups[0];
+  const activeRealWord = verifiedWords.find((word) => word.character === activeRealGroup.character);
+  const activeFunctionWord = functionWordExamGroups.find((group) => group.character === functionCharacter) ?? functionWordExamGroups[0];
+  const totalDated = totalDatedRealWordExamExamples + totalDatedFunctionWordExamExamples;
+
+  return <section className="workspace-section exam-map-section">
+    <div className="page-heading"><div><span className="section-kicker">第七轮 · 真题语境</span><h1>高考语义地图</h1><p>按实词和虚词浏览上传资料中的关联句、释义标注及翻译；只有资料明确给出的年份和卷别才作为真题标签显示。</p></div><span className="stage-badge">{totalRealWordExamExamples + totalFunctionWordExamExamples} 条关联 · {totalDated} 条标注年份</span></div>
+    <div className="exam-summary-row"><span><strong>120</strong>个资料实词</span><span><strong>{totalRealWordExamExamples}</strong>条实词关联</span><span><strong>18</strong>个虚词</span><span><strong>{totalFunctionWordExamExamples}</strong>条虚词关联</span></div>
+    <div className="exam-mode-row"><div className="lab-mode-switch"><button type="button" className={mode === "real" ? "active" : ""} onClick={() => setMode("real")}>120实词</button><button type="button" className={mode === "function" ? "active" : ""} onClick={() => setMode("function")}>18虚词</button></div><label className="fake-search exam-search"><span>⌕</span><input aria-label="搜索高考关联" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="搜索字、年份、卷别或语句" /></label></div>
+    <div className="exam-map-layout">
+      <aside className="exam-word-index"><div className="drawer-heading"><strong>{mode === "real" ? "实词索引" : "虚词索引"}</strong><span>{mode === "real" ? filteredRealWords.length : filteredFunctionWords.length}</span></div>{mode === "real" ? <div>{filteredRealWords.map((group) => <button type="button" className={group.character === activeRealGroup.character ? "active" : ""} key={group.character} onClick={() => setRealCharacter(group.character)}><strong>{group.character}</strong><span>{group.entries.length} 条</span></button>)}</div> : <div>{filteredFunctionWords.map((group) => <button type="button" className={group.character === activeFunctionWord.character ? "active" : ""} key={group.character} onClick={() => setFunctionCharacter(group.character)}><strong>{group.character}</strong><span>{group.entries.length} 条</span></button>)}</div>}</aside>
+      <article className="exam-map-detail">{mode === "real" ? <><header><div><span>文言实词</span><h2>{activeRealGroup.character}</h2><p>第 {activeRealGroup.sourceIndex} 词 · {activeRealGroup.entries.length} 条关联{activeRealWord ? ` · ${activeRealWord.pinyin}` : ""}</p></div>{activeRealWord && <button type="button" onClick={() => openWord(activeRealWord.character)}>进入完整实词学习 →</button>}</header><ExamEntryCards entries={activeRealGroup.entries} sourceName="120个文言实词高考真题关联句翻译辅助" />{!activeRealWord && <div className="source-anomaly"><strong>资料核对说明</strong><p>这份高考关联资料列有“{activeRealGroup.character}”，但当前120实词库没有该字，因此暂作为独立资料条目展示，不强行并入其他词。</p></div>}</> : <><header><div><span>文言虚词</span><h2>{activeFunctionWord.character}</h2><p>第 {activeFunctionWord.sourceIndex} 词 · {activeFunctionWord.entries.length} 条关联</p></div></header><ExamEntryCards entries={activeFunctionWord.entries} sourceName="18个文言虚词高考真题关联句翻译辅助" /></>}</article>
+    </div>
+  </section>;
 }
 
 function Resources() {
@@ -392,6 +426,8 @@ function Resources() {
   const resourceState = (item: string) => {
     if (item === "120实词归档版") return `已解析 · 120字 / ${totalVerifiedSenses}条义项已接入`;
     if (item === "文言文实词关联成语120个") return `已解析 · ${totalIdiomEntries}条关联 / 覆盖${totalIdiomCoveredWords}字`;
+    if (item === "120个文言实词高考真题关联句翻译辅助") return `已解析 · ${totalExamExamples}条关联 / 覆盖${totalExamCoveredWords}字`;
+    if (item === "18个文言虚词高考真题关联句翻译辅助") return `已解析 · ${totalFunctionWordExamExamples}条关联 / 18个虚词`;
     if (item.startsWith("教育部《成语典》")) return `公开授权核验源 · ${totalOfficiallyCheckedIdioms}条成语 / ${totalIdiomLinks}条字义关联已匹配`;
     if (indexedTextbooks.has(item)) return "已解析 · 教材原句索引已接入";
     return "已收录 · 待解析";
@@ -399,12 +435,12 @@ function Resources() {
   const groups = [
     { title: "文字学与汉字学", count: 7, items: researchWorks },
     { title: "专题研讨", count: 5, items: seminars },
-    { title: "教材与复习", count: 16, items: teachingResources },
+    { title: "教材与复习", count: 18, items: teachingResources },
     { title: "公开核验源", count: 1, items: publicReferenceWorks },
   ];
   return <section className="workspace-section">
-    <div className="page-heading"><div><span className="section-kicker">知识依据</span><h1>资料库</h1><p>28 项上传文件与公开核验源分开标注。正文解析、页码定位与条目核验按模块逐步进行。</p></div><span className="stage-badge">29 项资料依据</span></div>
-    <div className="resource-summary"><span><strong>22</strong>PDF</span><span><strong>6</strong>DOCX</span><span><strong>1</strong>公开核验源</span><span><strong>分批</strong>正文解析</span></div>
+    <div className="page-heading"><div><span className="section-kicker">知识依据</span><h1>资料库</h1><p>30 项上传文件与公开核验源分开标注。正文解析、页码定位与条目核验按模块逐步进行。</p></div><span className="stage-badge">31 项资料依据</span></div>
+    <div className="resource-summary"><span><strong>22</strong>PDF</span><span><strong>8</strong>DOCX</span><span><strong>1</strong>公开核验源</span><span><strong>分批</strong>正文解析</span></div>
     <div className="resource-groups">{groups.map((group) => <article className="resource-group" key={group.title}><div className="resource-group-head"><span>{group.title.slice(0, 1)}</span><div><h2>{group.title}</h2><p>{group.count} 项资料</p></div></div><ul>{group.items.map((item) => <li key={item}><span>{item}</span><small>{resourceState(item)}</small></li>)}</ul></article>)}</div>
   </section>;
 }

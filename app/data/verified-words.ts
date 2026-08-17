@@ -2,6 +2,8 @@ import sourceWords from "./all-words.json";
 import exactTextbookLinks from "./textbook-links.json";
 import officialIdiomLinks from "./idiom-links.json";
 import uploadedIdiomGroups from "./uploaded-idioms.json";
+import examRealWordGroups from "./exam-real-words.json";
+import type { ExamExample } from "./exam-data";
 
 export type WordSense = {
   grammar: string;
@@ -47,6 +49,8 @@ export type VerifiedWord = {
   textbookExamples: TextbookExample[];
   idiomExamples: IdiomExample[];
   idiomSourceNote?: string;
+  examExamples: ExamExample[];
+  examSourceNote?: string;
   verificationNotes?: string[];
 };
 
@@ -149,6 +153,15 @@ function idiomSourceNoteFor(character: string) {
   return undefined;
 }
 
+function examExamplesFor(character: string): ExamExample[] {
+  return examRealWordGroups.find((group) => group.character === character)?.entries ?? [];
+}
+
+function examSourceNoteFor(character: string) {
+  if (character === "乃") return "上传的120实词高考关联资料未列“乃”；该资料对应位置列“明”，与当前实词库名单不一致。";
+  return undefined;
+}
+
 const pinyinCorrections: Partial<Record<string, { pinyin: string; readings: string; note: string }>> = {
   度: { pinyin: "dù / duó", readings: "读音一：dù；读音二：duó", note: "原资料拼音作“dúo”，已按汉语拼音声调标注规则校为“duó”。" },
   期: { pinyin: "qī / jī", readings: "读音一：qī；读音二：jī", note: "“期年”读 jī；上传教材注为“满一年”。" },
@@ -240,6 +253,8 @@ export const verifiedWords: VerifiedWord[] = sourceWords.map((sourceWord) => {
     textbookExamples: examplesFor(sourceWord.character),
     idiomExamples: idiomsFor(sourceWord.character, senses),
     idiomSourceNote: idiomSourceNoteFor(sourceWord.character),
+    examExamples: examExamplesFor(sourceWord.character),
+    examSourceNote: examSourceNoteFor(sourceWord.character),
     verificationNotes: verificationNotes.length ? verificationNotes : undefined,
   };
 });
@@ -250,3 +265,6 @@ export const totalIdiomEntries = verifiedWords.reduce((total, word) => total + w
 export const totalIdiomCoveredWords = verifiedWords.filter((word) => word.idiomExamples.length > 0).length;
 export const totalOfficiallyCheckedIdioms = new Set(verifiedWords.flatMap((word) => word.idiomExamples.filter((example) => example.officialVerification).map((example) => example.idiom))).size;
 export const totalIdiomLinks = verifiedWords.reduce((total, word) => total + word.idiomExamples.filter((example) => example.matchedMeaning).length, 0);
+export const totalExamExamples = verifiedWords.reduce((total, word) => total + word.examExamples.length, 0);
+export const totalDatedExamExamples = verifiedWords.reduce((total, word) => total + word.examExamples.filter((example) => example.sourceLabel).length, 0);
+export const totalExamCoveredWords = verifiedWords.filter((word) => word.examExamples.length > 0).length;
