@@ -5,7 +5,6 @@ import { totalExamCoveredWords, totalExamExamples, totalIdiomCoveredWords, total
 import { functionWordExamGroups, realWordExamGroups, totalDatedFunctionWordExamExamples, totalDatedRealWordExamExamples, totalFunctionWordExamExamples, totalRealWordExamExamples, type ExamExample } from "./data/exam-data";
 
 type SectionId = "home" | "words" | "texts" | "exam" | "resources";
-type Audience = "teacher" | "student";
 
 const navItems: Array<{ id: SectionId; label: string; short: string; hint: string }> = [
   { id: "home", label: "学习总览", short: "览", hint: "课堂与复习入口" },
@@ -54,7 +53,6 @@ const textbookLessons = (() => {
 
 export default function Home() {
   const [section, setSection] = useState<SectionId>("home");
-  const [audience, setAudience] = useState<Audience>("teacher");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [requestedWord, setRequestedWord] = useState("爱");
   const current = useMemo(() => navItems.find((item) => item.id === section) ?? navItems[0], [section]);
@@ -87,15 +85,12 @@ export default function Home() {
         <header className="topbar">
           <button className="menu-button" type="button" onClick={() => setMobileMenuOpen(true)} aria-label="打开导航"><span /><span /><span /></button>
           <div className="breadcrumb"><span>文言学习工作台</span><i>/</i><strong>{current.label}</strong></div>
-          <div className="audience-switch" role="group" aria-label="使用视角">
-            <button className={audience === "teacher" ? "selected" : ""} onClick={() => setAudience("teacher")} type="button">教师</button>
-            <button className={audience === "student" ? "selected" : ""} onClick={() => setAudience("student")} type="button">学生</button>
-          </div>
+          <div className="shared-mode"><span>课堂 · 自学共用</span></div>
         </header>
         <div className="page-frame" key={section}>
-          {section === "home" && <Dashboard audience={audience} goTo={chooseSection} />}
-          {section === "words" && <WordsLab audience={audience} initialCharacter={requestedWord} />}
-          {section === "texts" && <TextsReview audience={audience} openWord={openWord} />}
+          {section === "home" && <Dashboard goTo={chooseSection} />}
+          {section === "words" && <WordsLab initialCharacter={requestedWord} />}
+          {section === "texts" && <TextsReview openWord={openWord} />}
           {section === "exam" && <ExamMap openWord={openWord} />}
           {section === "resources" && <Resources />}
         </div>
@@ -107,13 +102,13 @@ export default function Home() {
   );
 }
 
-function Dashboard({ audience, goTo }: { audience: Audience; goTo: (section: SectionId) => void }) {
+function Dashboard({ goTo }: { goTo: (section: SectionId) => void }) {
   return <>
     <section className="hero-panel">
       <div className="hero-copy">
         <div className="eyebrow"><span />第七轮 · 高考关联资料已接入</div>
-        <h1>{audience === "teacher" ? "把一个字，讲成一条清楚的义脉" : "从一个字出发，真正读懂文言"}</h1>
-        <p>{audience === "teacher" ? "面向课堂大屏的文言学习工作台。沿着字形、本义、义脉、教材、成语与高考语境，让讲解有据可循。" : "先观察，再推测；理解词义怎样生长，最后回到课文和题目中验证。每一步都留下复习线索。"}</p>
+        <h1>从一个字出发，走通一条清楚的义脉</h1>
+        <p>适合课堂展示与自主复习的文言学习工作台。先观察、再推测，沿着字形、本义、义脉、教材、成语与高考语境逐步验证。</p>
         <div className="hero-actions"><button className="primary-button" onClick={() => goTo("words")} type="button">进入实词实验室 <span>→</span></button><button className="text-button" onClick={() => goTo("resources")} type="button">查看已收录资料</button></div>
       </div>
       <div className="path-card" aria-label="完整学习路径">
@@ -153,11 +148,11 @@ function ModuleCard({ glyph, title, note, status, active = false, onClick }: { g
   return <button className={`module-card ${active ? "featured" : ""}`} type="button" onClick={onClick}><span className="module-glyph">{glyph}</span><span className="module-copy"><strong>{title}</strong><small>{note}</small></span><span className="module-status">{status}</span></button>;
 }
 
-function WordsLab({ audience, initialCharacter }: { audience: Audience; initialCharacter: string }) {
+function WordsLab({ initialCharacter }: { initialCharacter: string }) {
   const [activeCharacter, setActiveCharacter] = useState(verifiedWords.some((word) => word.character === initialCharacter) ? initialCharacter : verifiedWords[0].character);
   const [query, setQuery] = useState("");
   const [grammar, setGrammar] = useState("全部");
-  const [showTranslations, setShowTranslations] = useState(audience === "student");
+  const [showTranslations, setShowTranslations] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
   const [lessonWords, setLessonWords] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<"journey" | "catalog">("journey");
@@ -232,7 +227,7 @@ function WordsLab({ audience, initialCharacter }: { audience: Audience; initialC
       </article>
 
       <aside className="lesson-panel active-tools">
-        <div className="drawer-heading"><strong>课堂工具</strong><span>{audience === "teacher" ? "教师视角" : "学生视角"}</span></div>
+        <div className="drawer-heading"><strong>学习工具</strong><span>课堂 · 自学</span></div>
         <button type="button" className={focusMode ? "active" : ""} onClick={() => setFocusMode((focus) => !focus)}><span>放</span>{focusMode ? "恢复字形" : "放大字形"}</button>
         <button type="button" className={!showTranslations ? "active" : ""} onClick={() => setShowTranslations((show) => !show)}><span>隐</span>{showTranslations ? "隐藏释义" : "显示释义"}</button>
         <button type="button" className={inLesson ? "active" : ""} onClick={toggleLesson}><span>课</span>{inLesson ? "移出本课" : "加入本课"}</button>
@@ -317,7 +312,7 @@ function LearningJourney({ word, stage, advance, guessSelection, setGuessSelecti
   </div>;
 }
 
-function TextsReview({ audience, openWord }: { audience: Audience; openWord: (character: string) => void }) {
+function TextsReview({ openWord }: { openWord: (character: string) => void }) {
   const volumes = ["全部教材", ...textbookVolumeOrder.filter((volume) => textbookLessons.some((lesson) => lesson.volume === volume))];
   const [volume, setVolume] = useState("全部教材");
   const filteredLessons = textbookLessons.filter((lesson) => volume === "全部教材" || lesson.volume === volume);
@@ -360,7 +355,7 @@ function TextsReview({ audience, openWord }: { audience: Audience; openWord: (ch
 
       <article className="lesson-review-canvas">
         {activeLesson ? <>
-          <header><span>{activeLesson.volume}</span><h2>{activeLesson.title}</h2><p>{audience === "teacher" ? "可按顺序遮住义项，让学生先结合上下文判断，再点击词卡进入完整义项。" : "先读原句猜词义，再查看核验结果；点击实词可以回到完整学习路径。"}</p></header>
+          <header><span>{activeLesson.volume}</span><h2>{activeLesson.title}</h2><p>先读原句并结合上下文判断词义，再核验对应义项；点击实词可回到完整学习路径，课堂提问与自主复习均可使用。</p></header>
           <div className="lesson-example-list">{activeLesson.examples.map((example, index) => {
             const parts = example.sentence.split(example.character);
             return <article key={`${example.character}-${example.pdfPage}-${index}`}>

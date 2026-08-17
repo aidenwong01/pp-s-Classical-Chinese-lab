@@ -25,6 +25,8 @@ test("server-renders the Wenyan learning workspace", async () => {
   assert.match(html, /1131(?:<!-- -->)?条成语关联已接入/);
   assert.match(html, /522(?:<!-- -->)?条标注年份关联/);
   assert.match(html, /30 项上传资料 · 1 项公开核验源/);
+  assert.match(html, /课堂 · 自学共用/);
+  assert.doesNotMatch(html, /使用视角|>教师<|>学生</);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/);
 });
 
