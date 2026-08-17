@@ -76,3 +76,12 @@ test("keeps the uploaded idiom dataset within verified source boundaries", async
   assert.match(page, /本资料没有逐条指定义项时，页面不自行猜测/);
   assert.match(page, /资料核对说明/);
 });
+
+test("keeps a device-local taught status for all 120 real words", async () => {
+  const page = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+
+  assert.match(page, /pp-wenyan-lab-taught-words/);
+  assert.match(page, /按已讲状态筛选/);
+  assert.match(page, /标记为已讲/);
+  assert.match(page, /window\.localStorage\.setItem/);
+});

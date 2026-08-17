@@ -112,12 +112,16 @@ button, input { font: inherit; } button { color: inherit; }
 .lab-path > button.unlocked:not(.current) { color: var(--pine); background: rgba(227,235,229,.42); }
 .lab-path > button:disabled { cursor: not-allowed; opacity: .48; }
 .lab-path i { width: 19px; height: 19px; border: 1px solid currentColor; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-size: 8px; opacity: .75; }
-.lab-mode-row { min-height: 47px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+.lab-mode-row { min-height: 47px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 15px; }
 .lab-mode-row > span { color: var(--ink-faint); font-size: 9px; }
 .mobile-word-picker { display: none; }
 .lab-mode-switch { display: flex; padding: 3px; border: 1px solid var(--line); border-radius: 9px; background: rgba(251,250,246,.45); }
 .lab-mode-switch button { border: 0; border-radius: 6px; padding: 7px 12px; background: transparent; color: var(--ink-faint); font-size: 9px; cursor: pointer; }
 .lab-mode-switch button.active { background: var(--paper-light); color: var(--pine); box-shadow: 0 2px 8px rgba(44,40,31,.07); }
+.progress-filter { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.progress-filter button, .taught-toggle { padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; background: rgba(251,250,246,.45); color: var(--ink-faint); font-size: 9px; cursor: pointer; }
+.progress-filter button.active, .taught-toggle.active { border-color: rgba(51,77,67,.24); background: var(--pine-light); color: var(--pine); }
+.taught-toggle { color: var(--pine); }
 .lab-layout { margin-top: 16px; min-height: 520px; display: grid; grid-template-columns: 220px 1fr 200px; border: 1px solid var(--line); border-radius: 18px; background: rgba(251,250,246,.72); overflow: hidden; box-shadow: var(--shadow); }
 .word-drawer, .lesson-panel { padding: 20px; background: rgba(238,233,219,.55); }
 .word-drawer { border-right: 1px solid var(--line); } .lesson-panel { border-left: 1px solid var(--line); }
@@ -443,7 +447,7 @@ button, input { font: inherit; } button { color: inherit; }
   .word-hero { grid-template-columns: 92px 1fr; gap: 15px; } .character-block { width: 88px; height: 104px; } .character-block strong { font-size: 56px; }
   .source-status { grid-template-columns: 1fr 1fr; } .sense-toolbar { align-items: flex-start; flex-direction: column; padding: 12px 0; }
   .sense-card { padding: 15px 13px; grid-template-columns: 25px 1fr; gap: 8px; } .sense-card blockquote { font-size: 13px; }
-  .lab-mode-row { align-items: flex-start; flex-direction: column; padding: 7px 0 12px; } .observation-board { grid-template-columns: 1fr; justify-items: center; }
+  .lab-mode-row { align-items: stretch; flex-direction: column; padding: 7px 0 12px; } .lab-mode-switch, .progress-filter { width: 100%; margin-left: 0; } .lab-mode-switch button, .progress-filter button { flex: 1; } .taught-toggle { width: 100%; } .observation-board { grid-template-columns: 1fr; justify-items: center; }
   .observation-prompts { width: 100%; } .guess-options, .meaning-chain { grid-template-columns: 1fr; }
   .textbook-cards article > div:last-child { align-items: flex-start; flex-direction: column; }
   .idiom-heading, .idiom-source, .idiom-verification > div { align-items: flex-start; flex-direction: column; } .idiom-heading > small { max-width: 100%; text-align: left; }

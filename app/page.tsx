@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { totalExamCoveredWords, totalExamExamples, totalIdiomCoveredWords, totalIdiomEntries, totalIdiomLinks, totalOfficiallyCheckedIdioms, totalTextbookExamples, totalVerifiedSenses, verifiedWords } from "./data/verified-words";
 import { functionWordExamGroups, realWordExamGroups, totalDatedFunctionWordExamExamples, totalDatedRealWordExamExamples, totalFunctionWordExamExamples, totalRealWordExamExamples, type ExamExample } from "./data/exam-data";
 
@@ -37,6 +37,7 @@ const teachingResources = [
 const publicReferenceWorks = ["教育部《成语典》2020（2026-06-25 数据版）"];
 
 const learningPath = ["看字形", "猜本义", "理义脉", "回教材", "联成语", "对高考", "再复习"];
+const taughtWordsStorageKey = "pp-wenyan-lab-taught-words";
 const textbookVolumeOrder = ["七年级上册（2024秋版）", "七年级下册（2025春版）", "八年级上册", "八年级下册", "九年级下册", "高中语文必修上", "高中语文必修下", "高中语文选择性必修上", "高中语文选择性必修中", "高中语文选择性必修下"];
 const pickRandom = <T,>(items: T[], fallback: T) => items[Math.floor(Math.random() * items.length)] ?? fallback;
 const cleanReferenceLabel = (value: string) => value.replace(/[＃※]/g, "").replace(/\*\d+\*/g, "").replace(/\n/g, "；").trim();
@@ -159,11 +160,17 @@ function WordsLab({ initialCharacter }: { initialCharacter: string }) {
   const [journeyStage, setJourneyStage] = useState(0);
   const [unlockedStage, setUnlockedStage] = useState(0);
   const [guessSelection, setGuessSelection] = useState<string | null>(null);
+  const [progressFilter, setProgressFilter] = useState<"all" | "taught" | "untaught">("all");
+  const [taughtWords, setTaughtWords] = useState<string[]>([]);
+  const [progressLoaded, setProgressLoaded] = useState(false);
   const activeWord = verifiedWords.find((word) => word.character === activeCharacter) ?? verifiedWords[0];
   const grammarOptions = ["全部", "名词", "动词", "形容词", "其他"];
   const filteredWords = verifiedWords.filter((word) => {
     const haystack = [word.index, word.character, word.pinyin, ...word.senses.flatMap((sense) => [sense.meaning, sense.sentence, sense.reference]), ...word.idiomExamples.flatMap((example) => [example.idiom, example.explanation, example.officialVerification?.traditional, example.officialVerification?.sourceTitle]), ...word.examExamples.flatMap((example) => [example.sourceLabel, ...example.paragraphs])].join(" ");
-    return haystack.toLowerCase().includes(query.trim().toLowerCase());
+    const matchesQuery = haystack.toLowerCase().includes(query.trim().toLowerCase());
+    const isTaught = taughtWords.includes(word.character);
+    const matchesProgress = progressFilter === "all" || (progressFilter === "taught" ? isTaught : !isTaught);
+    return matchesQuery && matchesProgress;
   });
   const visibleSenses = activeWord.senses.filter((sense) => {
     if (grammar === "全部") return true;
@@ -171,11 +178,32 @@ function WordsLab({ initialCharacter }: { initialCharacter: string }) {
     return sense.grammar.startsWith(grammar);
   });
   const inLesson = lessonWords.includes(activeWord.character);
+  const isTaught = taughtWords.includes(activeWord.character);
   const toggleLesson = () => setLessonWords((words) => inLesson ? words.filter((word) => word !== activeWord.character) : [...words, activeWord.character]);
+  const toggleTaught = () => setTaughtWords((words) => isTaught ? words.filter((word) => word !== activeWord.character) : [...words, activeWord.character]);
   const chooseWord = (character: string) => {
     setActiveCharacter(character); setGrammar("全部"); setJourneyStage(0); setUnlockedStage(0); setGuessSelection(null);
   };
   const advanceJourney = (next: number) => { setJourneyStage(next); setUnlockedStage((current) => Math.max(current, next)); };
+
+  useEffect(() => {
+    const restoreProgress = window.requestAnimationFrame(() => {
+      try {
+        const saved = JSON.parse(window.localStorage.getItem(taughtWordsStorageKey) ?? "[]");
+        const knownCharacters = new Set(verifiedWords.map((word) => word.character));
+        if (Array.isArray(saved)) setTaughtWords([...new Set(saved.filter((character): character is string => typeof character === "string" && knownCharacters.has(character)))]);
+      } catch {
+        setTaughtWords([]);
+      } finally {
+        setProgressLoaded(true);
+      }
+    });
+    return () => window.cancelAnimationFrame(restoreProgress);
+  }, []);
+
+  useEffect(() => {
+    if (progressLoaded) window.localStorage.setItem(taughtWordsStorageKey, JSON.stringify(taughtWords));
+  }, [progressLoaded, taughtWords]);
 
   return <section className={`workspace-section words-workspace ${focusMode ? "focus-mode" : ""}`}>
     <div className="page-heading">
@@ -184,8 +212,13 @@ function WordsLab({ initialCharacter }: { initialCharacter: string }) {
     </div>
     <div className="lab-mode-row">
       <div className="lab-mode-switch"><button type="button" className={viewMode === "journey" ? "active" : ""} onClick={() => setViewMode("journey")}>分步探索</button><button type="button" className={viewMode === "catalog" ? "active" : ""} onClick={() => setViewMode("catalog")}>义项全览</button></div>
-      <label className="mobile-word-picker"><span>选择实词</span><select aria-label="选择实词" value={activeWord.character} onChange={(event) => chooseWord(event.target.value)}>{verifiedWords.map((word) => <option key={word.character} value={word.character}>{word.index}. {word.character} · {word.pinyin}</option>)}</select></label>
-      <span>当前：第 {activeWord.index} 词 · {activeWord.character} · {activeWord.pinyin}</span>
+      <div className="progress-filter" role="group" aria-label="按已讲状态筛选">
+        <button type="button" className={progressFilter === "all" ? "active" : ""} onClick={() => setProgressFilter("all")}>全部 {verifiedWords.length}</button>
+        <button type="button" className={progressFilter === "taught" ? "active" : ""} onClick={() => setProgressFilter("taught")}>已讲 {taughtWords.length}</button>
+        <button type="button" className={progressFilter === "untaught" ? "active" : ""} onClick={() => setProgressFilter("untaught")}>未讲 {verifiedWords.length - taughtWords.length}</button>
+      </div>
+      <label className="mobile-word-picker"><span>选择实词</span><select aria-label="选择实词" value={filteredWords.some((word) => word.character === activeWord.character) ? activeWord.character : ""} onChange={(event) => event.target.value && chooseWord(event.target.value)}>{filteredWords.length ? filteredWords.map((word) => <option key={word.character} value={word.character}>{word.index}. {word.character} · {word.pinyin}</option>) : <option value="" disabled>当前筛选暂无实词</option>}</select></label>
+      <button type="button" className={`taught-toggle ${isTaught ? "active" : ""}`} aria-pressed={isTaught} onClick={toggleTaught}>{isTaught ? "✓ 已讲" : "标记为已讲"}</button>
     </div>
     <div className="lab-path">{learningPath.map((step, index) => <button type="button" disabled={viewMode === "journey" && index > unlockedStage} onClick={() => viewMode === "journey" && setJourneyStage(index)} className={viewMode === "journey" && index === journeyStage ? "current" : index <= unlockedStage ? "unlocked" : ""} key={step}><i>{index + 1}</i>{step}</button>)}</div>
     <div className="lab-layout populated">
@@ -193,7 +226,7 @@ function WordsLab({ initialCharacter }: { initialCharacter: string }) {
         <div className="drawer-heading"><strong>实词目录</strong><span>{filteredWords.length} / {verifiedWords.length}</span></div>
         <label className="fake-search"><span>⌕</span><input aria-label="搜索实词" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="搜索字、篇目、成语或义项" /></label>
         <div className="word-list">
-          {filteredWords.map((word) => <button type="button" key={word.character} className={word.character === activeWord.character ? "active" : ""} onClick={() => chooseWord(word.character)}><span>{word.character}</span><div><strong>{String(word.index).padStart(3, "0")} · {word.pinyin}</strong><small>{word.senses.length} 个义项</small></div><i>›</i></button>)}
+          {filteredWords.map((word) => <button type="button" key={word.character} className={word.character === activeWord.character ? "active" : ""} onClick={() => chooseWord(word.character)}><span>{word.character}</span><div><strong>{String(word.index).padStart(3, "0")} · {word.pinyin}</strong><small>{word.senses.length} 个义项{taughtWords.includes(word.character) ? " · 已讲" : ""}</small></div><i>›</i></button>)}
           {filteredWords.length === 0 && <p className="no-result">120 个词条中没有匹配内容</p>}
         </div>
         <div className="drawer-foot"><span>据</span><p>资料来源<br /><strong>《120实词归档版》</strong></p></div>
@@ -230,6 +263,7 @@ function WordsLab({ initialCharacter }: { initialCharacter: string }) {
         <div className="drawer-heading"><strong>学习工具</strong><span>课堂 · 自学</span></div>
         <button type="button" className={focusMode ? "active" : ""} onClick={() => setFocusMode((focus) => !focus)}><span>放</span>{focusMode ? "恢复字形" : "放大字形"}</button>
         <button type="button" className={!showTranslations ? "active" : ""} onClick={() => setShowTranslations((show) => !show)}><span>隐</span>{showTranslations ? "隐藏释义" : "显示释义"}</button>
+        <button type="button" className={isTaught ? "active" : ""} onClick={toggleTaught}><span>讲</span>{isTaught ? "取消已讲" : "标记已讲"}</button>
         <button type="button" className={inLesson ? "active" : ""} onClick={toggleLesson}><span>课</span>{inLesson ? "移出本课" : "加入本课"}</button>
         <div className="lesson-basket"><span>本课字篮</span><strong>{lessonWords.length}</strong><p>{lessonWords.length ? lessonWords.join(" · ") : "尚未添加实词"}</p></div>
         <div className="tool-note"><strong>资料边界</strong><p>首批成语采用公开授权的教育部《成语典》核验；未建立可靠对应的词不自动补全。</p></div>
