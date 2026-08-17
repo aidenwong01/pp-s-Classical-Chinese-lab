@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { totalIdiomLinks, totalTextbookExamples, totalVerifiedIdioms, totalVerifiedSenses, verifiedWords } from "./data/verified-words";
+import { totalIdiomCoveredWords, totalIdiomEntries, totalIdiomLinks, totalOfficiallyCheckedIdioms, totalTextbookExamples, totalVerifiedSenses, verifiedWords } from "./data/verified-words";
 
 type SectionId = "home" | "words" | "texts" | "exam" | "resources";
 type Audience = "teacher" | "student";
@@ -29,7 +29,7 @@ const teachingResources = [
   "七年级上册（2024秋版）语文电子课本", "七年级下册（2025春版）语文电子课本",
   "八年级上册", "八年级下册", "九年级下册", "高中语文必修上", "高中语文必修下",
   "高中语文选择性必修上", "高中语文选择性必修中", "高中语文选择性必修下",
-  "高中语文统编版学习任务汇总", "120实词归档版", "文言文阅读十年汇编（原卷版）",
+  "高中语文统编版学习任务汇总", "120实词归档版", "文言文实词关联成语120个", "文言文阅读十年汇编（原卷版）",
   "文言文阅读十年汇编（答案版）", "2026高考文学类文本教考衔接资料",
 ];
 
@@ -109,7 +109,7 @@ function Dashboard({ audience, goTo }: { audience: Audience; goTo: (section: Sec
   return <>
     <section className="hero-panel">
       <div className="hero-copy">
-        <div className="eyebrow"><span />第五轮 · 首批成语联想已开放</div>
+        <div className="eyebrow"><span />第五轮 · 成语关联资料已接入</div>
         <h1>{audience === "teacher" ? "把一个字，讲成一条清楚的义脉" : "从一个字出发，真正读懂文言"}</h1>
         <p>{audience === "teacher" ? "面向课堂大屏的文言学习工作台。沿着字形、本义、义脉、教材、成语与高考语境，让讲解有据可循。" : "先观察，再推测；理解词义怎样生长，最后回到课文和题目中验证。每一步都留下复习线索。"}</p>
         <div className="hero-actions"><button className="primary-button" onClick={() => goTo("words")} type="button">进入实词实验室 <span>→</span></button><button className="text-button" onClick={() => goTo("resources")} type="button">查看已收录资料</button></div>
@@ -122,7 +122,7 @@ function Dashboard({ audience, goTo }: { audience: Audience; goTo: (section: Sec
     </section>
 
     <section className="stat-row" aria-label="资料库概况">
-      <div className="stat-card"><strong>28</strong><span>项资料依据</span><small>27 项上传资料 · 1 项公开核验源</small></div>
+      <div className="stat-card"><strong>29</strong><span>项资料依据</span><small>28 项上传资料 · 1 项公开核验源</small></div>
       <div className="stat-card"><strong>10</strong><span>册语文教材</span><small>初高中教材文件</small></div>
       <div className="stat-card"><strong>7</strong><span>部文字学著作</span><small>字形与本义的重要依据</small></div>
       <div className="stat-card warning"><strong>120</strong><span>个文言实词</span><small>{totalVerifiedSenses} 条带例句义项已据资料接入</small></div>
@@ -132,7 +132,7 @@ function Dashboard({ audience, goTo }: { audience: Audience; goTo: (section: Sec
       <section className="section-card modules-card">
         <div className="section-heading"><div><span className="section-kicker">工作台</span><h2>学习模块</h2></div><span className="quiet-tag">按轮次逐步开放</span></div>
         <div className="module-grid">
-          <ModuleCard glyph="实" title="实词实验室" note="观察、猜测、义项、教材与成语" status={`${totalVerifiedIdioms}条成语已接入`} active onClick={() => goTo("words")} />
+          <ModuleCard glyph="实" title="实词实验室" note="观察、猜测、义项、教材与成语" status={`${totalIdiomEntries}条成语关联已接入`} active onClick={() => goTo("words")} />
           <ModuleCard glyph="课" title="按课文复习" note="从教材原句回看重点词义" status="第四轮已开放" onClick={() => goTo("texts")} />
           <ModuleCard glyph="抽" title="随机抽字" note="课堂提问与课后自测入口" status="第四轮已开放" onClick={() => goTo("texts")} />
           <ModuleCard glyph="考" title="高考语义地图" note="连接真题语境与命题方式" status="第七轮" onClick={() => goTo("exam")} />
@@ -165,7 +165,7 @@ function WordsLab({ audience, initialCharacter }: { audience: Audience; initialC
   const activeWord = verifiedWords.find((word) => word.character === activeCharacter) ?? verifiedWords[0];
   const grammarOptions = ["全部", "名词", "动词", "形容词", "其他"];
   const filteredWords = verifiedWords.filter((word) => {
-    const haystack = [word.index, word.character, word.pinyin, ...word.senses.flatMap((sense) => [sense.meaning, sense.sentence, sense.reference]), ...word.idiomExamples.flatMap((example) => [example.idiom, example.traditional, example.sourceTitle])].join(" ");
+    const haystack = [word.index, word.character, word.pinyin, ...word.senses.flatMap((sense) => [sense.meaning, sense.sentence, sense.reference]), ...word.idiomExamples.flatMap((example) => [example.idiom, example.explanation, example.officialVerification?.traditional, example.officialVerification?.sourceTitle])].join(" ");
     return haystack.toLowerCase().includes(query.trim().toLowerCase());
   });
   const visibleSenses = activeWord.senses.filter((sense) => {
@@ -182,8 +182,8 @@ function WordsLab({ audience, initialCharacter }: { audience: Audience; initialC
 
   return <section className={`workspace-section words-workspace ${focusMode ? "focus-mode" : ""}`}>
     <div className="page-heading">
-      <div><span className="section-kicker">第五轮 · 首批成语联想</span><h1>实词实验室</h1><p>120 个实词已按上传资料顺序完整接入，可搜索字、读音、篇目、原句、义项或已核验成语。古文字形和高考关联缺少可靠材料时不补写。</p></div>
-      <span className="stage-badge">120 字 · {totalVerifiedSenses} 条义项 · {totalVerifiedIdioms} 条成语</span>
+      <div><span className="section-kicker">第五轮 · 成语关联资料</span><h1>实词实验室</h1><p>120 个实词已按上传资料顺序完整接入；“联成语”优先采用新上传的120词成语资料，名单差异与原文件异常均明确标注。</p></div>
+      <span className="stage-badge">120 字 · {totalVerifiedSenses} 条义项 · {totalIdiomEntries} 条成语关联</span>
     </div>
     <div className="lab-mode-row">
       <div className="lab-mode-switch"><button type="button" className={viewMode === "journey" ? "active" : ""} onClick={() => setViewMode("journey")}>分步探索</button><button type="button" className={viewMode === "catalog" ? "active" : ""} onClick={() => setViewMode("catalog")}>义项全览</button></div>
@@ -206,7 +206,7 @@ function WordsLab({ audience, initialCharacter }: { audience: Audience; initialC
         <header className="word-hero">
           <div className={`character-block ${focusMode ? "enlarged" : ""}`}><strong>{activeWord.character}</strong><span>{activeWord.pinyin}</span></div>
           <div className="word-meta"><h2>{activeWord.senses.length} 个义项</h2><p>{activeWord.readings ?? `读音：${activeWord.pinyin}`}</p>{activeWord.verificationNotes?.map((note) => <small className="word-verification-note" key={note}>核验：{note}</small>)}</div>
-          <div className="source-status"><span>资料状态</span><strong>实词义项已录入</strong><small>教材原句 · {activeWord.textbookExamples.length ? `已核验 ${activeWord.textbookExamples.length} 条` : "暂无关联"}</small><small>成语 · {activeWord.idiomExamples.length ? `已核验 ${activeWord.idiomExamples.length} 条` : "暂无关联"}</small><small>古文字形 · 暂无资料</small><small>高考关联 · 暂无资料</small></div>
+          <div className="source-status"><span>资料状态</span><strong>实词义项已录入</strong><small>教材原句 · {activeWord.textbookExamples.length ? `已核验 ${activeWord.textbookExamples.length} 条` : "暂无关联"}</small><small>成语 · {activeWord.idiomExamples.length ? `已录入 ${activeWord.idiomExamples.length} 条` : "暂无可靠关联"}</small><small>古文字形 · 暂无资料</small><small>高考关联 · 暂无资料</small></div>
         </header>
 
         {viewMode === "journey" ? <LearningJourney word={activeWord} stage={journeyStage} advance={advanceJourney} guessSelection={guessSelection} setGuessSelection={setGuessSelection} /> : <><div className="sense-toolbar">
@@ -253,6 +253,7 @@ function LearningJourney({ word, stage, advance, guessSelection, setGuessSelecti
     ? [markedOriginal, ...word.senses.filter((sense) => sense !== markedOriginal).slice(0, 2)]
     : word.senses.slice(0, 3);
   const guessIsCorrect = Boolean(markedOriginal && guessSelection === markedOriginal.meaning);
+  const officiallyCheckedCount = word.idiomExamples.filter((example) => example.officialVerification).length;
 
   if (stage === 0) return <div className="journey-panel observation-stage">
     <div className="journey-heading"><span>01 · 看字形</span><h2>先看，不急着解释</h2><p>观察今天通行的字形。上传资料中的古文字图像尚未建立页码索引，因此这里不绘制、不猜测古文字形。</p></div>
@@ -287,14 +288,15 @@ function LearningJourney({ word, stage, advance, guessSelection, setGuessSelecti
   </div>;
 
   if (stage === 4) return <div className="journey-panel">
-    <div className="journey-heading"><span>05 · 联成语</span><h2>用熟悉的成语固定“{word.character}”的词义</h2><p>成语名称、音读、释义与典源据教育部《成语典》公开数据核验；“对应义项”回连你上传的《120实词归档版》。</p></div>
-    {word.idiomExamples.length ? <div className="idiom-cards">{word.idiomExamples.map((example) => <article key={`${example.idiom}-${example.matchedMeaning}`}>
-      <div className="idiom-heading"><div><span>成语</span><h3>{example.idiom}</h3></div><small>{example.pinyin}</small></div>
-      {example.traditional !== example.idiom && <p className="traditional-form">《成语典》条目：{example.traditional}</p>}
-      <p className="official-meaning"><span>官方释义原文</span>{example.officialMeaning}</p>
-      <details><summary>揭晓“{word.character}”的对应义项</summary><div><strong>{example.matchedMeaning}</strong><p>义项依据：《120实词归档版》</p></div></details>
-      <div className="idiom-source"><div><span>典源：{cleanReferenceLabel(example.sourceTitle)}</span><small>{example.sourceLabel}</small></div><a href={example.sourceUrl} target="_blank" rel="noreferrer">核验来源 ↗</a></div>
-    </article>)}</div> : <div className="empty-evidence"><span>成</span><h3>暂无已核验成语关联</h3><p>不是说明没有相关成语，而是本轮尚未找到能与上传义项可靠对应的权威条目。</p></div>}
+    <div className="journey-heading"><span>05 · 联成语</span><h2>用熟悉的成语固定“{word.character}”的词义</h2><p>条目与释义优先采用你上传的《文言文实词关联成语120个》；只有与公开《成语典》逐项匹配的内容才另标“官网核验”。本资料没有逐条指定义项时，页面不自行猜测。</p></div>
+    {word.idiomExamples.length ? <><div className="idiom-round-summary"><span><strong>{word.idiomExamples.length}</strong> 条上传资料关联</span><span><strong>{officiallyCheckedCount}</strong> 条已有官网交叉核验</span></div><div className="idiom-cards">{word.idiomExamples.map((example, index) => <article key={`${example.idiom}-${index}`}>
+      <div className="idiom-heading"><div><span>关联成语 / 熟语</span><h3>{example.idiom}</h3></div>{example.officialVerification ? <small>{example.officialVerification.pinyin}</small> : <small>读音：资料未标注</small>}</div>
+      <p className="official-meaning"><span>上传资料释义</span>{example.explanation}</p>
+      {example.matchedMeaning ? <details><summary>查看已核验的“{word.character}”对应义项</summary><div><strong>{example.matchedMeaning}</strong><p>义项依据：《120实词归档版》；对应关系经公开资料交叉核验。</p></div></details> : <div className="idiom-boundary"><span>对应义项暂不判定</span><p>上传资料未逐条标注义项序号，当前不作推断。</p></div>}
+      {example.officialVerification && <div className="idiom-verification"><span>官网交叉核验</span>{example.officialVerification.traditional !== example.idiom && <p>《成语典》条目：{example.officialVerification.traditional}</p>}<p>{example.officialVerification.officialMeaning}</p><div><small>典源：{cleanReferenceLabel(example.officialVerification.sourceTitle)}</small><a href={example.officialVerification.sourceUrl} target="_blank" rel="noreferrer">核验来源 ↗</a></div></div>}
+      <div className="idiom-source"><div><span>{example.sourceEntry}</span><small>{example.sourceLabel}</small></div></div>
+    </article>)}</div></> : <div className="empty-evidence"><span>成</span><h3>暂无可靠成语关联</h3><p>不是说明没有相关成语，而是当前上传资料未提供可直接接入的可靠条目。</p></div>}
+    {word.idiomSourceNote && <div className="source-anomaly"><strong>资料核对说明</strong><p>{word.idiomSourceNote}</p></div>}
     <button className="journey-next" type="button" onClick={() => advance(5)}>继续查看高考关联 <span>→</span></button>
   </div>;
 
@@ -307,7 +309,7 @@ function LearningJourney({ word, stage, advance, guessSelection, setGuessSelecti
   return <div className="journey-panel review-stage">
     <div className="journey-heading"><span>07 · 再复习</span><h2>合上答案，再说一次</h2><p>用三个问题检查自己是否真的理解，而不只是“看过”。</p></div>
     <div className="review-summary"><div><span>字</span><strong>{word.character}</strong><small>{word.pinyin}</small></div><ul><li>我能说出至少两个义项吗？</li><li>我能解释一条教材原句吗？</li><li>我知道哪些内容仍待资料核验吗？</li></ul></div>
-    <div className="review-stats"><span><strong>{word.senses.length}</strong>个已录入义项</span><span><strong>{word.textbookExamples.length}</strong>条已核验教材原句</span><span><strong>{word.idiomExamples.length}</strong>条已核验成语关联</span><span><strong>0</strong>条已核验高考关联</span></div>
+    <div className="review-stats"><span><strong>{word.senses.length}</strong>个已录入义项</span><span><strong>{word.textbookExamples.length}</strong>条已核验教材原句</span><span><strong>{word.idiomExamples.length}</strong>条已录入成语关联</span><span><strong>0</strong>条已核验高考关联</span></div>
     <button className="journey-next secondary" type="button" onClick={() => advance(0)}>再走一遍 <span>↺</span></button>
   </div>;
 }
@@ -389,19 +391,20 @@ function Resources() {
   ]);
   const resourceState = (item: string) => {
     if (item === "120实词归档版") return `已解析 · 120字 / ${totalVerifiedSenses}条义项已接入`;
-    if (item.startsWith("教育部《成语典》")) return `公开授权核验源 · ${totalVerifiedIdioms}条成语 / ${totalIdiomLinks}条字义关联已接入`;
+    if (item === "文言文实词关联成语120个") return `已解析 · ${totalIdiomEntries}条关联 / 覆盖${totalIdiomCoveredWords}字`;
+    if (item.startsWith("教育部《成语典》")) return `公开授权核验源 · ${totalOfficiallyCheckedIdioms}条成语 / ${totalIdiomLinks}条字义关联已匹配`;
     if (indexedTextbooks.has(item)) return "已解析 · 教材原句索引已接入";
     return "已收录 · 待解析";
   };
   const groups = [
     { title: "文字学与汉字学", count: 7, items: researchWorks },
     { title: "专题研讨", count: 5, items: seminars },
-    { title: "教材与复习", count: 15, items: teachingResources },
+    { title: "教材与复习", count: 16, items: teachingResources },
     { title: "公开核验源", count: 1, items: publicReferenceWorks },
   ];
   return <section className="workspace-section">
-    <div className="page-heading"><div><span className="section-kicker">知识依据</span><h1>资料库</h1><p>27 项上传文件与公开核验源分开标注。正文解析、页码定位与条目核验按模块逐步进行。</p></div><span className="stage-badge">28 项资料依据</span></div>
-    <div className="resource-summary"><span><strong>22</strong>PDF</span><span><strong>5</strong>DOCX</span><span><strong>1</strong>公开核验源</span><span><strong>分批</strong>正文解析</span></div>
+    <div className="page-heading"><div><span className="section-kicker">知识依据</span><h1>资料库</h1><p>28 项上传文件与公开核验源分开标注。正文解析、页码定位与条目核验按模块逐步进行。</p></div><span className="stage-badge">29 项资料依据</span></div>
+    <div className="resource-summary"><span><strong>22</strong>PDF</span><span><strong>6</strong>DOCX</span><span><strong>1</strong>公开核验源</span><span><strong>分批</strong>正文解析</span></div>
     <div className="resource-groups">{groups.map((group) => <article className="resource-group" key={group.title}><div className="resource-group-head"><span>{group.title.slice(0, 1)}</span><div><h2>{group.title}</h2><p>{group.count} 项资料</p></div></div><ul>{group.items.map((item) => <li key={item}><span>{item}</span><small>{resourceState(item)}</small></li>)}</ul></article>)}</div>
   </section>;
 }

@@ -1,6 +1,7 @@
 import sourceWords from "./all-words.json";
 import exactTextbookLinks from "./textbook-links.json";
 import officialIdiomLinks from "./idiom-links.json";
+import uploadedIdiomGroups from "./uploaded-idioms.json";
 
 export type WordSense = {
   grammar: string;
@@ -23,13 +24,18 @@ export type TextbookExample = {
 
 export type IdiomExample = {
   idiom: string;
-  traditional: string;
-  pinyin: string;
-  officialMeaning: string;
-  sourceTitle: string;
+  explanation: string;
   sourceLabel: string;
-  sourceUrl: string;
-  matchedMeaning: string;
+  sourceEntry: string;
+  matchedMeaning?: string;
+  officialVerification?: {
+    traditional: string;
+    pinyin: string;
+    officialMeaning: string;
+    sourceTitle: string;
+    sourceLabel: string;
+    sourceUrl: string;
+  };
 };
 
 export type VerifiedWord = {
@@ -40,6 +46,7 @@ export type VerifiedWord = {
   senses: WordSense[];
   textbookExamples: TextbookExample[];
   idiomExamples: IdiomExample[];
+  idiomSourceNote?: string;
   verificationNotes?: string[];
 };
 
@@ -110,18 +117,36 @@ function examplesFor(character: string) {
 }
 
 function idiomsFor(character: string, senses: WordSense[]): IdiomExample[] {
-  return officialIdiomLinks.flatMap((entry) => entry.links
-    .filter((link) => link.character === character)
-    .map((link) => ({
+  const sourceGroup = uploadedIdiomGroups.find((group) => group.character === character);
+  if (!sourceGroup) return [];
+
+  return sourceGroup.idioms.map((entry, index) => {
+    const officialEntry = officialIdiomLinks.find((candidate) => candidate.idiom === entry.idiom);
+    const officialLink = officialEntry?.links.find((link) => link.character === character);
+    return {
       idiom: entry.idiom,
-      traditional: entry.traditional,
-      pinyin: entry.pinyin,
-      officialMeaning: entry.officialMeaning,
-      sourceTitle: entry.sourceTitle,
-      sourceLabel: entry.sourceLabel,
-      sourceUrl: entry.sourceUrl,
-      matchedMeaning: senses[link.senseIndex]?.meaning ?? "暂无资料",
-    })));
+      explanation: entry.explanation,
+      sourceLabel: "《2026届高考语文复习：文言文实词关联成语120个》",
+      sourceEntry: `第 ${sourceGroup.sourceIndex} 项 · 成语（${index + 1}）`,
+      matchedMeaning: officialLink ? senses[officialLink.senseIndex]?.meaning : undefined,
+      officialVerification: officialEntry && officialLink ? {
+        traditional: officialEntry.traditional,
+        pinyin: officialEntry.pinyin,
+        officialMeaning: officialEntry.officialMeaning,
+        sourceTitle: officialEntry.sourceTitle,
+        sourceLabel: officialEntry.sourceLabel,
+        sourceUrl: officialEntry.sourceUrl,
+      } : undefined,
+    };
+  });
+}
+
+function idiomSourceNoteFor(character: string) {
+  const sourceGroup = uploadedIdiomGroups.find((group) => group.character === character);
+  if (sourceGroup?.sourceWarning) return sourceGroup.sourceWarning;
+  if (!sourceGroup && character === "何") return "上传的成语资料未列“何”；该资料的120字名单含“达”，与当前实词库名单不一致。";
+  if (!sourceGroup && character === "乃") return "上传的成语资料未列“乃”；该资料的120字名单含“方”，与当前实词库名单不一致。";
+  return undefined;
 }
 
 const pinyinCorrections: Partial<Record<string, { pinyin: string; readings: string; note: string }>> = {
@@ -214,11 +239,14 @@ export const verifiedWords: VerifiedWord[] = sourceWords.map((sourceWord) => {
     senses,
     textbookExamples: examplesFor(sourceWord.character),
     idiomExamples: idiomsFor(sourceWord.character, senses),
+    idiomSourceNote: idiomSourceNoteFor(sourceWord.character),
     verificationNotes: verificationNotes.length ? verificationNotes : undefined,
   };
 });
 
 export const totalVerifiedSenses = verifiedWords.reduce((total, word) => total + word.senses.length, 0);
 export const totalTextbookExamples = verifiedWords.reduce((total, word) => total + word.textbookExamples.length, 0);
-export const totalVerifiedIdioms = new Set(verifiedWords.flatMap((word) => word.idiomExamples.map((example) => example.idiom))).size;
-export const totalIdiomLinks = verifiedWords.reduce((total, word) => total + word.idiomExamples.length, 0);
+export const totalIdiomEntries = verifiedWords.reduce((total, word) => total + word.idiomExamples.length, 0);
+export const totalIdiomCoveredWords = verifiedWords.filter((word) => word.idiomExamples.length > 0).length;
+export const totalOfficiallyCheckedIdioms = new Set(verifiedWords.flatMap((word) => word.idiomExamples.filter((example) => example.officialVerification).map((example) => example.idiom))).size;
+export const totalIdiomLinks = verifiedWords.reduce((total, word) => total + word.idiomExamples.filter((example) => example.matchedMeaning).length, 0);
