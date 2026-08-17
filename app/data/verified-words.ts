@@ -1,5 +1,6 @@
 import sourceWords from "./all-words.json";
 import exactTextbookLinks from "./textbook-links.json";
+import officialIdiomLinks from "./idiom-links.json";
 
 export type WordSense = {
   grammar: string;
@@ -20,6 +21,17 @@ export type TextbookExample = {
   matchedMeaning: string;
 };
 
+export type IdiomExample = {
+  idiom: string;
+  traditional: string;
+  pinyin: string;
+  officialMeaning: string;
+  sourceTitle: string;
+  sourceLabel: string;
+  sourceUrl: string;
+  matchedMeaning: string;
+};
+
 export type VerifiedWord = {
   index: number;
   character: string;
@@ -27,6 +39,7 @@ export type VerifiedWord = {
   readings?: string;
   senses: WordSense[];
   textbookExamples: TextbookExample[];
+  idiomExamples: IdiomExample[];
   verificationNotes?: string[];
 };
 
@@ -96,6 +109,21 @@ function examplesFor(character: string) {
   });
 }
 
+function idiomsFor(character: string, senses: WordSense[]): IdiomExample[] {
+  return officialIdiomLinks.flatMap((entry) => entry.links
+    .filter((link) => link.character === character)
+    .map((link) => ({
+      idiom: entry.idiom,
+      traditional: entry.traditional,
+      pinyin: entry.pinyin,
+      officialMeaning: entry.officialMeaning,
+      sourceTitle: entry.sourceTitle,
+      sourceLabel: entry.sourceLabel,
+      sourceUrl: entry.sourceUrl,
+      matchedMeaning: senses[link.senseIndex]?.meaning ?? "暂无资料",
+    })));
+}
+
 const pinyinCorrections: Partial<Record<string, { pinyin: string; readings: string; note: string }>> = {
   度: { pinyin: "dù / duó", readings: "读音一：dù；读音二：duó", note: "原资料拼音作“dúo”，已按汉语拼音声调标注规则校为“duó”。" },
   期: { pinyin: "qī / jī", readings: "读音一：qī；读音二：jī", note: "“期年”读 jī；上传教材注为“满一年”。" },
@@ -106,7 +134,7 @@ const pinyinCorrections: Partial<Record<string, { pinyin: string; readings: stri
 const sourceVerificationNotes: Partial<Record<string, string[]>> = {
   克: ["原资料作“克已复礼”，据上传教材核为“克己复礼”。"],
   类: ["“举类迩而见义远”中，原资料释“事例”，上传教材注“类”为“事物”；页面保留原资料义项并标出差异。"],
-  迁: ["“迁谪”应指贬官；“迁灭”据《六国论》语境应释为灭亡，已据上传教材校正。"],
+  迁: ["“迁谪”应指贬官；“迁灭”在《六国论》语境中整体释为灭亡，教材关联卡已据上传教材校正。"],
   涕: ["原资料作“儿涕而去”，据上传教材《促织》核为“儿涕而出”。"],
   或: ["原资料将“或王命急宣”的“或”标为“如果”；据上传教材语境核为“有时”。"],
 };
@@ -151,8 +179,7 @@ export const verifiedWords: VerifiedWord[] = sourceWords.map((sourceWord) => {
     if (sourceWord.character === "迁" && sense.sentence.includes("五国迁灭")) {
       return {
         ...sense,
-        meaning: "灭亡",
-        verificationNote: "原资料作“改变，改动”，据上传教材《六国论》语境校正。",
+        verificationNote: "本义项可联系“改变，改动”；但例句中的“迁灭”在上传教材《六国论》语境中整体释为“灭亡”。",
       };
     }
     if (sourceWord.character === "或" && sense.sentence.includes("或王命急宣")) {
@@ -186,9 +213,12 @@ export const verifiedWords: VerifiedWord[] = sourceWords.map((sourceWord) => {
     readings: pinyinCorrection?.readings ?? sourceWord.readings,
     senses,
     textbookExamples: examplesFor(sourceWord.character),
+    idiomExamples: idiomsFor(sourceWord.character, senses),
     verificationNotes: verificationNotes.length ? verificationNotes : undefined,
   };
 });
 
 export const totalVerifiedSenses = verifiedWords.reduce((total, word) => total + word.senses.length, 0);
 export const totalTextbookExamples = verifiedWords.reduce((total, word) => total + word.textbookExamples.length, 0);
+export const totalVerifiedIdioms = new Set(verifiedWords.flatMap((word) => word.idiomExamples.map((example) => example.idiom))).size;
+export const totalIdiomLinks = verifiedWords.reduce((total, word) => total + word.idiomExamples.length, 0);

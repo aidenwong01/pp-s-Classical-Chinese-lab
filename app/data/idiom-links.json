@@ -1,0 +1,785 @@
+[
+  {
+    "idiom": "安居乐业",
+    "traditional": "安居樂業",
+    "pinyin": "ān jū lè yè",
+    "officialMeaning": "人民生活安定和樂，且喜好自己的工作。",
+    "sourceTitle": "《漢書．卷九一．貨殖傳．序》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "安",
+        "senseIndex": 2
+      }
+    ]
+  },
+  {
+    "idiom": "本末倒置",
+    "traditional": "本末倒置",
+    "pinyin": "běn mò dào zhì",
+    "officialMeaning": "比喻不知事情的輕重緩急。",
+    "sourceTitle": "《禮記．大學》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "本",
+        "senseIndex": 1
+      }
+    ]
+  },
+  {
+    "idiom": "兵不厌诈",
+    "traditional": "兵不厭詐",
+    "pinyin": "bīng bù yàn zhà （變） bīng bú yàn zhà",
+    "officialMeaning": "本指作戰時不排斥以欺詐的方法來取勝。後亦比喻做事為了達到目的，不排斥使用詭詐的手段。",
+    "sourceTitle": "《韓非子．難一》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "兵",
+        "senseIndex": 4
+      }
+    ]
+  },
+  {
+    "idiom": "病入膏肓",
+    "traditional": "病入膏肓",
+    "pinyin": "bìng rù gāo huāng",
+    "officialMeaning": "指人病重，無藥可救。 ＆比喻人、事已到無可挽回的程度。",
+    "sourceTitle": "《左傳．成公十年》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "病",
+        "senseIndex": 0
+      }
+    ]
+  },
+  {
+    "idiom": "明察秋毫",
+    "traditional": "明察秋毫",
+    "pinyin": "míng chá qiū háo",
+    "officialMeaning": "比喻人能洞察一切，看到極細微的地方。",
+    "sourceTitle": "＃《孟子．梁惠王上》*1*",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "察",
+        "senseIndex": 1
+      }
+    ]
+  },
+  {
+    "idiom": "朝三暮四",
+    "traditional": "朝三暮四",
+    "pinyin": "zhāo sān mù sì",
+    "officialMeaning": "比喻心意不定、反覆無常。貶義。",
+    "sourceTitle": "《莊子．齊物論》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "朝",
+        "senseIndex": 3
+      }
+    ]
+  },
+  {
+    "idiom": "从善如流",
+    "traditional": "從善如流",
+    "pinyin": "cóng shàn rú liú",
+    "officialMeaning": "比喻樂於接受別人好的意見。",
+    "sourceTitle": "《左傳．成公八年》\n《左傳．昭公十三年》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "从",
+        "senseIndex": 1
+      },
+      {
+        "character": "善",
+        "senseIndex": 0
+      }
+    ]
+  },
+  {
+    "idiom": "道听途说",
+    "traditional": "道聽塗說",
+    "pinyin": "dào tīng tú shuō",
+    "officialMeaning": "泛指沒有經過證實、缺乏根據的話。",
+    "sourceTitle": "《論語．陽貨》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "道",
+        "senseIndex": 0
+      },
+      {
+        "character": "说",
+        "senseIndex": 2
+      }
+    ]
+  },
+  {
+    "idiom": "负荆请罪",
+    "traditional": "負荊請罪",
+    "pinyin": "fù jīng qǐng zuì",
+    "officialMeaning": "背著荊條，前往對方居所自請責罰。 ＆比喻主動向對方承認錯誤，請求責罰和原諒。",
+    "sourceTitle": "《史記．卷八一．廉頗藺相如列傳》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "负",
+        "senseIndex": 0
+      },
+      {
+        "character": "请",
+        "senseIndex": 0
+      }
+    ]
+  },
+  {
+    "idiom": "故步自封",
+    "traditional": "故步自封",
+    "pinyin": "gù bù zì fēng",
+    "officialMeaning": "安於現狀，不求進取。貶義。",
+    "sourceTitle": "「故步」：《漢書．卷一〇〇．敘傳上》\n「自封」：晉．庾闡〈斷酒戒〉（據《藝文類聚．卷七二．食物部．酒》引）",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "故",
+        "senseIndex": 3
+      }
+    ]
+  },
+  {
+    "idiom": "顾此失彼",
+    "traditional": "顧此失彼",
+    "pinyin": "gù cǐ shī bǐ",
+    "officialMeaning": "指做事時不能全面兼顧。",
+    "sourceTitle": "《隋書．卷五七．薛道衡列傳》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "顾",
+        "senseIndex": 5
+      }
+    ]
+  },
+  {
+    "idiom": "过犹不及",
+    "traditional": "過猶不及",
+    "pinyin": "guò yóu bù jí",
+    "officialMeaning": "做事過分就好比做得不夠一樣，皆不妥當；指事情要做得恰到好處。",
+    "sourceTitle": "《論語．先進》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "过",
+        "senseIndex": 8
+      },
+      {
+        "character": "及",
+        "senseIndex": 3
+      }
+    ]
+  },
+  {
+    "idiom": "患得患失",
+    "traditional": "患得患失",
+    "pinyin": "huàn dé huàn shī",
+    "officialMeaning": "形容人的得失心很重。",
+    "sourceTitle": "《論語．陽貨》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "患",
+        "senseIndex": 2
+      },
+      {
+        "character": "得",
+        "senseIndex": 2
+      }
+    ]
+  },
+  {
+    "idiom": "迫不及待",
+    "traditional": "迫不及待",
+    "pinyin": "pò bù jí dài",
+    "officialMeaning": "形容心情急切，不願等待。",
+    "sourceTitle": "※明．王夫之《讀通鑑論．卷二四．唐德宗》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "及",
+        "senseIndex": 1
+      }
+    ]
+  },
+  {
+    "idiom": "既往不咎",
+    "traditional": "既往不咎",
+    "pinyin": "jì wǎng bù jiù （變） jì wǎng bú jiù",
+    "officialMeaning": "對過去的錯誤不再追究責難。",
+    "sourceTitle": "《論語．八佾》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "既",
+        "senseIndex": 1
+      }
+    ]
+  },
+  {
+    "idiom": "狐假虎威",
+    "traditional": "狐假虎威",
+    "pinyin": "hú jiǎ hǔ wēi",
+    "officialMeaning": "比喻藉著有權者的威勢欺壓他人、作威作福。",
+    "sourceTitle": "＃《尹文子》逸文（據《太平御覽．卷四九四．人事部．詭詐》引）",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "假",
+        "senseIndex": 1
+      }
+    ]
+  },
+  {
+    "idiom": "见异思迁",
+    "traditional": "見異思遷",
+    "pinyin": "jiàn yì sī qiān",
+    "officialMeaning": "比喻意志不堅定。貶義。",
+    "sourceTitle": "＃《管子．小匡》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "见",
+        "senseIndex": 0
+      },
+      {
+        "character": "迁",
+        "senseIndex": 4
+      }
+    ]
+  },
+  {
+    "idiom": "迎刃而解",
+    "traditional": "迎刃而解",
+    "pinyin": "yíng rèn ér jiě",
+    "officialMeaning": "比喻相連的事物很容易分開。＆比喻事情很容易解決。",
+    "sourceTitle": "《晉書．卷三四．杜預列傳》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "解",
+        "senseIndex": 2
+      }
+    ]
+  },
+  {
+    "idiom": "举一反三",
+    "traditional": "舉一反三",
+    "pinyin": "jǔ yī fǎn sān",
+    "officialMeaning": "形容人於學習中善於觸類旁通。褒義。",
+    "sourceTitle": "《論語．述而》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "举",
+        "senseIndex": 2
+      }
+    ]
+  },
+  {
+    "idiom": "顾影自怜",
+    "traditional": "顧影自憐",
+    "pinyin": "gù yǐng zì lián",
+    "officialMeaning": "看著自己的形影，想到自己的遭遇，自我憐憫。 ＆看著自己美好的形影，自我欣賞。",
+    "sourceTitle": "＃晉．束晳〈貧家賦〉（據《藝文類聚．卷三五．人部十九．貧》引）*1*\n南朝梁．張率〈繡賦〉（據《初學記．卷二七．寶器部．繡第七》引）",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "顾",
+        "senseIndex": 1
+      },
+      {
+        "character": "怜",
+        "senseIndex": 0
+      }
+    ]
+  },
+  {
+    "idiom": "不期而遇",
+    "traditional": "不期而遇",
+    "pinyin": "bù qí ér yù",
+    "officialMeaning": "指未經約定而意外相見。",
+    "sourceTitle": "＃《穀梁傳．隱公八年》*1*",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "期",
+        "senseIndex": 3
+      }
+    ]
+  },
+  {
+    "idiom": "出奇制胜",
+    "traditional": "出奇制勝",
+    "pinyin": "chū qí zhì shèng",
+    "officialMeaning": "發奇兵或用奇計制敵而獲勝。褒義。＆比喻用奇特、創新的方法取得好效果。褒義。",
+    "sourceTitle": "《孫子．勢篇》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "奇",
+        "senseIndex": 3
+      },
+      {
+        "character": "胜",
+        "senseIndex": 1
+      }
+    ]
+  },
+  {
+    "idiom": "山穷水尽",
+    "traditional": "山窮水盡",
+    "pinyin": "shān qióng shuǐ jìn",
+    "officialMeaning": "水陸交通阻斷，無法通行。＆比喻走投無路，陷入絕境。",
+    "sourceTitle": "※北周．庾信〈周兗州刺史廣饒公宇文公神道碑〉（據《文苑英華．卷九一九．碑》引）",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "穷",
+        "senseIndex": 3
+      }
+    ]
+  },
+  {
+    "idiom": "扬长而去",
+    "traditional": "揚長而去",
+    "pinyin": "yáng cháng ér qù",
+    "officialMeaning": "掉頭不理，大模大樣地離去。",
+    "sourceTitle": "※《金瓶梅詞話》第二三回",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "去",
+        "senseIndex": 0
+      }
+    ]
+  },
+  {
+    "idiom": "如鱼得水",
+    "traditional": "如魚得水",
+    "pinyin": "rú yú dé shuǐ",
+    "officialMeaning": "比喻得到與自己志同道合的人或適合於自己發展的環境。＆比喻兩人間情愛親密。",
+    "sourceTitle": "秦．李斯〈用筆法〉（據《全上古三代秦漢三國六朝文．全秦文．卷一．李斯》引）\n《三國志．卷三五．蜀書．諸葛亮傳》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "如",
+        "senseIndex": 2
+      },
+      {
+        "character": "得",
+        "senseIndex": 2
+      }
+    ]
+  },
+  {
+    "idiom": "若无其事",
+    "traditional": "若無其事",
+    "pinyin": "ruò wú qí shì",
+    "officialMeaning": "形容神態鎮靜、自然。",
+    "sourceTitle": "※《雪巖外傳》第一〇回",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "若",
+        "senseIndex": 0
+      }
+    ]
+  },
+  {
+    "idiom": "少不更事",
+    "traditional": "少不更事",
+    "pinyin": "shào bù gēng shì",
+    "officialMeaning": "形容年紀輕，經歷世事少，欠缺經驗。",
+    "sourceTitle": "《晉書．卷六九．周顗列傳》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "少",
+        "senseIndex": 6
+      }
+    ]
+  },
+  {
+    "idiom": "老马识途",
+    "traditional": "老馬識途",
+    "pinyin": "lǎo mǎ shì tú",
+    "officialMeaning": "比喻有經驗的人對情況比較熟悉，容易把工作做好。褒義。",
+    "sourceTitle": "《韓非子．說林上》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "识",
+        "senseIndex": 0
+      }
+    ]
+  },
+  {
+    "idiom": "罄竹难书",
+    "traditional": "罄竹難書",
+    "pinyin": "qìng zhú nán shū",
+    "officialMeaning": "形容罪狀極多。貶義。",
+    "sourceTitle": "＃《呂氏春秋．季夏紀．明理》*1*",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "书",
+        "senseIndex": 0
+      }
+    ]
+  },
+  {
+    "idiom": "假公济私",
+    "traditional": "假公濟私",
+    "pinyin": "jiǎ gōng jì sī",
+    "officialMeaning": "假借公家的名義以謀取個人的私利。",
+    "sourceTitle": "＃《漢書．卷六〇．杜周傳》*1*",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "假",
+        "senseIndex": 0
+      },
+      {
+        "character": "私",
+        "senseIndex": 2
+      }
+    ]
+  },
+  {
+    "idiom": "赴汤蹈火",
+    "traditional": "赴湯蹈火",
+    "pinyin": "fù tāng dào huǒ",
+    "officialMeaning": "比喻奮不顧身，不避艱險。",
+    "sourceTitle": "※＃《漢書．卷四九．爰盎鼂錯傳．鼂錯》*1*",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "汤",
+        "senseIndex": 0
+      }
+    ]
+  },
+  {
+    "idiom": "亡羊补牢",
+    "traditional": "亡羊補牢",
+    "pinyin": "wáng yáng bǔ láo",
+    "officialMeaning": "比喻犯錯後及時更正，尚能補救。",
+    "sourceTitle": "《戰國策．楚策四》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "亡",
+        "senseIndex": 1
+      }
+    ]
+  },
+  {
+    "idiom": "望梅止渴",
+    "traditional": "望梅止渴",
+    "pinyin": "wàng méi zhǐ kě",
+    "officialMeaning": "比喻以空想來安慰自己。",
+    "sourceTitle": "南朝宋．劉義慶《世說新語．假譎》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "望",
+        "senseIndex": 0
+      }
+    ]
+  },
+  {
+    "idiom": "恶贯满盈",
+    "traditional": "惡貫滿盈",
+    "pinyin": "è guàn mǎn yíng",
+    "officialMeaning": "比喻罪大惡極，末日已到。",
+    "sourceTitle": "＃《書經．泰誓上》*1*",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "恶",
+        "senseIndex": 0
+      }
+    ]
+  },
+  {
+    "idiom": "防微杜渐",
+    "traditional": "防微杜漸",
+    "pinyin": "fáng wéi dù jiàn",
+    "officialMeaning": "防範弊病要從小地方著手，並制止弊端逐漸擴大。",
+    "sourceTitle": "※漢．丁鴻〈日食上封事〉（據《後漢書．卷三七．桓榮丁鴻列傳．丁鴻》引）",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "微",
+        "senseIndex": 1
+      }
+    ]
+  },
+  {
+    "idiom": "相得益彰",
+    "traditional": "相得益彰",
+    "pinyin": "xiāng dé yì zhāng",
+    "officialMeaning": "指互相配合、映襯，更能顯出各自的優點。",
+    "sourceTitle": "漢．王襃〈聖主得賢臣頌〉（據《漢書．卷六四下．嚴朱吾丘主父徐嚴終王賈傳．王襃》引）",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "相",
+        "senseIndex": 6
+      },
+      {
+        "character": "得",
+        "senseIndex": 7
+      }
+    ]
+  },
+  {
+    "idiom": "信口开河",
+    "traditional": "信口開河",
+    "pinyin": "xìn kǒu kāi hé",
+    "officialMeaning": "比喻隨口亂說。",
+    "sourceTitle": "※＃元．關漢卿《魯齋郎》第四折*1*",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "信",
+        "senseIndex": 11
+      }
+    ]
+  },
+  {
+    "idiom": "兴高采烈",
+    "traditional": "興高采烈",
+    "pinyin": "xìng gāo cǎi liè",
+    "officialMeaning": "形容興致勃勃，情緒熱烈的樣子。",
+    "sourceTitle": "南朝梁．劉勰《文心雕龍．體性》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "兴",
+        "senseIndex": 8
+      }
+    ]
+  },
+  {
+    "idiom": "行云流水",
+    "traditional": "行雲流水",
+    "pinyin": "xíng yún liú shuǐ",
+    "officialMeaning": "形容待人處事或文章字畫飄逸自然，無拘無束。褒義。",
+    "sourceTitle": "＃宋．蘇軾〈與謝民師推官書〉（據《蘇軾文集．卷四九．書》引）\n《警世通言．卷二．莊子休鼓盆成大道》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "行",
+        "senseIndex": 1
+      }
+    ]
+  },
+  {
+    "idiom": "阳奉阴违",
+    "traditional": "陽奉陰違",
+    "pinyin": "yáng fèng yīn wéi",
+    "officialMeaning": "表面上裝著遵守奉行，暗地裡卻違反不照辦。貶義。",
+    "sourceTitle": "明．范景文〈革大戶行召募疏〉（據《明臣奏議》卷三九引）",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "阴",
+        "senseIndex": 6
+      }
+    ]
+  },
+  {
+    "idiom": "要言不烦",
+    "traditional": "要言不煩",
+    "pinyin": "yào yán bù fán",
+    "officialMeaning": "形容說話精要，不囉嗦。",
+    "sourceTitle": "《輅別傳》（據《三國志．卷二九．魏書．方技傳．管輅》裴松之注引）",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "要",
+        "senseIndex": 2
+      }
+    ]
+  },
+  {
+    "idiom": "因地制宜",
+    "traditional": "因地制宜",
+    "pinyin": "yīn dì zhì yí",
+    "officialMeaning": "根據不同環境的實際情況制定相應的妥善辦法。",
+    "sourceTitle": "漢．趙曄《吳越春秋．闔閭內傳》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "宜",
+        "senseIndex": 1
+      }
+    ]
+  },
+  {
+    "idiom": "遗臭万年",
+    "traditional": "遺臭萬年",
+    "pinyin": "yí chòu wàn nián",
+    "officialMeaning": "惡名永傳後世，為人所唾棄。",
+    "sourceTitle": "南朝宋．劉義慶《世說新語．尤悔》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "遗",
+        "senseIndex": 2
+      }
+    ]
+  },
+  {
+    "idiom": "易如反掌",
+    "traditional": "易如反掌",
+    "pinyin": "yì rú fǎn zhǎng",
+    "officialMeaning": "比喻事情非常容易做到。",
+    "sourceTitle": "《孟子．公孫丑上》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "易",
+        "senseIndex": 4
+      }
+    ]
+  },
+  {
+    "idiom": "左右逢源",
+    "traditional": "左右逢源",
+    "pinyin": "zuǒ yòu féng yuán",
+    "officialMeaning": "比喻辦事得心應手或處事圓融。",
+    "sourceTitle": "《孟子．離婁下》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "左",
+        "senseIndex": 0
+      },
+      {
+        "character": "右",
+        "senseIndex": 0
+      }
+    ]
+  },
+  {
+    "idiom": "闭门造车",
+    "traditional": "閉門造車",
+    "pinyin": "bì mén zào jū",
+    "officialMeaning": "比喻凡事只憑主觀辦事，不問是否切合實際。貶義。",
+    "sourceTitle": "＃《祖堂集．卷二〇．五冠山瑞雲寺和尚》*1*",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "造",
+        "senseIndex": 1
+      }
+    ]
+  },
+  {
+    "idiom": "知己知彼",
+    "traditional": "知己知彼",
+    "pinyin": "zhī jǐ zhī bǐ",
+    "officialMeaning": "正確澈底地了解自己以及對手的實力。",
+    "sourceTitle": "《孫子．謀攻》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "知",
+        "senseIndex": 5
+      }
+    ]
+  },
+  {
+    "idiom": "文质彬彬",
+    "traditional": "文質彬彬",
+    "pinyin": "wén zhí bīn bīn",
+    "officialMeaning": "形容人舉止文雅，態度端莊。＆形容文章內容與辭采並茂。",
+    "sourceTitle": "《論語．雍也》",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "质",
+        "senseIndex": 7
+      }
+    ]
+  },
+  {
+    "idiom": "走马看花",
+    "traditional": "走馬看花",
+    "pinyin": "zǒu mǎ kàn huā",
+    "officialMeaning": "比喻粗略、匆促地觀看，不能仔細深入。",
+    "sourceTitle": "唐．孟郊〈登科後〉詩（據《全唐詩．卷三七四．孟郊》引）\n※清．吳喬《圍爐詩話》卷三（據《清詩話續編》引）",
+    "sourceLabel": "教育部《成語典》2020（2026-06-25 数据版）",
+    "sourceUrl": "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/respub/dict_idiomsdict_download.html",
+    "links": [
+      {
+        "character": "走",
+        "senseIndex": 0
+      }
+    ]
+  }
+]
