@@ -237,16 +237,16 @@ function WordsLab({ initialCharacter }: { initialCharacter: string }) {
     </div>
     <div className="lab-mode-row">
       <div className="lab-mode-switch"><button type="button" className={viewMode === "journey" ? "active" : ""} onClick={() => setViewMode("journey")}>分步探索</button><button type="button" className={viewMode === "catalog" ? "active" : ""} onClick={() => setViewMode("catalog")}>义项全览</button><button type="button" className={viewMode === "review" ? "active" : ""} onClick={() => setViewMode("review")}>卡片复习</button></div>
-      <div className="progress-filter" role="group" aria-label="按已讲状态筛选">
+      {viewMode !== "review" && <><div className="progress-filter" role="group" aria-label="按已讲状态筛选">
         <button type="button" className={progressFilter === "all" ? "active" : ""} onClick={() => setProgressFilter("all")}>全部 {verifiedWords.length}</button>
         <button type="button" className={progressFilter === "taught" ? "active" : ""} onClick={() => setProgressFilter("taught")}>已讲 {taughtWords.length}</button>
         <button type="button" className={progressFilter === "untaught" ? "active" : ""} onClick={() => setProgressFilter("untaught")}>未讲 {verifiedWords.length - taughtWords.length}</button>
       </div>
       <label className="mobile-word-picker"><span>选择实词</span><select aria-label="选择实词" value={filteredWords.some((word) => word.character === activeWord.character) ? activeWord.character : ""} onChange={(event) => event.target.value && chooseWord(event.target.value)}>{filteredWords.length ? filteredWords.map((word) => <option key={word.character} value={word.character}>{word.index}. {word.character} · {word.pinyin}</option>) : <option value="" disabled>当前筛选暂无实词</option>}</select></label>
-      <button type="button" className={`taught-toggle ${isTaught ? "active" : ""}`} aria-pressed={isTaught} onClick={toggleTaught}>{isTaught ? "✓ 已讲" : "标记为已讲"}</button>
+      <button type="button" className={`taught-toggle ${isTaught ? "active" : ""}`} aria-pressed={isTaught} onClick={toggleTaught}>{isTaught ? "✓ 已讲" : "标记为已讲"}</button></>}
     </div>
     {viewMode !== "review" && <div className="lab-path">{learningPath.map((step, index) => <button type="button" disabled={viewMode === "journey" && index > unlockedStage} onClick={() => viewMode === "journey" && setJourneyStage(index)} className={viewMode === "journey" && index === journeyStage ? "current" : index <= unlockedStage ? "unlocked" : ""} key={step}><i>{index + 1}</i>{step}</button>)}</div>}
-    <div className="lab-layout populated">
+    <div className={`lab-layout populated ${viewMode === "review" ? "review-mode" : ""}`}>
       <aside className="word-drawer">
         <div className="drawer-heading"><strong>实词目录</strong><span>{filteredWords.length} / {verifiedWords.length}</span></div>
         <label className="fake-search"><span>⌕</span><input aria-label="搜索实词" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="搜索字、篇目、成语或义项" /></label>

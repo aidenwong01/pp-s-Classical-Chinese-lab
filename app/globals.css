@@ -144,6 +144,9 @@ button, input { font: inherit; } button { color: inherit; }
 .lesson-panel p { margin-top: 10px; color: var(--ink-faint); text-align: center; font-size: 8px; }
 
 .lab-layout.populated { min-height: 650px; align-items: stretch; }
+.lab-layout.populated.review-mode { grid-template-columns: minmax(0,1fr); }
+.lab-layout.populated.review-mode > .word-drawer, .lab-layout.populated.review-mode > .lesson-panel { display: none; }
+.lab-layout.populated.review-mode > .word-canvas { padding: 34px 42px 40px; }
 .word-list { max-height: 740px; display: grid; gap: 6px; margin-top: 15px; padding-right: 4px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgba(51,77,67,.22) transparent; }
 .word-list button { width: 100%; min-height: 58px; padding: 8px 10px; border: 1px solid transparent; border-radius: 10px; background: transparent; display: grid; grid-template-columns: 38px 1fr auto; align-items: center; gap: 9px; text-align: left; cursor: pointer; transition: background .2s ease, border-color .2s ease; }
 .word-list button:hover { background: rgba(255,255,255,.5); }
@@ -491,6 +494,7 @@ button, input { font: inherit; } button { color: inherit; }
   .review-summary { grid-template-columns: 1fr; } .review-summary > div { border-right: 0; border-bottom: 1px solid var(--line); padding-bottom: 16px; }
   .review-stats { grid-template-columns: 1fr; }
   .review-card, .review-card.is-revealed { min-height: 330px; padding: 20px; grid-template-columns: 1fr; gap: 20px; } .review-card-front strong { font-size: 82px; } .review-card-back { padding: 20px 0 0; border-left: 0; border-top: 1px solid var(--line); } .review-foot { align-items: flex-start; flex-direction: column; }
+  .lab-layout.populated.review-mode > .word-canvas { padding: 24px 18px 30px; }
   .text-review-summary { grid-template-columns: 1fr 1fr; } .text-review-summary span:nth-child(3) { border-top: 1px solid var(--line); border-left: 0; } .text-review-summary span:nth-child(4) { border-top: 1px solid var(--line); }
   .lesson-review-canvas { padding: 24px 18px 32px; } .example-answer { grid-template-columns: 34px 1fr; } .example-answer button { grid-column: 1 / -1; text-align: left; padding-left: 45px; }
   .random-draw-panel { display: block; } .draw-actions { grid-template-columns: 1fr; }

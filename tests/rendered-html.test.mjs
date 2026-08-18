@@ -95,4 +95,5 @@ test("builds Anki-style review cards only from connected word data", async () =>
   assert.match(page, /本轮再见/);
   assert.match(page, /明天复习/);
   assert.match(page, /3 天起复习/);
+  assert.match(page, /review-mode/);
 });
