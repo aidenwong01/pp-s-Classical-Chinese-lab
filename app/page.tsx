@@ -41,7 +41,7 @@ const publicReferenceWorks = ["教育部《成语典》2020（2026-06-25 数据�
 const learningPath = ["看字形", "猜本义", "理义脉", "回教材", "联成语", "对高考", "再复习"];
 const taughtWordsStorageKey = "pp-wenyan-lab-taught-words";
 const reviewRecordsStorageKey = "pp-wenyan-lab-review-records";
-const textbookVolumeOrder = ["七年级上册（2024秋版）", "七年级下册（2025春版）", "八年级上册", "八年级下册", "九年级下册", "高中语文必修上", "高中语文必修下", "高中语文选择性必修上", "高中语文选择性必修中", "高中语文选择性必修下"];
+const textbookVolumeOrder = ["七年级上册（2024秋版）", "七年级下册（2025春版）", "八年级上册", "八年级下册", "九年级上册", "九年级下册", "高中语文必修上", "高中语文必修下", "高中语文选择性必修上", "高中语文选择性必修中", "高中语文选择性必修下"];
 const pickRandom = <T,>(items: T[], fallback: T) => items[Math.floor(Math.random() * items.length)] ?? fallback;
 const cleanReferenceLabel = (value: string) => value.replace(/[＃※]/g, "").replace(/\*\d+\*/g, "").replace(/\n/g, "；").trim();
 const sanitizeReviewRecords = (value: unknown, knownCharacters: Set<string>) => {
@@ -583,7 +583,7 @@ function ExamMap({ openWord }: { openWord: (character: string) => void }) {
 
 function Resources() {
   const indexedTextbooks = new Set([
-    "七年级上册（2024秋版）语文电子课本", "七年级下册（2025春版）语文电子课本", "八年级上册", "八年级下册", "九年级下册",
+    "七年级上册（2024秋版）语文电子课本", "七年级下册（2025春版）语文电子课本", "八年级上册", "八年级下册", "九年级上册", "九年级下册",
     "高中语文必修上", "高中语文必修下", "高中语文选择性必修上", "高中语文选择性必修中", "高中语文选择性必修下",
   ]);
   const resourceState = (item: string) => {

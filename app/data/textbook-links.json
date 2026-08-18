@@ -1828,5 +1828,345 @@
     "volume": "高中语文选择性必修下",
     "pdfPage": 85,
     "matchedMeaning": "漫步，散步"
+  },
+  {
+    "wordIndex": 10,
+    "character": "朝",
+    "senseIndex": 3,
+    "sentence": "衔远山，吞长江，浩浩汤汤，横无际涯，朝晖夕阴，气象万千",
+    "title": "《岳阳楼记》",
+    "volume": "九年级上册",
+    "pdfPage": 57,
+    "matchedMeaning": "早晨"
+  },
+  {
+    "wordIndex": 76,
+    "character": "属",
+    "senseIndex": 9,
+    "sentence": "乃重修岳阳楼，增其旧制，刻唐贤今人诗赋于其上，属予作文以记之",
+    "title": "《岳阳楼记》",
+    "volume": "九年级上册",
+    "pdfPage": 57,
+    "matchedMeaning": "同“嘱”，嘱托"
+  },
+  {
+    "wordIndex": 69,
+    "character": "胜",
+    "senseIndex": 2,
+    "sentence": "予观夫巴陵胜状，在洞庭一湖",
+    "title": "《岳阳楼记》",
+    "volume": "九年级上册",
+    "pdfPage": 57,
+    "matchedMeaning": "美好"
+  },
+  {
+    "wordIndex": 82,
+    "character": "汤",
+    "senseIndex": 4,
+    "sentence": "衔远山，吞长江，浩浩汤汤，横无际涯",
+    "title": "《岳阳楼记》",
+    "volume": "九年级上册",
+    "pdfPage": 57,
+    "matchedMeaning": "水势浩大的样子（汤汤）"
+  },
+  {
+    "wordIndex": 58,
+    "character": "迁",
+    "senseIndex": 3,
+    "sentence": "迁客骚人，多会于此",
+    "title": "《岳阳楼记》",
+    "volume": "九年级上册",
+    "pdfPage": 58,
+    "matchedMeaning": "贬谪、降职"
+  },
+  {
+    "wordIndex": 20,
+    "character": "得",
+    "senseIndex": 4,
+    "sentence": "览物之情，得无异乎？",
+    "title": "《岳阳楼记》",
+    "volume": "九年级上册",
+    "pdfPage": 58,
+    "matchedMeaning": "与“无”连用，表推测"
+  },
+  {
+    "wordIndex": 30,
+    "character": "国",
+    "senseIndex": 2,
+    "sentence": "去国怀乡，忧谗畏讥",
+    "title": "《岳阳楼记》",
+    "volume": "九年级上册",
+    "pdfPage": 58,
+    "matchedMeaning": "国都"
+  },
+  {
+    "wordIndex": 61,
+    "character": "去",
+    "senseIndex": 0,
+    "sentence": "去国怀乡，忧谗畏讥",
+    "title": "《岳阳楼记》",
+    "volume": "九年级上册",
+    "pdfPage": 58,
+    "matchedMeaning": "离开"
+  },
+  {
+    "wordIndex": 36,
+    "character": "或",
+    "senseIndex": 1,
+    "sentence": "予尝求古仁人之心，或异二者之为",
+    "title": "《岳阳楼记》",
+    "volume": "九年级上册",
+    "pdfPage": 58,
+    "matchedMeaning": "或许、也许"
+  },
+  {
+    "wordIndex": 29,
+    "character": "归",
+    "senseIndex": 3,
+    "sentence": "微斯人，吾谁与归？",
+    "title": "《岳阳楼记》",
+    "volume": "九年级上册",
+    "pdfPage": 59,
+    "matchedMeaning": "归依，一道"
+  },
+  {
+    "wordIndex": 89,
+    "character": "微",
+    "senseIndex": 6,
+    "sentence": "微斯人，吾谁与归？",
+    "title": "《岳阳楼记》",
+    "volume": "九年级上册",
+    "pdfPage": 59,
+    "matchedMeaning": "如果没有"
+  },
+  {
+    "wordIndex": 95,
+    "character": "行",
+    "senseIndex": 0,
+    "sentence": "山行六七里，渐闻水声潺潺",
+    "title": "《醉翁亭记》",
+    "volume": "九年级上册",
+    "pdfPage": 61,
+    "matchedMeaning": "行走"
+  },
+  {
+    "wordIndex": 114,
+    "character": "诸",
+    "senseIndex": 0,
+    "sentence": "其西南诸峰，林壑尤美",
+    "title": "《醉翁亭记》",
+    "volume": "九年级上册",
+    "pdfPage": 61,
+    "matchedMeaning": "众，各个"
+  },
+  {
+    "wordIndex": 26,
+    "character": "故",
+    "senseIndex": 9,
+    "sentence": "饮少辄醉，而年又最高，故自号曰醉翁也",
+    "title": "《醉翁亭记》",
+    "volume": "九年级上册",
+    "pdfPage": 61,
+    "matchedMeaning": "所以"
+  },
+  {
+    "wordIndex": 20,
+    "character": "得",
+    "senseIndex": 1,
+    "sentence": "山水之乐，得之心而寓之酒也",
+    "title": "《醉翁亭记》",
+    "volume": "九年级上册",
+    "pdfPage": 61,
+    "matchedMeaning": "领会"
+  },
+  {
+    "wordIndex": 29,
+    "character": "归",
+    "senseIndex": 4,
+    "sentence": "云归而岩穴暝",
+    "title": "《醉翁亭记》",
+    "volume": "九年级上册",
+    "pdfPage": 61,
+    "matchedMeaning": "聚拢"
+  },
+  {
+    "wordIndex": 24,
+    "character": "负",
+    "senseIndex": 0,
+    "sentence": "至于负者歌于途，行者休于树",
+    "title": "《醉翁亭记》",
+    "volume": "九年级上册",
+    "pdfPage": 62,
+    "matchedMeaning": "背着东西的人"
+  },
+  {
+    "wordIndex": 47,
+    "character": "绝",
+    "senseIndex": 0,
+    "sentence": "往来而不绝者，滁人游也",
+    "title": "《醉翁亭记》",
+    "volume": "九年级上册",
+    "pdfPage": 62,
+    "matchedMeaning": "断绝"
+  },
+  {
+    "wordIndex": 69,
+    "character": "胜",
+    "senseIndex": 1,
+    "sentence": "射者中，弈者胜，觥筹交错",
+    "title": "《醉翁亭记》",
+    "volume": "九年级上册",
+    "pdfPage": 62,
+    "matchedMeaning": "取胜"
+  },
+  {
+    "wordIndex": 16,
+    "character": "从",
+    "senseIndex": 0,
+    "sentence": "太守归而宾客从也",
+    "title": "《醉翁亭记》",
+    "volume": "九年级上册",
+    "pdfPage": 63,
+    "matchedMeaning": "跟随"
+  },
+  {
+    "wordIndex": 61,
+    "character": "去",
+    "senseIndex": 0,
+    "sentence": "游人去而禽鸟乐也",
+    "title": "《醉翁亭记》",
+    "volume": "九年级上册",
+    "pdfPage": 63,
+    "matchedMeaning": "离开"
+  },
+  {
+    "wordIndex": 47,
+    "character": "绝",
+    "senseIndex": 3,
+    "sentence": "大雪三日，湖中人鸟声俱绝",
+    "title": "《湖心亭看雪》",
+    "volume": "九年级上册",
+    "pdfPage": 64,
+    "matchedMeaning": "消失，停止"
+  },
+  {
+    "wordIndex": 72,
+    "character": "是",
+    "senseIndex": 3,
+    "sentence": "是日更定矣，余拏一小舟",
+    "title": "《湖心亭看雪》",
+    "volume": "九年级上册",
+    "pdfPage": 64,
+    "matchedMeaning": "这"
+  },
+  {
+    "wordIndex": 20,
+    "character": "得",
+    "senseIndex": 4,
+    "sentence": "湖中焉得更有此人！",
+    "title": "《湖心亭看雪》",
+    "volume": "九年级上册",
+    "pdfPage": 64,
+    "matchedMeaning": "能够"
+  },
+  {
+    "wordIndex": 38,
+    "character": "及",
+    "senseIndex": 1,
+    "sentence": "及下船，舟子喃喃曰",
+    "title": "《湖心亭看雪》",
+    "volume": "九年级上册",
+    "pdfPage": 64,
+    "matchedMeaning": "等到"
+  },
+  {
+    "wordIndex": 53,
+    "character": "莫",
+    "senseIndex": 4,
+    "sentence": "莫说相公痴，更有痴似相公者",
+    "title": "《湖心亭看雪》",
+    "volume": "九年级上册",
+    "pdfPage": 64,
+    "matchedMeaning": "不要"
+  },
+  {
+    "wordIndex": 2,
+    "character": "安",
+    "senseIndex": 8,
+    "sentence": "行路难，行路难，多歧路，今安在？",
+    "title": "《行路难（其一）》",
+    "volume": "九年级上册",
+    "pdfPage": 66,
+    "matchedMeaning": "哪里"
+  },
+  {
+    "wordIndex": 23,
+    "character": "复",
+    "senseIndex": 7,
+    "sentence": "闲来垂钓碧溪上，忽复乘舟梦日边",
+    "title": "《行路难（其一）》",
+    "volume": "九年级上册",
+    "pdfPage": 66,
+    "matchedMeaning": "又"
+  },
+  {
+    "wordIndex": 12,
+    "character": "乘",
+    "senseIndex": 0,
+    "sentence": "闲来垂钓碧溪上，忽复乘舟梦日边",
+    "title": "《行路难（其一）》",
+    "volume": "九年级上册",
+    "pdfPage": 66,
+    "matchedMeaning": "乘坐"
+  },
+  {
+    "wordIndex": 8,
+    "character": "病",
+    "senseIndex": null,
+    "sentence": "沉舟侧畔千帆过，病树前头万木春",
+    "title": "《酬乐天扬州初逢席上见赠》",
+    "volume": "九年级上册",
+    "pdfPage": 67,
+    "matchedMeaning": "衰败、病弱（诗中比喻）"
+  },
+  {
+    "wordIndex": 69,
+    "character": "胜",
+    "senseIndex": 4,
+    "sentence": "我欲乘风归去，又恐琼楼玉宇，高处不胜寒",
+    "title": "《水调歌头》",
+    "volume": "九年级上册",
+    "pdfPage": 68,
+    "matchedMeaning": "禁受，承受"
+  },
+  {
+    "wordIndex": 32,
+    "character": "何",
+    "senseIndex": 2,
+    "sentence": "起舞弄清影，何似在人间",
+    "title": "《水调歌头》",
+    "volume": "九年级上册",
+    "pdfPage": 68,
+    "matchedMeaning": "哪里比得上"
+  },
+  {
+    "wordIndex": 54,
+    "character": "乃",
+    "senseIndex": null,
+    "sentence": "寄书长不达，况乃未休兵",
+    "title": "《月夜忆舍弟》",
+    "volume": "九年级上册",
+    "pdfPage": 72,
+    "matchedMeaning": "何况，况且（与“况”连用）"
+  },
+  {
+    "wordIndex": 51,
+    "character": "怜",
+    "senseIndex": 0,
+    "sentence": "寂寂江山摇落处，怜君何事到天涯",
+    "title": "《长沙过贾谊宅》",
+    "volume": "九年级上册",
+    "pdfPage": 72,
+    "matchedMeaning": "哀怜、同情"
   }
 ]

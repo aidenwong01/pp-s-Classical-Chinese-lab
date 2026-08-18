@@ -41,6 +41,26 @@ test("lists all audited uploaded resources, including the missing textbook and a
   assert.match(page, /<strong>9<\/strong>DOCX/);
 });
 
+test("indexes verified ninth-grade first-semester textbook contexts", async () => {
+  const [linksText, wordsText, page] = await Promise.all([
+    readFile(new URL("../app/data/textbook-links.json", import.meta.url), "utf8"),
+    readFile(new URL("../app/data/all-words.json", import.meta.url), "utf8"),
+    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+  ]);
+  const links = JSON.parse(linksText);
+  const words = JSON.parse(wordsText);
+  const wordSet = new Set(words.map((word) => word.character));
+  const ninthGradeLinks = links.filter((link) => link.volume === "九年级上册");
+
+  assert.equal(links.length, 217);
+  assert.equal(ninthGradeLinks.length, 34);
+  assert.equal(new Set(ninthGradeLinks.map((link) => link.character)).size, 27);
+  assert.equal(ninthGradeLinks.filter((link) => !wordSet.has(link.character)).length, 0);
+  assert.equal(ninthGradeLinks.filter((link) => !link.sentence.includes(link.character)).length, 0);
+  assert.equal(ninthGradeLinks.filter((link) => link.pdfPage < 57 || link.pdfPage > 72).length, 0);
+  assert.match(page, /"八年级下册", "九年级上册", "九年级下册"/);
+});
+
 test("indexes uploaded real-word and function-word exam links without inventing dates", async () => {
   const [realText, functionText, wordsText, page] = await Promise.all([
     readFile(new URL("../app/data/exam-real-words.json", import.meta.url), "utf8"),
