@@ -32,7 +32,7 @@ const teachingResources = [
   "八年级上册", "八年级下册", "九年级上册", "九年级下册", "高中语文必修上", "高中语文必修下",
   "高中语文选择性必修上", "高中语文选择性必修中", "高中语文选择性必修下",
   "高中语文统编版学习任务汇总", "120实词归档版", "文言文实词关联成语120个", "文言文阅读十年汇编（原卷版）",
-  "文言文阅读十年汇编（答案版）", "2026高考文学类文本教考衔接资料",
+  "文言文阅读十年汇编（答案版）", "文言文阅读十年汇编（解析版）", "2026高考文学类文本教考衔接资料",
   "120个文言实词高考真题关联句翻译辅助", "18个文言虚词高考真题关联句翻译辅助",
 ];
 
@@ -132,7 +132,7 @@ function Dashboard({ goTo }: { goTo: (section: SectionId) => void }) {
     </section>
 
     <section className="stat-row" aria-label="资料库概况">
-      <div className="stat-card"><strong>32</strong><span>项资料依据</span><small>31 项上传资料 · 1 项公开核验源</small></div>
+      <div className="stat-card"><strong>33</strong><span>项资料依据</span><small>32 项上传资料 · 1 项公开核验源</small></div>
       <div className="stat-card"><strong>11</strong><span>册语文教材</span><small>初高中教材文件</small></div>
       <div className="stat-card"><strong>7</strong><span>部文字学著作</span><small>字形与本义的重要依据</small></div>
       <div className="stat-card warning"><strong>120</strong><span>个文言实词</span><small>{totalVerifiedSenses} 条带例句义项已据资料接入</small></div>
@@ -598,12 +598,12 @@ function Resources() {
   const groups = [
     { title: "文字学与汉字学", count: 7, items: researchWorks },
     { title: "专题研讨", count: 5, items: seminars },
-    { title: "教材与复习", count: 19, items: teachingResources },
+    { title: "教材与复习", count: 20, items: teachingResources },
     { title: "公开核验源", count: 1, items: publicReferenceWorks },
   ];
   return <section className="workspace-section">
-    <div className="page-heading"><div><span className="section-kicker">知识依据</span><h1>资料库</h1><p>31 项上传文件与公开核验源分开标注。正文解析、页码定位与条目核验按模块逐步进行。</p></div><span className="stage-badge">32 项资料依据</span></div>
-    <div className="resource-summary"><span><strong>23</strong>PDF</span><span><strong>8</strong>DOCX</span><span><strong>1</strong>公开核验源</span><span><strong>分批</strong>正文解析</span></div>
+    <div className="page-heading"><div><span className="section-kicker">知识依据</span><h1>资料库</h1><p>32 项上传文件与公开核验源分开标注。正文解析、页码定位与条目核验按模块逐步进行。</p></div><span className="stage-badge">33 项资料依据</span></div>
+    <div className="resource-summary"><span><strong>23</strong>PDF</span><span><strong>9</strong>DOCX</span><span><strong>1</strong>公开核验源</span><span><strong>分批</strong>正文解析</span></div>
     <div className="resource-groups">{groups.map((group) => <article className="resource-group" key={group.title}><div className="resource-group-head"><span>{group.title.slice(0, 1)}</span><div><h2>{group.title}</h2><p>{group.count} 项资料</p></div></div><ul>{group.items.map((item) => <li key={item}><span>{item}</span><small>{resourceState(item)}</small></li>)}</ul></article>)}</div>
   </section>;
 }

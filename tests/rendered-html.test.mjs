@@ -24,19 +24,21 @@ test("server-renders the Wenyan learning workspace", async () => {
   assert.match(html, /第七轮 · 高考关联资料已接入/);
   assert.match(html, /1131(?:<!-- -->)?条成语关联已接入/);
   assert.match(html, /522(?:<!-- -->)?条标注年份关联/);
-  assert.match(html, /31 项上传资料 · 1 项公开核验源/);
+  assert.match(html, /32 项上传资料 · 1 项公开核验源/);
   assert.match(html, /11<\/strong><span>册语文教材/);
   assert.match(html, /课堂 · 自学共用/);
   assert.doesNotMatch(html, /使用视角|>教师<|>学生</);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/);
 });
 
-test("lists the newly received ninth-grade first-semester textbook as an uploaded resource", async () => {
+test("lists all audited uploaded resources, including the missing textbook and analysis edition", async () => {
   const page = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
 
   assert.match(page, /"九年级上册"/);
-  assert.match(page, /31 项上传文件与公开核验源分开标注/);
+  assert.match(page, /"文言文阅读十年汇编（解析版）"/);
+  assert.match(page, /32 项上传文件与公开核验源分开标注/);
   assert.match(page, /<strong>23<\/strong>PDF/);
+  assert.match(page, /<strong>9<\/strong>DOCX/);
 });
 
 test("indexes uploaded real-word and function-word exam links without inventing dates", async () => {
