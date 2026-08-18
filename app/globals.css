@@ -346,6 +346,43 @@ button, input { font: inherit; } button { color: inherit; }
 .review-stats span { padding: 13px; border: 1px solid var(--line); border-radius: 9px; color: var(--ink-faint); text-align: center; font-size: 8px; }
 .review-stats strong { display: block; margin-bottom: 4px; color: var(--pine); font-family: Georgia, serif; font-size: 20px; font-weight: 500; }
 
+.review-deck { min-height: 620px; padding: 12px 8px 6px; display: flex; flex-direction: column; }
+.review-deck-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.review-kicker { color: var(--cinnabar); font-size: 9px; letter-spacing: .12em; }
+.review-deck-head h2 { margin: 7px 0 0; font-family: "Songti SC", STSong, serif; font-size: 24px; }
+.review-count { min-width: 92px; padding: 10px 13px; border: 1px solid var(--line); border-radius: 10px; background: rgba(255,255,255,.42); text-align: center; }
+.review-count strong { display: block; color: var(--pine); font-family: Georgia, serif; font-size: 24px; font-weight: 500; }
+.review-count span { color: var(--ink-faint); font-size: 8px; }
+.review-source-note { margin: 11px 0 16px; color: var(--ink-faint); font-size: 9px; line-height: 1.6; }
+.review-card { min-height: 370px; padding: 28px; border: 1px solid rgba(51,77,67,.17); border-radius: 18px; background: linear-gradient(145deg, rgba(255,255,255,.68), rgba(238,233,219,.48)); box-shadow: 0 16px 38px rgba(44,40,31,.07); display: grid; grid-template-columns: 1fr; align-items: center; transition: border-color .25s ease; }
+.review-card.is-revealed { grid-template-columns: minmax(180px,.72fr) minmax(0,1.28fr); gap: 28px; border-color: rgba(51,77,67,.28); }
+.review-card-front { text-align: center; }
+.review-card-front small { color: var(--cinnabar); font-size: 9px; }
+.review-card-front strong { display: block; margin: 10px 0 4px; color: var(--pine); font-family: "Songti SC", STSong, serif; font-size: 104px; font-weight: 500; line-height: 1; }
+.review-card-front span { color: var(--ink-faint); font-family: Georgia, serif; font-size: 13px; }
+.review-card-front p { max-width: 320px; margin: 22px auto 0; color: var(--ink-soft); font-family: "Songti SC", STSong, serif; font-size: 11px; line-height: 1.7; }
+.review-card-back { padding-left: 28px; border-left: 1px solid var(--line); display: grid; gap: 18px; }
+.review-card-back > div > span { color: var(--cinnabar); font-size: 8px; letter-spacing: .11em; }
+.review-card-back ul { margin: 9px 0 0; padding: 0; list-style: none; display: grid; gap: 7px; }
+.review-card-back li { padding: 8px 10px; border-left: 2px solid rgba(51,77,67,.2); background: rgba(244,240,230,.58); font-family: "Songti SC", STSong, serif; font-size: 11px; }
+.review-card-back li small { margin-right: 8px; color: var(--ink-faint); font-family: sans-serif; font-size: 8px; }
+.review-card-back li em { margin-left: 8px; color: var(--cinnabar); font-family: sans-serif; font-size: 7px; font-style: normal; }
+.review-card-back p { margin: 8px 0 0; color: var(--ink-faint); font-size: 8px; line-height: 1.6; }
+.review-card-back blockquote { margin: 9px 0 0; padding: 11px 13px; border: 1px solid var(--line); border-radius: 9px; background: rgba(255,255,255,.45); font-family: "Songti SC", STSong, serif; font-size: 11px; line-height: 1.7; }
+.review-card-back blockquote small { display: block; margin-top: 6px; color: var(--ink-faint); font-family: sans-serif; font-size: 7px; }
+.review-reveal { align-self: center; min-width: 190px; margin-top: 18px; padding: 11px 18px; border: 0; border-radius: 9px; background: var(--pine); color: white; font-size: 10px; cursor: pointer; box-shadow: 0 9px 20px rgba(51,77,67,.17); }
+.review-rating { margin-top: 14px; display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.review-rating button { padding: 10px; border: 1px solid var(--line); border-radius: 9px; background: rgba(255,255,255,.5); cursor: pointer; }
+.review-rating button:hover { border-color: rgba(51,77,67,.28); background: var(--pine-light); }
+.review-rating strong, .review-rating small { display: block; }
+.review-rating strong { color: var(--pine); font-size: 10px; }
+.review-rating small { margin-top: 3px; color: var(--ink-faint); font-size: 7px; }
+.review-foot { margin-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 14px; color: var(--ink-faint); font-size: 8px; }
+.review-foot button { border: 0; background: transparent; color: var(--cinnabar); font-size: 8px; cursor: pointer; }
+.review-complete { min-height: 560px; align-items: center; justify-content: center; text-align: center; }
+.review-complete > strong { margin-top: 14px; color: var(--pine); font-family: "Songti SC", STSong, serif; font-size: 25px; }
+.review-complete > p { color: var(--ink-faint); font-size: 10px; }
+
 .text-review-summary { margin-bottom: 16px; display: grid; grid-template-columns: repeat(4,1fr); border: 1px solid var(--line); border-radius: 14px; background: rgba(251,250,246,.68); overflow: hidden; }
 .text-review-summary span { min-height: 74px; padding: 16px; border-left: 1px solid var(--line); color: var(--ink-faint); font-size: 9px; display: grid; align-content: center; }
 .text-review-summary span:first-child { border-left: 0; }
@@ -453,6 +490,7 @@ button, input { font: inherit; } button { color: inherit; }
   .idiom-heading, .idiom-source, .idiom-verification > div { align-items: flex-start; flex-direction: column; } .idiom-heading > small { max-width: 100%; text-align: left; }
   .review-summary { grid-template-columns: 1fr; } .review-summary > div { border-right: 0; border-bottom: 1px solid var(--line); padding-bottom: 16px; }
   .review-stats { grid-template-columns: 1fr; }
+  .review-card, .review-card.is-revealed { min-height: 330px; padding: 20px; grid-template-columns: 1fr; gap: 20px; } .review-card-front strong { font-size: 82px; } .review-card-back { padding: 20px 0 0; border-left: 0; border-top: 1px solid var(--line); } .review-foot { align-items: flex-start; flex-direction: column; }
   .text-review-summary { grid-template-columns: 1fr 1fr; } .text-review-summary span:nth-child(3) { border-top: 1px solid var(--line); border-left: 0; } .text-review-summary span:nth-child(4) { border-top: 1px solid var(--line); }
   .lesson-review-canvas { padding: 24px 18px 32px; } .example-answer { grid-template-columns: 34px 1fr; } .example-answer button { grid-column: 1 / -1; text-align: left; padding-left: 45px; }
   .random-draw-panel { display: block; } .draw-actions { grid-template-columns: 1fr; }

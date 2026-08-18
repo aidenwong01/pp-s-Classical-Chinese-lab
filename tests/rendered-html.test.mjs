@@ -85,3 +85,14 @@ test("keeps a device-local taught status for all 120 real words", async () => {
   assert.match(page, /标记为已讲/);
   assert.match(page, /window\.localStorage\.setItem/);
 });
+
+test("builds Anki-style review cards only from connected word data", async () => {
+  const page = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+
+  assert.match(page, /pp-wenyan-lab-review-records/);
+  assert.match(page, /Anki 式卡片复习/);
+  assert.match(page, /卡片答案只读取已接入资料/);
+  assert.match(page, /本轮再见/);
+  assert.match(page, /明天复习/);
+  assert.match(page, /3 天起复习/);
+});

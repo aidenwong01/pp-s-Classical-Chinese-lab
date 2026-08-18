@@ -5,6 +5,8 @@ import { totalExamCoveredWords, totalExamExamples, totalIdiomCoveredWords, total
 import { functionWordExamGroups, realWordExamGroups, totalDatedFunctionWordExamExamples, totalDatedRealWordExamExamples, totalFunctionWordExamExamples, totalRealWordExamExamples, type ExamExample } from "./data/exam-data";
 
 type SectionId = "home" | "words" | "texts" | "exam" | "resources";
+type ReviewRating = "again" | "hard" | "good";
+type ReviewRecord = { nextReview: number; intervalDays: number; repetitions: number; lastRating: ReviewRating };
 
 const navItems: Array<{ id: SectionId; label: string; short: string; hint: string }> = [
   { id: "home", label: "学习总览", short: "览", hint: "课堂与复习入口" },
@@ -38,6 +40,7 @@ const publicReferenceWorks = ["教育部《成语典》2020（2026-06-25 数据�
 
 const learningPath = ["看字形", "猜本义", "理义脉", "回教材", "联成语", "对高考", "再复习"];
 const taughtWordsStorageKey = "pp-wenyan-lab-taught-words";
+const reviewRecordsStorageKey = "pp-wenyan-lab-review-records";
 const textbookVolumeOrder = ["七年级上册（2024秋版）", "七年级下册（2025春版）", "八年级上册", "八年级下册", "九年级下册", "高中语文必修上", "高中语文必修下", "高中语文选择性必修上", "高中语文选择性必修中", "高中语文选择性必修下"];
 const pickRandom = <T,>(items: T[], fallback: T) => items[Math.floor(Math.random() * items.length)] ?? fallback;
 const cleanReferenceLabel = (value: string) => value.replace(/[＃※]/g, "").replace(/\*\d+\*/g, "").replace(/\n/g, "；").trim();
@@ -156,12 +159,14 @@ function WordsLab({ initialCharacter }: { initialCharacter: string }) {
   const [showTranslations, setShowTranslations] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
   const [lessonWords, setLessonWords] = useState<string[]>([]);
-  const [viewMode, setViewMode] = useState<"journey" | "catalog">("journey");
+  const [viewMode, setViewMode] = useState<"journey" | "catalog" | "review">("journey");
   const [journeyStage, setJourneyStage] = useState(0);
   const [unlockedStage, setUnlockedStage] = useState(0);
   const [guessSelection, setGuessSelection] = useState<string | null>(null);
   const [progressFilter, setProgressFilter] = useState<"all" | "taught" | "untaught">("all");
   const [taughtWords, setTaughtWords] = useState<string[]>([]);
+  const [reviewRecords, setReviewRecords] = useState<Record<string, ReviewRecord>>({});
+  const [reviewClock, setReviewClock] = useState(0);
   const [progressLoaded, setProgressLoaded] = useState(false);
   const activeWord = verifiedWords.find((word) => word.character === activeCharacter) ?? verifiedWords[0];
   const grammarOptions = ["全部", "名词", "动词", "形容词", "其他"];
@@ -185,6 +190,16 @@ function WordsLab({ initialCharacter }: { initialCharacter: string }) {
     setActiveCharacter(character); setGrammar("全部"); setJourneyStage(0); setUnlockedStage(0); setGuessSelection(null);
   };
   const advanceJourney = (next: number) => { setJourneyStage(next); setUnlockedStage((current) => Math.max(current, next)); };
+  const reviewWords = taughtWords.length ? verifiedWords.filter((word) => taughtWords.includes(word.character)) : verifiedWords;
+  const rateReview = (character: string, rating: ReviewRating) => {
+    const now = Date.now();
+    setReviewRecords((records) => {
+      const previous = records[character];
+      const intervalDays = rating === "again" ? 0 : rating === "hard" ? Math.max(1, previous?.intervalDays ?? 1) : Math.min(30, Math.max(3, (previous?.intervalDays ?? 1) * 2));
+      return { ...records, [character]: { nextReview: rating === "again" ? now : now + intervalDays * 86_400_000, intervalDays, repetitions: rating === "again" ? 0 : (previous?.repetitions ?? 0) + 1, lastRating: rating } };
+    });
+    setReviewClock(now);
+  };
 
   useEffect(() => {
     const restoreProgress = window.requestAnimationFrame(() => {
@@ -192,9 +207,16 @@ function WordsLab({ initialCharacter }: { initialCharacter: string }) {
         const saved = JSON.parse(window.localStorage.getItem(taughtWordsStorageKey) ?? "[]");
         const knownCharacters = new Set(verifiedWords.map((word) => word.character));
         if (Array.isArray(saved)) setTaughtWords([...new Set(saved.filter((character): character is string => typeof character === "string" && knownCharacters.has(character)))]);
+        const savedReviews = JSON.parse(window.localStorage.getItem(reviewRecordsStorageKey) ?? "{}");
+        if (savedReviews && typeof savedReviews === "object" && !Array.isArray(savedReviews)) {
+          const validReviews = Object.fromEntries(Object.entries(savedReviews).filter(([character, record]) => knownCharacters.has(character) && record && typeof record === "object" && Number.isFinite((record as ReviewRecord).nextReview) && Number.isFinite((record as ReviewRecord).intervalDays)));
+          setReviewRecords(validReviews as Record<string, ReviewRecord>);
+        }
       } catch {
         setTaughtWords([]);
+        setReviewRecords({});
       } finally {
+        setReviewClock(Date.now());
         setProgressLoaded(true);
       }
     });
@@ -202,8 +224,11 @@ function WordsLab({ initialCharacter }: { initialCharacter: string }) {
   }, []);
 
   useEffect(() => {
-    if (progressLoaded) window.localStorage.setItem(taughtWordsStorageKey, JSON.stringify(taughtWords));
-  }, [progressLoaded, taughtWords]);
+    if (progressLoaded) {
+      window.localStorage.setItem(taughtWordsStorageKey, JSON.stringify(taughtWords));
+      window.localStorage.setItem(reviewRecordsStorageKey, JSON.stringify(reviewRecords));
+    }
+  }, [progressLoaded, reviewRecords, taughtWords]);
 
   return <section className={`workspace-section words-workspace ${focusMode ? "focus-mode" : ""}`}>
     <div className="page-heading">
@@ -211,7 +236,7 @@ function WordsLab({ initialCharacter }: { initialCharacter: string }) {
       <span className="stage-badge">120 字 · {totalIdiomEntries} 条成语 · {totalExamExamples} 条高考关联</span>
     </div>
     <div className="lab-mode-row">
-      <div className="lab-mode-switch"><button type="button" className={viewMode === "journey" ? "active" : ""} onClick={() => setViewMode("journey")}>分步探索</button><button type="button" className={viewMode === "catalog" ? "active" : ""} onClick={() => setViewMode("catalog")}>义项全览</button></div>
+      <div className="lab-mode-switch"><button type="button" className={viewMode === "journey" ? "active" : ""} onClick={() => setViewMode("journey")}>分步探索</button><button type="button" className={viewMode === "catalog" ? "active" : ""} onClick={() => setViewMode("catalog")}>义项全览</button><button type="button" className={viewMode === "review" ? "active" : ""} onClick={() => setViewMode("review")}>卡片复习</button></div>
       <div className="progress-filter" role="group" aria-label="按已讲状态筛选">
         <button type="button" className={progressFilter === "all" ? "active" : ""} onClick={() => setProgressFilter("all")}>全部 {verifiedWords.length}</button>
         <button type="button" className={progressFilter === "taught" ? "active" : ""} onClick={() => setProgressFilter("taught")}>已讲 {taughtWords.length}</button>
@@ -220,7 +245,7 @@ function WordsLab({ initialCharacter }: { initialCharacter: string }) {
       <label className="mobile-word-picker"><span>选择实词</span><select aria-label="选择实词" value={filteredWords.some((word) => word.character === activeWord.character) ? activeWord.character : ""} onChange={(event) => event.target.value && chooseWord(event.target.value)}>{filteredWords.length ? filteredWords.map((word) => <option key={word.character} value={word.character}>{word.index}. {word.character} · {word.pinyin}</option>) : <option value="" disabled>当前筛选暂无实词</option>}</select></label>
       <button type="button" className={`taught-toggle ${isTaught ? "active" : ""}`} aria-pressed={isTaught} onClick={toggleTaught}>{isTaught ? "✓ 已讲" : "标记为已讲"}</button>
     </div>
-    <div className="lab-path">{learningPath.map((step, index) => <button type="button" disabled={viewMode === "journey" && index > unlockedStage} onClick={() => viewMode === "journey" && setJourneyStage(index)} className={viewMode === "journey" && index === journeyStage ? "current" : index <= unlockedStage ? "unlocked" : ""} key={step}><i>{index + 1}</i>{step}</button>)}</div>
+    {viewMode !== "review" && <div className="lab-path">{learningPath.map((step, index) => <button type="button" disabled={viewMode === "journey" && index > unlockedStage} onClick={() => viewMode === "journey" && setJourneyStage(index)} className={viewMode === "journey" && index === journeyStage ? "current" : index <= unlockedStage ? "unlocked" : ""} key={step}><i>{index + 1}</i>{step}</button>)}</div>}
     <div className="lab-layout populated">
       <aside className="word-drawer">
         <div className="drawer-heading"><strong>实词目录</strong><span>{filteredWords.length} / {verifiedWords.length}</span></div>
@@ -233,13 +258,13 @@ function WordsLab({ initialCharacter }: { initialCharacter: string }) {
       </aside>
 
       <article className="word-canvas">
-        <header className="word-hero">
+        {viewMode !== "review" && <header className="word-hero">
           <div className={`character-block ${focusMode ? "enlarged" : ""}`}><strong>{activeWord.character}</strong><span>{activeWord.pinyin}</span></div>
           <div className="word-meta"><h2>{activeWord.senses.length} 个义项</h2><p>{activeWord.readings ?? `读音：${activeWord.pinyin}`}</p>{activeWord.verificationNotes?.map((note) => <small className="word-verification-note" key={note}>核验：{note}</small>)}</div>
           <div className="source-status"><span>资料状态</span><strong>实词义项已录入</strong><small>教材原句 · {activeWord.textbookExamples.length ? `已核验 ${activeWord.textbookExamples.length} 条` : "暂无关联"}</small><small>成语 · {activeWord.idiomExamples.length ? `已录入 ${activeWord.idiomExamples.length} 条` : "暂无可靠关联"}</small><small>高考关联 · {activeWord.examExamples.length ? `已录入 ${activeWord.examExamples.length} 条` : "暂无可靠关联"}</small><small>古文字形 · 暂无资料</small></div>
-        </header>
+        </header>}
 
-        {viewMode === "journey" ? <LearningJourney word={activeWord} stage={journeyStage} advance={advanceJourney} guessSelection={guessSelection} setGuessSelection={setGuessSelection} /> : <><div className="sense-toolbar">
+        {viewMode === "review" ? <SpacedReview words={reviewWords} records={reviewRecords} now={reviewClock} onRate={rateReview} onOpenWord={(character) => { chooseWord(character); setViewMode("journey"); }} usingTaughtWords={taughtWords.length > 0} /> : viewMode === "journey" ? <LearningJourney word={activeWord} stage={journeyStage} advance={advanceJourney} guessSelection={guessSelection} setGuessSelection={setGuessSelection} /> : <><div className="sense-toolbar">
           <div className="grammar-tabs" role="group" aria-label="按词性筛选">{grammarOptions.map((item) => <button type="button" key={item} onClick={() => setGrammar(item)} className={grammar === item ? "active" : ""}>{item}</button>)}</div>
           <button type="button" className="translation-toggle" onClick={() => setShowTranslations((show) => !show)}>{showTranslations ? "收起译文" : "展开译文"}</button>
         </div>
@@ -270,6 +295,46 @@ function WordsLab({ initialCharacter }: { initialCharacter: string }) {
       </aside>
     </div>
   </section>;
+}
+
+function SpacedReview({ words, records, now, onRate, onOpenWord, usingTaughtWords }: {
+  words: (typeof verifiedWords)[number][];
+  records: Record<string, ReviewRecord>;
+  now: number;
+  onRate: (character: string, rating: ReviewRating) => void;
+  onOpenWord: (character: string) => void;
+  usingTaughtWords: boolean;
+}) {
+  const [answerVisible, setAnswerVisible] = useState(false);
+  const [cursor, setCursor] = useState(0);
+  const dueWords = words.filter((word) => !records[word.character] || records[word.character].nextReview <= now);
+  const word = dueWords[cursor % Math.max(dueWords.length, 1)];
+  const nextReview = words.map((item) => records[item.character]?.nextReview).filter((value): value is number => typeof value === "number" && value > now).sort((a, b) => a - b)[0];
+  const rate = (rating: ReviewRating) => {
+    if (!word) return;
+    onRate(word.character, rating);
+    if (rating === "again") setCursor((current) => current + 1);
+    setAnswerVisible(false);
+  };
+
+  if (!word) return <div className="review-deck review-complete">
+    <span className="review-kicker">本轮完成</span><strong>今日到期卡片已复习完</strong><p>{nextReview ? `下一次安排：${new Date(nextReview).toLocaleDateString("zh-CN")}` : "当前没有等待复习的实词。"}</p>
+  </div>;
+
+  const textbookExample = word.textbookExamples[0];
+  return <div className="review-deck">
+    <div className="review-deck-head"><div><span className="review-kicker">Anki 式卡片复习</span><h2>先回忆，再揭晓</h2></div><div className="review-count"><strong>{dueWords.length}</strong><span>张今日待复习</span></div></div>
+    <p className="review-source-note">{usingTaughtWords ? `当前使用 ${words.length} 个“已讲”实词组卡。` : "尚未标记“已讲”实词，当前暂从全部 120 字中组卡。"} 卡片答案只读取已接入资料。</p>
+    <article className={`review-card ${answerVisible ? "is-revealed" : ""}`}>
+      <div className="review-card-front"><small>第 {word.index} 词</small><strong>{word.character}</strong><span>{word.pinyin}</span><p>请先说出本义线索、常见义项，或一条教材原句。</p></div>
+      {answerVisible && <div className="review-card-back">
+        <div><span>资料义项</span><ul>{word.senses.slice(0, 4).map((sense, index) => <li key={`${sense.meaning}-${index}`}><small>{sense.grammar}</small>{sense.meaning}{sense.sourceMarksOriginal && <em>资料标注“本意”</em>}</li>)}</ul>{word.senses.length > 4 && <p>另有 {word.senses.length - 4} 个义项，可进入完整学习路径查看。</p>}</div>
+        <div><span>教材核验</span>{textbookExample ? <blockquote>{textbookExample.sentence}<small>《{textbookExample.title}》· {textbookExample.volume}</small></blockquote> : <p>暂无已核验教材原句。</p>}</div>
+      </div>}
+    </article>
+    {!answerVisible ? <button className="review-reveal" type="button" onClick={() => setAnswerVisible(true)}>显示资料答案</button> : <div className="review-rating" aria-label="评价本次回忆"><button type="button" onClick={() => rate("again")}><strong>重来</strong><small>本轮再见</small></button><button type="button" onClick={() => rate("hard")}><strong>模糊</strong><small>明天复习</small></button><button type="button" onClick={() => rate("good")}><strong>掌握</strong><small>3 天起复习</small></button></div>}
+    <div className="review-foot"><span>复习安排保存在当前设备</span><button type="button" onClick={() => onOpenWord(word.character)}>进入“{word.character}”的完整学习路径 →</button></div>
+  </div>;
 }
 
 function LearningJourney({ word, stage, advance, guessSelection, setGuessSelection }: {
