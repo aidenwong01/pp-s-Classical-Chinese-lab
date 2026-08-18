@@ -116,4 +116,7 @@ test("filters exam contexts without inventing missing year labels", async () => 
   assert.match(page, /资料未标注/);
   assert.match(page, /当前找到/);
   assert.match(page, /请调整搜索词或年份卷别标注筛选/);
+  assert.match(page, /选择具体年份与卷别/);
+  assert.match(page, /全部已标注来源/);
+  assert.match(page, /entry\.sourceLabel === sourceLabelFilter/);
 });

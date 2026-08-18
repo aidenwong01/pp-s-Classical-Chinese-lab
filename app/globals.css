@@ -339,6 +339,9 @@ button, input { font: inherit; } button { color: inherit; }
 .exam-filter-row > div { display: flex; flex-wrap: wrap; gap: 5px; }
 .exam-filter-row button { padding: 6px 9px; border: 1px solid transparent; border-radius: 7px; background: transparent; color: var(--ink-faint); font-size: 8px; cursor: pointer; }
 .exam-filter-row button.active { border-color: rgba(51,77,67,.16); background: var(--pine-light); color: var(--pine); }
+.exam-source-select { min-width: 245px; display: flex; align-items: center; gap: 7px; }
+.exam-source-select > span { color: var(--ink-faint); font-size: 8px; white-space: nowrap; }
+.exam-source-select select { min-width: 0; width: 100%; padding: 6px 8px; border: 1px solid var(--line); border-radius: 7px; background: rgba(255,255,255,.55); color: var(--ink-soft); font-size: 8px; }
 .exam-filter-row > span { color: var(--ink-faint); font-size: 8px; white-space: nowrap; }
 .exam-map-layout { display: grid; grid-template-columns: 178px minmax(0, 1fr); gap: 14px; }
 .exam-word-index, .exam-map-detail { border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.34); }
@@ -515,7 +518,7 @@ button, input { font: inherit; } button { color: inherit; }
   .text-review-summary { grid-template-columns: 1fr 1fr; } .text-review-summary span:nth-child(3) { border-top: 1px solid var(--line); border-left: 0; } .text-review-summary span:nth-child(4) { border-top: 1px solid var(--line); }
   .lesson-review-canvas { padding: 24px 18px 32px; } .example-answer { grid-template-columns: 34px 1fr; } .example-answer button { grid-column: 1 / -1; text-align: left; padding-left: 45px; }
   .random-draw-panel { display: block; } .draw-actions { grid-template-columns: 1fr; }
-  .exam-summary-row { grid-template-columns: 1fr 1fr; } .exam-mode-row, .exam-filter-row { align-items: stretch; flex-direction: column; } .exam-search { width: 100%; } .exam-filter-row > span { white-space: normal; }
+  .exam-summary-row { grid-template-columns: 1fr 1fr; } .exam-mode-row, .exam-filter-row { align-items: stretch; flex-direction: column; } .exam-search, .exam-source-select { width: 100%; } .exam-filter-row > span { white-space: normal; }
   .exam-word-index > div:last-child { grid-template-columns: repeat(2,1fr); } .exam-map-detail { padding: 16px; } .exam-map-detail > header, .exam-entry-head { align-items: flex-start; flex-direction: column; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
