@@ -107,3 +107,13 @@ test("exports and restores device-local learning progress without source content
   assert.match(page, /仅包含“已讲”状态与卡片复习安排/);
   assert.match(page, /请选择由本网站导出的学习进度 JSON 文件/);
 });
+
+test("filters exam contexts without inventing missing year labels", async () => {
+  const page = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+
+  assert.match(page, /按年份卷别标注状态筛选/);
+  assert.match(page, /已标年份卷别/);
+  assert.match(page, /资料未标注/);
+  assert.match(page, /当前找到/);
+  assert.match(page, /请调整搜索词或年份卷别标注筛选/);
+});
