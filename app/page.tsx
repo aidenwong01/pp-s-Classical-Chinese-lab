@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ChangeEvent } from "react";
 import { totalExamCoveredWords, totalExamExamples, totalIdiomCoveredWords, totalIdiomEntries, totalIdiomLinks, totalOfficiallyCheckedIdioms, totalTextbookExamples, totalVerifiedSenses, verifiedWords } from "./data/verified-words";
 import { functionWordExamGroups, realWordExamGroups, totalDatedFunctionWordExamExamples, totalDatedRealWordExamExamples, totalFunctionWordExamExamples, totalRealWordExamExamples, type ExamExample } from "./data/exam-data";
 
@@ -44,6 +44,15 @@ const reviewRecordsStorageKey = "pp-wenyan-lab-review-records";
 const textbookVolumeOrder = ["七年级上册（2024秋版）", "七年级下册（2025春版）", "八年级上册", "八年级下册", "九年级下册", "高中语文必修上", "高中语文必修下", "高中语文选择性必修上", "高中语文选择性必修中", "高中语文选择性必修下"];
 const pickRandom = <T,>(items: T[], fallback: T) => items[Math.floor(Math.random() * items.length)] ?? fallback;
 const cleanReferenceLabel = (value: string) => value.replace(/[＃※]/g, "").replace(/\*\d+\*/g, "").replace(/\n/g, "；").trim();
+const sanitizeReviewRecords = (value: unknown, knownCharacters: Set<string>) => {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  const ratings = new Set<ReviewRating>(["again", "hard", "good"]);
+  return Object.fromEntries(Object.entries(value).filter(([character, record]) => {
+    if (!knownCharacters.has(character) || !record || typeof record !== "object") return false;
+    const candidate = record as Partial<ReviewRecord>;
+    return Number.isFinite(candidate.nextReview) && Number.isFinite(candidate.intervalDays) && Number.isFinite(candidate.repetitions) && ratings.has(candidate.lastRating as ReviewRating);
+  })) as Record<string, ReviewRecord>;
+};
 const textbookLessons = (() => {
   const lessons = new Map<string, { id: string; title: string; volume: string; examples: Array<{ character: string; wordIndex: number; sentence: string; pdfPage: number; matchedMeaning: string }> }>();
   verifiedWords.forEach((word) => word.textbookExamples.forEach((example) => {
@@ -168,6 +177,7 @@ function WordsLab({ initialCharacter }: { initialCharacter: string }) {
   const [reviewRecords, setReviewRecords] = useState<Record<string, ReviewRecord>>({});
   const [reviewClock, setReviewClock] = useState(0);
   const [progressLoaded, setProgressLoaded] = useState(false);
+  const [progressMessage, setProgressMessage] = useState("");
   const activeWord = verifiedWords.find((word) => word.character === activeCharacter) ?? verifiedWords[0];
   const grammarOptions = ["全部", "名词", "动词", "形容词", "其他"];
   const filteredWords = verifiedWords.filter((word) => {
@@ -200,6 +210,40 @@ function WordsLab({ initialCharacter }: { initialCharacter: string }) {
     });
     setReviewClock(now);
   };
+  const exportProgress = () => {
+    const exportedAt = new Date().toISOString();
+    const payload = { format: "pp-wenyan-lab-progress", version: 1, exportedAt, taughtWords, reviewRecords };
+    const url = window.URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: "application/json;charset=utf-8" }));
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `pp文言实验室学习进度-${exportedAt.slice(0, 10)}.json`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => window.URL.revokeObjectURL(url), 0);
+    setProgressMessage(`已导出：${taughtWords.length} 个已讲实词，${Object.keys(reviewRecords).length} 条复习记录。`);
+  };
+  const importProgress = async (event: ChangeEvent<HTMLInputElement>) => {
+    const input = event.currentTarget;
+    const file = input.files?.[0];
+    if (!file) return;
+    try {
+      if (file.size > 2_000_000) throw new Error("文件过大");
+      const parsed = JSON.parse(await file.text()) as { format?: unknown; version?: unknown; taughtWords?: unknown; reviewRecords?: unknown };
+      if (parsed.format !== "pp-wenyan-lab-progress" || parsed.version !== 1 || !Array.isArray(parsed.taughtWords)) throw new Error("格式不符");
+      const knownCharacters = new Set(verifiedWords.map((word) => word.character));
+      const importedTaught = [...new Set(parsed.taughtWords.filter((character): character is string => typeof character === "string" && knownCharacters.has(character)))];
+      const importedReviews = sanitizeReviewRecords(parsed.reviewRecords, knownCharacters);
+      setTaughtWords(importedTaught);
+      setReviewRecords(importedReviews);
+      setReviewClock(Date.now());
+      setProgressMessage(`导入成功：${importedTaught.length} 个已讲实词，${Object.keys(importedReviews).length} 条复习记录。`);
+    } catch {
+      setProgressMessage("导入失败：请选择由本网站导出的学习进度 JSON 文件。");
+    } finally {
+      input.value = "";
+    }
+  };
 
   useEffect(() => {
     const restoreProgress = window.requestAnimationFrame(() => {
@@ -208,10 +252,7 @@ function WordsLab({ initialCharacter }: { initialCharacter: string }) {
         const knownCharacters = new Set(verifiedWords.map((word) => word.character));
         if (Array.isArray(saved)) setTaughtWords([...new Set(saved.filter((character): character is string => typeof character === "string" && knownCharacters.has(character)))]);
         const savedReviews = JSON.parse(window.localStorage.getItem(reviewRecordsStorageKey) ?? "{}");
-        if (savedReviews && typeof savedReviews === "object" && !Array.isArray(savedReviews)) {
-          const validReviews = Object.fromEntries(Object.entries(savedReviews).filter(([character, record]) => knownCharacters.has(character) && record && typeof record === "object" && Number.isFinite((record as ReviewRecord).nextReview) && Number.isFinite((record as ReviewRecord).intervalDays)));
-          setReviewRecords(validReviews as Record<string, ReviewRecord>);
-        }
+        setReviewRecords(sanitizeReviewRecords(savedReviews, knownCharacters));
       } catch {
         setTaughtWords([]);
         setReviewRecords({});
@@ -244,6 +285,16 @@ function WordsLab({ initialCharacter }: { initialCharacter: string }) {
       </div>
       <label className="mobile-word-picker"><span>选择实词</span><select aria-label="选择实词" value={filteredWords.some((word) => word.character === activeWord.character) ? activeWord.character : ""} onChange={(event) => event.target.value && chooseWord(event.target.value)}>{filteredWords.length ? filteredWords.map((word) => <option key={word.character} value={word.character}>{word.index}. {word.character} · {word.pinyin}</option>) : <option value="" disabled>当前筛选暂无实词</option>}</select></label>
       <button type="button" className={`taught-toggle ${isTaught ? "active" : ""}`} aria-pressed={isTaught} onClick={toggleTaught}>{isTaught ? "✓ 已讲" : "标记为已讲"}</button></>}
+      <details className="progress-manager">
+        <summary>进度管理</summary>
+        <div className="progress-manager-panel">
+          <strong>本设备学习进度</strong>
+          <p>{taughtWords.length} 个已讲实词 · {Object.keys(reviewRecords).length} 条复习记录</p>
+          <div><button type="button" onClick={exportProgress}>导出进度</button><label>导入进度<input type="file" accept="application/json,.json" onChange={importProgress} /></label></div>
+          <small>仅包含“已讲”状态与卡片复习安排，不包含教材和题目资料。</small>
+          {progressMessage && <span role="status">{progressMessage}</span>}
+        </div>
+      </details>
     </div>
     {viewMode !== "review" && <div className="lab-path">{learningPath.map((step, index) => <button type="button" disabled={viewMode === "journey" && index > unlockedStage} onClick={() => viewMode === "journey" && setJourneyStage(index)} className={viewMode === "journey" && index === journeyStage ? "current" : index <= unlockedStage ? "unlocked" : ""} key={step}><i>{index + 1}</i>{step}</button>)}</div>}
     <div className={`lab-layout populated ${viewMode === "review" ? "review-mode" : ""}`}>

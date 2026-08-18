@@ -97,3 +97,13 @@ test("builds Anki-style review cards only from connected word data", async () =>
   assert.match(page, /3 天起复习/);
   assert.match(page, /review-mode/);
 });
+
+test("exports and restores device-local learning progress without source content", async () => {
+  const page = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+
+  assert.match(page, /pp-wenyan-lab-progress/);
+  assert.match(page, /导出进度/);
+  assert.match(page, /导入进度/);
+  assert.match(page, /仅包含“已讲”状态与卡片复习安排/);
+  assert.match(page, /请选择由本网站导出的学习进度 JSON 文件/);
+});

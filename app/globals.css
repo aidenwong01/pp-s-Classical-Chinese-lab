@@ -122,6 +122,18 @@ button, input { font: inherit; } button { color: inherit; }
 .progress-filter button, .taught-toggle { padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; background: rgba(251,250,246,.45); color: var(--ink-faint); font-size: 9px; cursor: pointer; }
 .progress-filter button.active, .taught-toggle.active { border-color: rgba(51,77,67,.24); background: var(--pine-light); color: var(--pine); }
 .taught-toggle { color: var(--pine); }
+.progress-manager { position: relative; }
+.progress-manager > summary { padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; background: rgba(251,250,246,.45); color: var(--pine); font-size: 9px; cursor: pointer; list-style: none; }
+.progress-manager > summary::-webkit-details-marker { display: none; }
+.progress-manager[open] > summary { background: var(--pine-light); border-color: rgba(51,77,67,.24); }
+.progress-manager-panel { width: 285px; padding: 15px; position: absolute; z-index: 9; top: calc(100% + 8px); right: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--paper-light); box-shadow: 0 14px 35px rgba(44,40,31,.14); }
+.progress-manager-panel > strong { font-family: "Songti SC", STSong, serif; font-size: 13px; }
+.progress-manager-panel > p { margin: 5px 0 12px; color: var(--ink-faint); font-size: 8px; }
+.progress-manager-panel > div { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.progress-manager-panel button, .progress-manager-panel label { padding: 9px 7px; border: 1px solid var(--line); border-radius: 8px; background: rgba(244,240,230,.6); color: var(--pine); text-align: center; font-size: 9px; cursor: pointer; }
+.progress-manager-panel input { width: 1px; height: 1px; position: absolute; opacity: 0; pointer-events: none; }
+.progress-manager-panel > small { margin-top: 10px; display: block; color: var(--ink-faint); font-size: 7px; line-height: 1.55; }
+.progress-manager-panel > span { margin-top: 9px; padding: 8px; display: block; border-radius: 7px; background: var(--pine-light); color: var(--pine); font-size: 8px; line-height: 1.5; }
 .lab-layout { margin-top: 16px; min-height: 520px; display: grid; grid-template-columns: 220px 1fr 200px; border: 1px solid var(--line); border-radius: 18px; background: rgba(251,250,246,.72); overflow: hidden; box-shadow: var(--shadow); }
 .word-drawer, .lesson-panel { padding: 20px; background: rgba(238,233,219,.55); }
 .word-drawer { border-right: 1px solid var(--line); } .lesson-panel { border-left: 1px solid var(--line); }
@@ -487,7 +499,7 @@ button, input { font: inherit; } button { color: inherit; }
   .word-hero { grid-template-columns: 92px 1fr; gap: 15px; } .character-block { width: 88px; height: 104px; } .character-block strong { font-size: 56px; }
   .source-status { grid-template-columns: 1fr 1fr; } .sense-toolbar { align-items: flex-start; flex-direction: column; padding: 12px 0; }
   .sense-card { padding: 15px 13px; grid-template-columns: 25px 1fr; gap: 8px; } .sense-card blockquote { font-size: 13px; }
-  .lab-mode-row { align-items: stretch; flex-direction: column; padding: 7px 0 12px; } .lab-mode-switch, .progress-filter { width: 100%; margin-left: 0; } .lab-mode-switch button, .progress-filter button { flex: 1; } .taught-toggle { width: 100%; } .observation-board { grid-template-columns: 1fr; justify-items: center; }
+  .lab-mode-row { align-items: stretch; flex-direction: column; padding: 7px 0 12px; } .lab-mode-switch, .progress-filter { width: 100%; margin-left: 0; } .lab-mode-switch button, .progress-filter button { flex: 1; } .taught-toggle { width: 100%; } .progress-manager { width: 100%; } .progress-manager > summary { text-align: center; } .progress-manager-panel { width: 100%; position: static; margin-top: 7px; } .observation-board { grid-template-columns: 1fr; justify-items: center; }
   .observation-prompts { width: 100%; } .guess-options, .meaning-chain { grid-template-columns: 1fr; }
   .textbook-cards article > div:last-child { align-items: flex-start; flex-direction: column; }
   .idiom-heading, .idiom-source, .idiom-verification > div { align-items: flex-start; flex-direction: column; } .idiom-heading > small { max-width: 100%; text-align: left; }
