@@ -202,7 +202,7 @@ test("indexes every 2017-2026 exam entry from the uploaded analysis edition", as
   assert.match(page, /"real" \| "function" \| "paper"/);
   assert.match(page, />真题解析</);
   assert.match(page, /按年份筛选试卷/);
-  assert.match(page, /fetch\("\/data\/exam-papers\.json"\)/);
+  assert.match(page, /fetch\(new URL\("data\/exam-papers\.json", document\.baseURI\)\)/);
   assert.match(page, /2017—2026共/);
   assert.match(page, /上传资料本条目未另附解析，页面不补写/);
   assert.match(examData, /exam-paper-index\.json/);
