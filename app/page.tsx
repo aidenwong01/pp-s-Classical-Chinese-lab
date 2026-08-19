@@ -612,7 +612,7 @@ function ExamMap({ openWord }: { openWord: (character: string) => void }) {
     setMode("paper");
     if (paperLoadState !== "idle") return;
     setPaperLoadState("loading");
-    fetch("/data/exam-papers.json")
+    fetch(new URL("data/exam-papers.json", document.baseURI))
       .then((response) => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         return response.json() as Promise<ExamPaper[]>;
