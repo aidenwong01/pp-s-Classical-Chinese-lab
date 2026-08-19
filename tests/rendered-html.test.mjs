@@ -23,7 +23,7 @@ test("server-renders the Wenyan learning workspace", async () => {
   assert.match(html, /<title>pp的文言实验室<\/title>/i);
   assert.match(html, /第七轮 · 高考关联资料已接入/);
   assert.match(html, /1131(?:<!-- -->)?条成语关联已接入/);
-  assert.match(html, /2套完整解析 · 10道题/);
+  assert.match(html, /60个试卷条目 · 268道题/);
   assert.match(html, /32 项上传资料 · 1 项公开核验源/);
   assert.match(html, /11<\/strong><span>册语文教材/);
   assert.match(html, /课堂 · 自学共用/);
@@ -152,24 +152,39 @@ test("filters exam contexts without inventing missing year labels", async () => 
   assert.match(page, /entry\.sourceLabel === sourceLabelFilter/);
 });
 
-test("adds the first two complete 2026 paper analyses from the uploaded analysis edition", async () => {
-  const [papersText, page] = await Promise.all([
-    readFile(new URL("../app/data/exam-papers.json", import.meta.url), "utf8"),
+test("indexes every 2017-2026 exam entry from the uploaded analysis edition", async () => {
+  const [papersText, indexText, page, examData] = await Promise.all([
+    readFile(new URL("../public/data/exam-papers.json", import.meta.url), "utf8"),
+    readFile(new URL("../app/data/exam-paper-index.json", import.meta.url), "utf8"),
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/data/exam-data.ts", import.meta.url), "utf8"),
   ]);
   const papers = JSON.parse(papersText);
+  const paperIndex = JSON.parse(indexText);
+  const yearCounts = Object.fromEntries(Object.entries(Object.groupBy(papers, (paper) => paper.year)).map(([year, items]) => [year, items.length]));
+  const firstTwo = papers.slice(0, 2);
 
-  assert.equal(papers.length, 2);
-  assert.deepEqual(papers.map((paper) => paper.label), ["2026·全国I卷", "2026·全国II卷"]);
-  assert.equal(papers.flatMap((paper) => paper.questions).length, 10);
-  assert.deepEqual(papers.map((paper) => paper.questions.map((question) => question.number)), [[10, 11, 12, 13, 14], [10, 11, 12, 13, 14]]);
-  assert.deepEqual(papers.map((paper) => paper.questions[0].answer), ["BEH", "CEG"]);
-  assert.deepEqual(papers.map((paper) => paper.questions[1].answer), ["A", "B"]);
-  assert.deepEqual(papers.map((paper) => paper.questions[2].answer), ["D", "B"]);
-  assert.equal(papers.every((paper) => paper.passages.length && paper.referenceTranslations.length), true);
+  assert.equal(papers.length, 60);
+  assert.equal(paperIndex.length, 60);
+  assert.equal(papers.flatMap((paper) => paper.questions).length, 268);
+  assert.deepEqual(yearCounts, { 2017: 8, 2018: 9, 2019: 9, 2020: 7, 2021: 6, 2022: 6, 2023: 5, 2024: 4, 2025: 4, 2026: 2 });
+  assert.deepEqual(firstTwo.map((paper) => paper.label), ["2026·全国I卷", "2026·全国II卷"]);
+  assert.deepEqual(firstTwo.map((paper) => paper.questions.map((question) => question.number)), [[10, 11, 12, 13, 14], [10, 11, 12, 13, 14]]);
+  assert.deepEqual(firstTwo.map((paper) => paper.questions[0].answer), ["BEH", "CEG"]);
+  assert.deepEqual(firstTwo.map((paper) => paper.questions[1].answer), ["A", "B"]);
+  assert.deepEqual(firstTwo.map((paper) => paper.questions[2].answer), ["D", "B"]);
+  assert.equal(papers.slice(2).every((paper) => paper.answerText?.length), true);
+  assert.equal(papers.every((paper) => paper.questions.length && paper.questions.every((question) => question.stem)), true);
   assert.equal(papers.every((paper) => paper.sourceName === "专题04 文言文阅读（10年汇编）（全国通用）（解析版）"), true);
+  assert.equal(new Set(papers.map((paper) => paper.id)).size, 60);
+  assert.deepEqual(papers.filter((paper) => !paper.analysisText?.length && paper.year !== 2026).map((paper) => paper.label), ["2022·上海卷", "2021·全国甲卷", "2021·全国乙卷", "2021·新高考Ⅰ卷", "2021·浙江卷"]);
+  assert.deepEqual(papers.filter((paper) => !paper.referenceTranslations.length).map((paper) => paper.label), ["2022·上海卷", "2021·上海卷"]);
   assert.match(page, /"real" \| "function" \| "paper"/);
   assert.match(page, />真题解析</);
-  assert.match(page, /首批 2 套 2026 全国卷 \/ 10 道题/);
-  assert.match(page, /文言文阅读十年汇编（解析版）.*首批/);
+  assert.match(page, /按年份筛选试卷/);
+  assert.match(page, /fetch\("\/data\/exam-papers\.json"\)/);
+  assert.match(page, /2017—2026共/);
+  assert.match(page, /上传资料本条目未另附解析，页面不补写/);
+  assert.match(examData, /exam-paper-index\.json/);
+  assert.doesNotMatch(examData, /exam-papers\.json/);
 });

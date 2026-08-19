@@ -364,15 +364,15 @@ button, input { font: inherit; } button { color: inherit; }
 .exam-paper-detail > .exam-paper-header h2 { font-size: 28px; }
 .exam-paper-header em { min-width: 48px; padding: 10px; border: 1px solid var(--line); border-radius: 50%; color: var(--cinnabar); font-family: Georgia, serif; font-size: 11px; font-style: normal; text-align: center; }
 .exam-paper-source-note { margin: 14px 0; padding: 10px 12px; border-left: 2px solid var(--cinnabar); background: rgba(156,69,54,.045); color: var(--ink-faint); font-size: 9px; line-height: 1.7; }
-.exam-paper-materials, .exam-paper-translations { margin: 12px 0; border: 1px solid var(--line); border-radius: 11px; background: rgba(251,250,246,.46); }
-.exam-paper-materials > summary, .exam-paper-translations > summary { padding: 13px 15px; color: var(--pine); cursor: pointer; font-family: "Songti SC", STSong, serif; font-size: 11px; }
-.exam-paper-materials > summary span, .exam-paper-translations > summary span { float: right; color: var(--ink-faint); font-family: sans-serif; font-size: 8px; }
-.exam-paper-passages, .exam-paper-translations > div { padding: 0 15px 15px; display: grid; gap: 10px; }
+.exam-paper-materials, .exam-paper-translations, .exam-paper-bulk { margin: 12px 0; border: 1px solid var(--line); border-radius: 11px; background: rgba(251,250,246,.46); }
+.exam-paper-materials > summary, .exam-paper-translations > summary, .exam-paper-bulk > summary { padding: 13px 15px; color: var(--pine); cursor: pointer; font-family: "Songti SC", STSong, serif; font-size: 11px; }
+.exam-paper-materials > summary span, .exam-paper-translations > summary span, .exam-paper-bulk > summary span { float: right; color: var(--ink-faint); font-family: sans-serif; font-size: 8px; }
+.exam-paper-passages, .exam-paper-translations > div, .exam-paper-bulk > div { padding: 0 15px 15px; display: grid; gap: 10px; }
 .exam-paper-passages article, .exam-paper-translations article { padding: 14px; border-top: 1px dashed var(--line); background: rgba(255,255,255,.34); }
 .exam-paper-passages article > div { margin-bottom: 9px; display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
 .exam-paper-passages strong, .exam-paper-translations strong { color: var(--cinnabar); font-family: "Songti SC", STSong, serif; font-size: 10px; font-weight: 500; }
 .exam-paper-passages small { color: var(--ink-faint); font-size: 8px; }
-.exam-paper-passages p, .exam-paper-translations p { margin: 7px 0 0; color: var(--ink-soft); font-family: "Songti SC", STSong, serif; font-size: 12px; line-height: 1.9; text-align: justify; }
+.exam-paper-passages p, .exam-paper-translations p, .exam-paper-bulk p { margin: 7px 0 0; color: var(--ink-soft); font-family: "Songti SC", STSong, serif; font-size: 12px; line-height: 1.9; text-align: justify; }
 .exam-paper-passages aside { padding: 11px 14px; border: 1px dashed var(--line); border-radius: 8px; color: var(--ink-faint); }
 .exam-paper-passages aside strong { color: var(--pine); font-size: 9px; }
 .exam-paper-passages aside p { margin: 4px 0; color: var(--ink-faint); font-size: 9px; line-height: 1.55; }
@@ -391,6 +391,9 @@ button, input { font: inherit; } button { color: inherit; }
 .exam-paper-answer span, .exam-paper-analysis span { color: var(--cinnabar); font-size: 8px; letter-spacing: .08em; }
 .exam-paper-answer p, .exam-paper-analysis p { margin: 6px 0 0; color: var(--ink-soft); font-family: "Songti SC", STSong, serif; font-size: 10px; line-height: 1.75; }
 .exam-paper-source { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line); color: var(--ink-faint); font-size: 8px; text-align: right; }
+.exam-paper-answers { border-left: 2px solid var(--cinnabar); background: rgba(156,69,54,.035); }
+.exam-paper-full-analysis { border-left: 2px solid var(--pine); }
+.exam-paper-missing { margin: 12px 0; padding: 12px 14px; border: 1px dashed var(--line); border-radius: 9px; color: var(--ink-faint); font-size: 9px; }
 
 .review-summary { margin-top: 25px; padding: 24px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.43); display: grid; grid-template-columns: 120px 1fr; align-items: center; gap: 25px; }
 .review-summary > div { min-height: 118px; border-right: 1px solid var(--line); display: grid; place-items: center; align-content: center; }

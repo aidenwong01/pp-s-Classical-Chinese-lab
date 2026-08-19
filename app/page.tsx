@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, type ChangeEvent } from "react";
 import { totalExamCoveredWords, totalExamExamples, totalIdiomCoveredWords, totalIdiomEntries, totalIdiomLinks, totalOfficiallyCheckedIdioms, totalTextbookExamples, totalVerifiedSenses, verifiedWords } from "./data/verified-words";
-import { examPapers, functionWordExamGroups, realWordExamGroups, totalExamPaperQuestions, totalFunctionWordExamExamples, totalRealWordExamExamples, type ExamExample, type ExamPaper } from "./data/exam-data";
+import { examPaperIndex, functionWordExamGroups, realWordExamGroups, totalExamPaperQuestions, totalFunctionWordExamExamples, totalRealWordExamExamples, type ExamExample, type ExamPaper } from "./data/exam-data";
 
 type SectionId = "home" | "words" | "texts" | "exam" | "resources";
 type ReviewRating = "again" | "hard" | "good";
@@ -145,7 +145,7 @@ function Dashboard({ goTo }: { goTo: (section: SectionId) => void }) {
           <ModuleCard glyph="实" title="实词实验室" note="观察、猜测、义项、教材与成语" status={`${totalIdiomEntries}条成语关联已接入`} active onClick={() => goTo("words")} />
           <ModuleCard glyph="课" title="按课文复习" note="从教材原句回看重点词义" status="第四轮已开放" onClick={() => goTo("texts")} />
           <ModuleCard glyph="抽" title="随机抽字" note="课堂提问与课后自测入口" status="第四轮已开放" onClick={() => goTo("texts")} />
-          <ModuleCard glyph="考" title="高考语义地图" note="连接实词、虚词与完整真题解析" status={`${examPapers.length}套完整解析 · ${totalExamPaperQuestions}道题`} onClick={() => goTo("exam")} />
+          <ModuleCard glyph="考" title="高考语义地图" note="连接实词、虚词与完整真题解析" status={`${examPaperIndex.length}个试卷条目 · ${totalExamPaperQuestions}道题`} onClick={() => goTo("exam")} />
         </div>
       </section>
       <aside className="section-card guard-card">
@@ -541,35 +541,46 @@ function ExamEntryCards({ entries, sourceName }: { entries: ExamExample[]; sourc
 }
 
 function ExamPaperDetail({ paper }: { paper: ExamPaper }) {
-  const answerLines = (answer: string | string[]) => Array.isArray(answer) ? answer : [answer];
+  const answerLines = (answer?: string | string[]) => answer ? Array.isArray(answer) ? answer : [answer] : [];
+  const questionNumbers = paper.questions.map((question) => question.number);
+  const questionRange = questionNumbers.length === 1 ? `第 ${questionNumbers[0]} 题` : `第 ${questionNumbers[0]}—${questionNumbers.at(-1)} 题`;
+  const visiblePassages = paper.passages.filter((passage) => passage.text.trim());
   return <>
     <header className="exam-paper-header">
-      <div><span>完整真题解析</span><h2>{paper.label}</h2><p>{paper.title} · 第 10—14 题 · 原资料第 {paper.sourceItem} 套</p></div>
+      <div><span>完整真题解析</span><h2>{paper.label}</h2><p>{paper.title} · {questionRange} · 本年份第 {paper.sourceItem} 条</p></div>
       <em>{paper.questions.length} 题</em>
     </header>
     <div className="exam-paper-source-note">本页题干、答案、解析及译文均按上传解析版接入；长内容默认折叠，点击即可展开。</div>
-    <details className="exam-paper-materials">
-      <summary>展开阅读原文与注释 <span>{paper.passages.length} 则材料</span></summary>
+    {visiblePassages.length > 0 && <details className="exam-paper-materials">
+      <summary>展开阅读原文与注释 <span>{visiblePassages.length} 则材料</span></summary>
       <div className="exam-paper-passages">
-        {paper.passages.map((passage) => <article key={passage.label}><div><strong>{passage.label}</strong><small>{passage.source}</small></div>{passage.text.split("\n").map((paragraph, index) => <p key={index}>{paragraph}</p>)}</article>)}
+        {visiblePassages.map((passage) => <article key={passage.label}><div><strong>{passage.label}</strong>{passage.source && <small>{passage.source}</small>}</div>{passage.text.split("\n").map((paragraph, index) => <p key={index}>{paragraph}</p>)}</article>)}
         {paper.notes.length > 0 && <aside><strong>注释</strong>{paper.notes.map((note) => <p key={note}>{note}</p>)}</aside>}
       </div>
-    </details>
+    </details>}
     <div className="exam-paper-questions">
       {paper.questions.map((question) => <article className="exam-paper-question" key={question.number}>
         <header><span>{question.number}</span><h3>{question.stem}</h3></header>
-        {question.choices && <ol>{question.choices.map((choice) => <li key={choice}>{choice}</li>)}</ol>}
-        <details>
+        {question.choices && <ol>{question.choices.map((choice, index) => <li key={`${question.number}-${index}`}>{choice}</li>)}</ol>}
+        {(question.answer || question.analysis?.length) && <details>
           <summary>核验答案与解析</summary>
-          <div className="exam-paper-answer"><span>参考答案</span>{answerLines(question.answer).map((line, index) => <p key={index}>{line}</p>)}</div>
-          <div className="exam-paper-analysis"><span>资料解析</span>{question.analysis.map((line, index) => <p key={index}>{line}</p>)}</div>
-        </details>
+          {question.answer && <div className="exam-paper-answer"><span>参考答案</span>{answerLines(question.answer).map((line, index) => <p key={index}>{line}</p>)}</div>}
+          {Boolean(question.analysis?.length) && <div className="exam-paper-analysis"><span>资料解析</span>{question.analysis?.map((line, index) => <p key={index}>{line}</p>)}</div>}
+        </details>}
       </article>)}
     </div>
-    <details className="exam-paper-translations">
+    {Boolean(paper.answerText?.length) && <details className="exam-paper-bulk exam-paper-answers">
+      <summary>展开本卷答案汇总 <span>{paper.answerText.length} 段</span></summary>
+      <div>{paper.answerText?.map((paragraph, index) => <p key={index}>{paragraph}</p>)}</div>
+    </details>}
+    {paper.analysisText?.length ? <details className="exam-paper-bulk exam-paper-full-analysis">
+      <summary>展开本卷解析 <span>{paper.analysisText.length} 段</span></summary>
+      <div>{paper.analysisText.map((paragraph, index) => <p key={index}>{paragraph}</p>)}</div>
+    </details> : paper.answerText && <div className="exam-paper-missing">上传资料本条目未另附解析，页面不补写。</div>}
+    {paper.referenceTranslations.length > 0 ? <details className="exam-paper-translations">
       <summary>展开参考译文 <span>{paper.referenceTranslations.length} 部分</span></summary>
       <div>{paper.referenceTranslations.map((translation) => <article key={translation.label}><strong>{translation.label}</strong>{translation.text.split("\n").map((paragraph, index) => <p key={index}>{paragraph}</p>)}</article>)}</div>
-    </details>
+    </details> : <div className="exam-paper-missing">上传资料本条目未另附参考译文，页面不补写。</div>}
     <footer className="exam-paper-source">资料来源：《{paper.sourceName}》</footer>
   </>;
 }
@@ -581,8 +592,23 @@ function ExamMap({ openWord }: { openWord: (character: string) => void }) {
   const [sourceLabelFilter, setSourceLabelFilter] = useState("all");
   const [realCharacter, setRealCharacter] = useState("爱");
   const [functionCharacter, setFunctionCharacter] = useState("而");
-  const [paperId, setPaperId] = useState(examPapers[0]?.id ?? "");
+  const [paperId, setPaperId] = useState(examPaperIndex[0]?.id ?? "");
+  const [paperYear, setPaperYear] = useState("all");
+  const [paperData, setPaperData] = useState<ExamPaper[]>([]);
+  const [paperLoadState, setPaperLoadState] = useState<"idle" | "loading" | "loaded" | "error">("idle");
   const normalizedQuery = query.trim().toLowerCase();
+  const openPaperMode = () => {
+    setMode("paper");
+    if (paperLoadState !== "idle") return;
+    setPaperLoadState("loading");
+    fetch("/data/exam-papers.json")
+      .then((response) => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json() as Promise<ExamPaper[]>;
+      })
+      .then((papers) => { setPaperData(papers); setPaperLoadState("loaded"); })
+      .catch(() => setPaperLoadState("error"));
+  };
   const entryMatches = (character: string, entry: ExamExample) => {
     const matchesLabel = labelFilter === "all" || (labelFilter === "dated" ? Boolean(entry.sourceLabel) : !entry.sourceLabel);
     const matchesSource = sourceLabelFilter === "all" || entry.sourceLabel === sourceLabelFilter;
@@ -600,18 +626,19 @@ function ExamMap({ openWord }: { openWord: (character: string) => void }) {
   const activeRealGroup = filteredRealWords.find((group) => group.character === realCharacter) ?? filteredRealWords[0];
   const activeRealWord = activeRealGroup ? verifiedWords.find((word) => word.character === activeRealGroup.character) : undefined;
   const activeFunctionWord = filteredFunctionWords.find((group) => group.character === functionCharacter) ?? filteredFunctionWords[0];
-  const filteredPapers = examPapers.filter((paper) => !normalizedQuery || JSON.stringify(paper).toLowerCase().includes(normalizedQuery));
+  const paperYears = [...new Set(examPaperIndex.map((paper) => paper.year))].sort((a, b) => b - a);
+  const filteredPapers = paperData.filter((paper) => (paperYear === "all" || paper.year === Number(paperYear)) && (!normalizedQuery || JSON.stringify(paper).toLowerCase().includes(normalizedQuery)));
   const activePaper = filteredPapers.find((paper) => paper.id === paperId) ?? filteredPapers[0];
   const filteredGroups = mode === "real" ? filteredRealWords : mode === "function" ? filteredFunctionWords : [];
   const filteredEntryCount = filteredGroups.reduce((total, group) => total + group.entries.length, 0);
   return <section className="workspace-section exam-map-section">
-    <div className="page-heading"><div><span className="section-kicker">第七轮 · 真题语境</span><h1>高考语义地图</h1><p>按实词、虚词浏览关联语境，也可进入整套真题核验原文、题干、答案、解析与译文；只显示上传资料明确标注的信息。</p></div><span className="stage-badge">{examPapers.length} 套完整解析 · {totalExamPaperQuestions} 道题</span></div>
-    <div className="exam-summary-row"><span><strong>120</strong>个资料实词</span><span><strong>{totalRealWordExamExamples}</strong>条实词关联</span><span><strong>18</strong>个虚词</span><span><strong>{totalFunctionWordExamExamples}</strong>条虚词关联</span><span><strong>{examPapers.length}</strong>套真题解析</span></div>
-    <div className="exam-mode-row"><div className="lab-mode-switch"><button type="button" className={mode === "real" ? "active" : ""} onClick={() => { setMode("real"); setSourceLabelFilter("all"); }}>120实词</button><button type="button" className={mode === "function" ? "active" : ""} onClick={() => { setMode("function"); setSourceLabelFilter("all"); }}>18虚词</button><button type="button" className={mode === "paper" ? "active" : ""} onClick={() => setMode("paper")}>真题解析</button></div><label className="fake-search exam-search"><span>⌕</span><input aria-label="搜索高考关联" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={mode === "paper" ? "搜索卷别、原文、题干或解析" : "搜索字、年份、卷别或语句"} /></label></div>
-    {mode === "paper" ? <div className="exam-filter-row exam-paper-filter"><strong>首批 2 套 2026 全国卷 / 10 道题</strong><span>本轮只接入解析版 2026 年部分，后续逐年扩展。</span></div> : <div className="exam-filter-row"><div role="group" aria-label="按年份卷别标注状态筛选"><button type="button" className={labelFilter === "all" ? "active" : ""} onClick={() => setLabelFilter("all")}>全部语境</button><button type="button" className={labelFilter === "dated" ? "active" : ""} onClick={() => setLabelFilter("dated")}>已标年份卷别</button><button type="button" className={labelFilter === "undated" ? "active" : ""} onClick={() => { setLabelFilter("undated"); setSourceLabelFilter("all"); }}>资料未标注</button></div><label className="exam-source-select"><span>具体年份与卷别</span><select aria-label="选择具体年份与卷别" value={sourceLabelFilter} onChange={(event) => { setSourceLabelFilter(event.target.value); if (event.target.value !== "all") setLabelFilter("dated"); }}><option value="all">全部已标注来源</option>{sourceLabelOptions.map(([label, count]) => <option key={label} value={label}>{label}（{count} 条）</option>)}</select></label><span>当前找到 {filteredGroups.length} 个词 · {filteredEntryCount} 条语境</span></div>}
+    <div className="page-heading"><div><span className="section-kicker">第七轮 · 真题语境</span><h1>高考语义地图</h1><p>按实词、虚词浏览关联语境，也可进入整套真题核验原文、题干、答案、解析与译文；只显示上传资料明确标注的信息。</p></div><span className="stage-badge">{examPaperIndex.length} 个试卷条目 · {totalExamPaperQuestions} 道题</span></div>
+    <div className="exam-summary-row"><span><strong>120</strong>个资料实词</span><span><strong>{totalRealWordExamExamples}</strong>条实词关联</span><span><strong>18</strong>个虚词</span><span><strong>{totalFunctionWordExamExamples}</strong>条虚词关联</span><span><strong>{examPaperIndex.length}</strong>个试卷条目</span></div>
+    <div className="exam-mode-row"><div className="lab-mode-switch"><button type="button" className={mode === "real" ? "active" : ""} onClick={() => { setMode("real"); setSourceLabelFilter("all"); }}>120实词</button><button type="button" className={mode === "function" ? "active" : ""} onClick={() => { setMode("function"); setSourceLabelFilter("all"); }}>18虚词</button><button type="button" className={mode === "paper" ? "active" : ""} onClick={openPaperMode}>真题解析</button></div><label className="fake-search exam-search"><span>⌕</span><input aria-label="搜索高考关联" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={mode === "paper" ? "搜索卷别、原文、题干或解析" : "搜索字、年份、卷别或语句"} /></label></div>
+    {mode === "paper" ? <div className="exam-filter-row exam-paper-filter"><strong>2017—2026 · {examPaperIndex.length} 个试卷条目 / {totalExamPaperQuestions} 道题</strong><label className="exam-source-select"><span>考试年份</span><select aria-label="按年份筛选试卷" value={paperYear} onChange={(event) => { setPaperYear(event.target.value); setPaperId(""); }}><option value="all">全部年份</option>{paperYears.map((year) => <option key={year} value={year}>{year} 年（{examPaperIndex.filter((paper) => paper.year === year).length} 条）</option>)}</select></label><span>{paperLoadState === "loaded" ? `当前找到 ${filteredPapers.length} 个条目` : "完整资料按需加载"}</span></div> : <div className="exam-filter-row"><div role="group" aria-label="按年份卷别标注状态筛选"><button type="button" className={labelFilter === "all" ? "active" : ""} onClick={() => setLabelFilter("all")}>全部语境</button><button type="button" className={labelFilter === "dated" ? "active" : ""} onClick={() => setLabelFilter("dated")}>已标年份卷别</button><button type="button" className={labelFilter === "undated" ? "active" : ""} onClick={() => { setLabelFilter("undated"); setSourceLabelFilter("all"); }}>资料未标注</button></div><label className="exam-source-select"><span>具体年份与卷别</span><select aria-label="选择具体年份与卷别" value={sourceLabelFilter} onChange={(event) => { setSourceLabelFilter(event.target.value); if (event.target.value !== "all") setLabelFilter("dated"); }}><option value="all">全部已标注来源</option>{sourceLabelOptions.map(([label, count]) => <option key={label} value={label}>{label}（{count} 条）</option>)}</select></label><span>当前找到 {filteredGroups.length} 个词 · {filteredEntryCount} 条语境</span></div>}
     <div className="exam-map-layout">
       <aside className={`exam-word-index ${mode === "paper" ? "exam-paper-index" : ""}`}><div className="drawer-heading"><strong>{mode === "real" ? "实词索引" : mode === "function" ? "虚词索引" : "试卷索引"}</strong><span>{mode === "real" ? filteredRealWords.length : mode === "function" ? filteredFunctionWords.length : filteredPapers.length}</span></div>{mode === "real" ? <div>{filteredRealWords.map((group) => <button type="button" className={group.character === activeRealGroup?.character ? "active" : ""} key={group.character} onClick={() => setRealCharacter(group.character)}><strong>{group.character}</strong><span>{group.entries.length} 条</span></button>)}</div> : mode === "function" ? <div>{filteredFunctionWords.map((group) => <button type="button" className={group.character === activeFunctionWord?.character ? "active" : ""} key={group.character} onClick={() => setFunctionCharacter(group.character)}><strong>{group.character}</strong><span>{group.entries.length} 条</span></button>)}</div> : <div>{filteredPapers.map((paper) => <button type="button" className={paper.id === activePaper?.id ? "active" : ""} key={paper.id} onClick={() => setPaperId(paper.id)}><strong>{paper.paper}</strong><span>{paper.questions.length} 题</span></button>)}</div>}</aside>
-      <article className={`exam-map-detail ${mode === "paper" ? "exam-paper-detail" : ""}`}>{mode === "real" ? activeRealGroup ? <><header><div><span>文言实词</span><h2>{activeRealGroup.character}</h2><p>第 {activeRealGroup.sourceIndex} 词 · 当前显示 {activeRealGroup.entries.length} 条关联{activeRealWord ? ` · ${activeRealWord.pinyin}` : ""}</p></div>{activeRealWord && <button type="button" onClick={() => openWord(activeRealWord.character)}>进入完整实词学习 →</button>}</header><ExamEntryCards entries={activeRealGroup.entries} sourceName="120个文言实词高考真题关联句翻译辅助" />{!activeRealWord && <div className="source-anomaly"><strong>资料核对说明</strong><p>这份高考关联资料列有“{activeRealGroup.character}”，但当前120实词库没有该字，因此暂作为独立资料条目展示，不强行并入其他词。</p></div>}</> : <div className="empty-evidence"><span>考</span><h3>没有匹配语境</h3><p>请调整搜索词或年份卷别标注筛选。</p></div> : mode === "function" ? activeFunctionWord ? <><header><div><span>文言虚词</span><h2>{activeFunctionWord.character}</h2><p>第 {activeFunctionWord.sourceIndex} 词 · 当前显示 {activeFunctionWord.entries.length} 条关联</p></div></header><ExamEntryCards entries={activeFunctionWord.entries} sourceName="18个文言虚词高考真题关联句翻译辅助" /></> : <div className="empty-evidence"><span>考</span><h3>没有匹配语境</h3><p>请调整搜索词或年份卷别标注筛选。</p></div> : activePaper ? <ExamPaperDetail paper={activePaper} /> : <div className="empty-evidence"><span>考</span><h3>没有匹配真题</h3><p>请调整搜索词，或清空搜索后浏览已接入试卷。</p></div>}</article>
+      <article className={`exam-map-detail ${mode === "paper" ? "exam-paper-detail" : ""}`}>{mode === "real" ? activeRealGroup ? <><header><div><span>文言实词</span><h2>{activeRealGroup.character}</h2><p>第 {activeRealGroup.sourceIndex} 词 · 当前显示 {activeRealGroup.entries.length} 条关联{activeRealWord ? ` · ${activeRealWord.pinyin}` : ""}</p></div>{activeRealWord && <button type="button" onClick={() => openWord(activeRealWord.character)}>进入完整实词学习 →</button>}</header><ExamEntryCards entries={activeRealGroup.entries} sourceName="120个文言实词高考真题关联句翻译辅助" />{!activeRealWord && <div className="source-anomaly"><strong>资料核对说明</strong><p>这份高考关联资料列有“{activeRealGroup.character}”，但当前120实词库没有该字，因此暂作为独立资料条目展示，不强行并入其他词。</p></div>}</> : <div className="empty-evidence"><span>考</span><h3>没有匹配语境</h3><p>请调整搜索词或年份卷别标注筛选。</p></div> : mode === "function" ? activeFunctionWord ? <><header><div><span>文言虚词</span><h2>{activeFunctionWord.character}</h2><p>第 {activeFunctionWord.sourceIndex} 词 · 当前显示 {activeFunctionWord.entries.length} 条关联</p></div></header><ExamEntryCards entries={activeFunctionWord.entries} sourceName="18个文言虚词高考真题关联句翻译辅助" /></> : <div className="empty-evidence"><span>考</span><h3>没有匹配语境</h3><p>请调整搜索词或年份卷别标注筛选。</p></div> : paperLoadState === "loading" || paperLoadState === "idle" ? <div className="empty-evidence"><span>考</span><h3>正在载入完整真题</h3><p>首次进入需要读取十年试卷资料，请稍候。</p></div> : paperLoadState === "error" ? <div className="empty-evidence"><span>考</span><h3>真题资料载入失败</h3><p>请刷新页面后重新进入；实词与虚词地图不受影响。</p></div> : activePaper ? <ExamPaperDetail paper={activePaper} /> : <div className="empty-evidence"><span>考</span><h3>没有匹配真题</h3><p>请调整年份或搜索词，清空后可浏览全部试卷。</p></div>}</article>
     </div>
   </section>;
 }
@@ -626,7 +653,7 @@ function Resources() {
     if (item === "文言文实词关联成语120个") return `已解析 · ${totalIdiomEntries}条关联 / 覆盖${totalIdiomCoveredWords}字`;
     if (item === "120个文言实词高考真题关联句翻译辅助") return `已解析 · ${totalExamExamples}条关联 / 覆盖${totalExamCoveredWords}字`;
     if (item === "18个文言虚词高考真题关联句翻译辅助") return `已解析 · ${totalFunctionWordExamExamples}条关联 / 18个虚词`;
-    if (item === "文言文阅读十年汇编（解析版）") return `已解析 · 首批${examPapers.length}套2026全国卷 / ${totalExamPaperQuestions}道题`;
+    if (item === "文言文阅读十年汇编（解析版）") return `已解析 · 2017—2026共${examPaperIndex.length}个试卷条目 / ${totalExamPaperQuestions}道题`;
     if (item.startsWith("教育部《成语典》")) return `公开授权核验源 · ${totalOfficiallyCheckedIdioms}条成语 / ${totalIdiomLinks}条字义关联已匹配`;
     if (indexedTextbooks.has(item)) return "已解析 · 教材原句索引已接入";
     return "已收录 · 待解析";

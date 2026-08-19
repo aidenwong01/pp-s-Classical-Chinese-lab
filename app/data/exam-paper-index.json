@@ -1,0 +1,542 @@
+[
+  {
+    "id": "2026-national-1",
+    "year": 2026,
+    "paper": "全国I卷",
+    "label": "2026·全国I卷",
+    "title": "三子治政群文阅读",
+    "sourceItem": 1,
+    "questionCount": 5
+  },
+  {
+    "id": "2026-national-2",
+    "year": 2026,
+    "paper": "全国II卷",
+    "label": "2026·全国II卷",
+    "title": "《齐民要术·序》阅读",
+    "sourceItem": 2,
+    "questionCount": 5
+  },
+  {
+    "id": "2025-01",
+    "year": 2025,
+    "paper": "全国一卷",
+    "label": "2025·全国一卷",
+    "title": "节选自《左传·昭公二十四年》；节选自刘向《列女传》卷三；节选自韩婴《韩诗外传》卷二；节选自崔述《考信录》",
+    "sourceItem": 1,
+    "questionCount": 5
+  },
+  {
+    "id": "2025-02",
+    "year": 2025,
+    "paper": "全国二卷",
+    "label": "2025·全国二卷",
+    "title": "节选自《晋书·郗鉴传》；节选自苏轼《东坡志林·人物》",
+    "sourceItem": 2,
+    "questionCount": 5
+  },
+  {
+    "id": "2025-03",
+    "year": 2025,
+    "paper": "北京卷",
+    "label": "2025·北京卷",
+    "title": "文言文阅读",
+    "sourceItem": 3,
+    "questionCount": 5
+  },
+  {
+    "id": "2025-04",
+    "year": 2025,
+    "paper": "天津卷",
+    "label": "2025·天津卷",
+    "title": "文言文阅读",
+    "sourceItem": 4,
+    "questionCount": 7
+  },
+  {
+    "id": "2024-01",
+    "year": 2024,
+    "paper": "新高考Ⅰ卷",
+    "label": "2024·新高考Ⅰ卷",
+    "title": "节选自《资治通鉴·汉纪》；节选自王夫之《读通鉴论》卷三",
+    "sourceItem": 1,
+    "questionCount": 5
+  },
+  {
+    "id": "2024-02",
+    "year": 2024,
+    "paper": "新高考Ⅱ卷",
+    "label": "2024·新高考Ⅱ卷",
+    "title": "节选自《史记·魏世家》；节选自《史记·留侯世家》；节选自王充《论衡·非韩》",
+    "sourceItem": 2,
+    "questionCount": 5
+  },
+  {
+    "id": "2024-03",
+    "year": 2024,
+    "paper": "全国甲卷",
+    "label": "2024·全国甲卷",
+    "title": "节选自赵翼《廿二史札记》卷七",
+    "sourceItem": 3,
+    "questionCount": 4
+  },
+  {
+    "id": "2024-04",
+    "year": 2024,
+    "paper": "新高考北京卷",
+    "label": "2024·新高考北京卷",
+    "title": "文言文阅读",
+    "sourceItem": 4,
+    "questionCount": 5
+  },
+  {
+    "id": "2023-01",
+    "year": 2023,
+    "paper": "新高考Ⅰ卷",
+    "label": "2023·新高考Ⅰ卷",
+    "title": "节选自《韩非子·难一》；节选自《孔丛子·答问》",
+    "sourceItem": 1,
+    "questionCount": 5
+  },
+  {
+    "id": "2023-02",
+    "year": 2023,
+    "paper": "新高考Ⅱ卷",
+    "label": "2023·新高考Ⅱ卷",
+    "title": "节选自《百战奇略》；节选自《唐太宗李卫公问对》",
+    "sourceItem": 2,
+    "questionCount": 5
+  },
+  {
+    "id": "2023-03",
+    "year": 2023,
+    "paper": "全国甲卷",
+    "label": "2023·全国甲卷",
+    "title": "节选自《隆平集·儒学行义》",
+    "sourceItem": 3,
+    "questionCount": 4
+  },
+  {
+    "id": "2023-04",
+    "year": 2023,
+    "paper": "全国乙卷",
+    "label": "2023·全国乙卷",
+    "title": "节选自《韩非子·十过》",
+    "sourceItem": 4,
+    "questionCount": 4
+  },
+  {
+    "id": "2023-05",
+    "year": 2023,
+    "paper": "北京卷",
+    "label": "2023·北京卷",
+    "title": "文言文阅读",
+    "sourceItem": 5,
+    "questionCount": 5
+  },
+  {
+    "id": "2022-01",
+    "year": 2022,
+    "paper": "全国甲卷",
+    "label": "2022·全国甲卷",
+    "title": "节选自《战国策·秦策二》",
+    "sourceItem": 1,
+    "questionCount": 4
+  },
+  {
+    "id": "2022-02",
+    "year": 2022,
+    "paper": "全国乙卷",
+    "label": "2022·全国乙卷",
+    "title": "节选自《说苑•贵德》",
+    "sourceItem": 2,
+    "questionCount": 4
+  },
+  {
+    "id": "2022-03",
+    "year": 2022,
+    "paper": "新高考1卷",
+    "label": "2022·新高考1卷",
+    "title": "节选自《战国策·魏策三》",
+    "sourceItem": 3,
+    "questionCount": 5
+  },
+  {
+    "id": "2022-04",
+    "year": 2022,
+    "paper": "新高考Ⅱ卷",
+    "label": "2022·新高考Ⅱ卷",
+    "title": "节选自《东观汉记》卷十",
+    "sourceItem": 4,
+    "questionCount": 5
+  },
+  {
+    "id": "2022-05",
+    "year": 2022,
+    "paper": "浙江卷",
+    "label": "2022·浙江卷",
+    "title": "选自《苏辙集》",
+    "sourceItem": 5,
+    "questionCount": 5
+  },
+  {
+    "id": "2022-06",
+    "year": 2022,
+    "paper": "上海卷",
+    "label": "2022·上海卷",
+    "title": "文言文阅读",
+    "sourceItem": 6,
+    "questionCount": 3
+  },
+  {
+    "id": "2021-01",
+    "year": 2021,
+    "paper": "全国甲卷",
+    "label": "2021·全国甲卷",
+    "title": "节选自《宋史纪事本末·契丹盟好》",
+    "sourceItem": 1,
+    "questionCount": 4
+  },
+  {
+    "id": "2021-02",
+    "year": 2021,
+    "paper": "全国乙卷",
+    "label": "2021·全国乙卷",
+    "title": "节选自《通鉴纪事本末·贞观君臣论治》",
+    "sourceItem": 2,
+    "questionCount": 4
+  },
+  {
+    "id": "2021-03",
+    "year": 2021,
+    "paper": "新高考Ⅰ卷",
+    "label": "2021·新高考Ⅰ卷",
+    "title": "节选自《通鉴纪事本末·贞观君臣论治》",
+    "sourceItem": 3,
+    "questionCount": 5
+  },
+  {
+    "id": "2021-04",
+    "year": 2021,
+    "paper": "新高考Ⅱ卷",
+    "label": "2021·新高考Ⅱ卷",
+    "title": "节选自《通鉴纪事本末·祖逖北伐》",
+    "sourceItem": 4,
+    "questionCount": 5
+  },
+  {
+    "id": "2021-05",
+    "year": 2021,
+    "paper": "上海卷",
+    "label": "2021·上海卷",
+    "title": "节选自《晋书·羊祜传》",
+    "sourceItem": 5,
+    "questionCount": 6
+  },
+  {
+    "id": "2021-06",
+    "year": 2021,
+    "paper": "浙江卷",
+    "label": "2021·浙江卷",
+    "title": "选自《全宋文》",
+    "sourceItem": 6,
+    "questionCount": 5
+  },
+  {
+    "id": "2020-01",
+    "year": 2020,
+    "paper": "新课标Ⅰ卷",
+    "label": "2020·新课标Ⅰ卷",
+    "title": "节选自《宋史·苏轼传》",
+    "sourceItem": 1,
+    "questionCount": 4
+  },
+  {
+    "id": "2020-02",
+    "year": 2020,
+    "paper": "新课标Ⅱ",
+    "label": "2020·新课标Ⅱ",
+    "title": "节选自《宋史·王安中传》",
+    "sourceItem": 2,
+    "questionCount": 4
+  },
+  {
+    "id": "2020-03",
+    "year": 2020,
+    "paper": "新课标Ⅲ",
+    "label": "2020·新课标Ⅲ",
+    "title": "节选自《晋书·王彪之传》",
+    "sourceItem": 3,
+    "questionCount": 4
+  },
+  {
+    "id": "2020-04",
+    "year": 2020,
+    "paper": "江苏卷",
+    "label": "2020·江苏卷",
+    "title": "选自《白苏斋类集》，有删节",
+    "sourceItem": 4,
+    "questionCount": 4
+  },
+  {
+    "id": "2020-05",
+    "year": 2020,
+    "paper": "山东卷",
+    "label": "2020·山东卷",
+    "title": "节选自《明史·左光斗传》",
+    "sourceItem": 5,
+    "questionCount": 5
+  },
+  {
+    "id": "2020-06",
+    "year": 2020,
+    "paper": "浙江卷",
+    "label": "2020·浙江卷",
+    "title": "选自《张耒集》，标点有改动",
+    "sourceItem": 6,
+    "questionCount": 5
+  },
+  {
+    "id": "2020-07",
+    "year": 2020,
+    "paper": "天津卷",
+    "label": "2020·天津卷",
+    "title": "节选自宋·陆游《放翁家训·序》；节选自宋·叶梦得《石林治生家训要略》",
+    "sourceItem": 7,
+    "questionCount": 7
+  },
+  {
+    "id": "2019-01",
+    "year": 2019,
+    "paper": "新课标Ⅰ卷",
+    "label": "2019·新课标Ⅰ卷",
+    "title": "节选自《史记·屈原贾生列传》",
+    "sourceItem": 1,
+    "questionCount": 4
+  },
+  {
+    "id": "2019-02",
+    "year": 2019,
+    "paper": "新课标Ⅱ卷",
+    "label": "2019·新课标Ⅱ卷",
+    "title": "节选自《史记·商君列传》",
+    "sourceItem": 2,
+    "questionCount": 4
+  },
+  {
+    "id": "2019-03",
+    "year": 2019,
+    "paper": "新课标Ⅲ卷",
+    "label": "2019·新课标Ⅲ卷",
+    "title": "文言文阅读",
+    "sourceItem": 3,
+    "questionCount": 4
+  },
+  {
+    "id": "2019-04",
+    "year": 2019,
+    "paper": "江苏卷",
+    "label": "2019·江苏卷",
+    "title": "选自《汤显祖诗文集》附录，有删节",
+    "sourceItem": 4,
+    "questionCount": 4
+  },
+  {
+    "id": "2019-05",
+    "year": 2019,
+    "paper": "北京卷",
+    "label": "2019·北京卷",
+    "title": "文言文阅读",
+    "sourceItem": 5,
+    "questionCount": 5
+  },
+  {
+    "id": "2019-06",
+    "year": 2019,
+    "paper": "北京卷",
+    "label": "2019·北京卷",
+    "title": "文言文阅读",
+    "sourceItem": 6,
+    "questionCount": 1
+  },
+  {
+    "id": "2019-07",
+    "year": 2019,
+    "paper": "天津卷",
+    "label": "2019·天津卷",
+    "title": "选自《于湖居士文集》",
+    "sourceItem": 7,
+    "questionCount": 6
+  },
+  {
+    "id": "2019-08",
+    "year": 2019,
+    "paper": "江苏卷",
+    "label": "2019·江苏卷",
+    "title": "文言文阅读",
+    "sourceItem": 8,
+    "questionCount": 3
+  },
+  {
+    "id": "2019-09",
+    "year": 2019,
+    "paper": "浙江卷",
+    "label": "2019·浙江卷",
+    "title": "选自《弇州山人四部稿》，有期节",
+    "sourceItem": 9,
+    "questionCount": 5
+  },
+  {
+    "id": "2018-01",
+    "year": 2018,
+    "paper": "新课标Ⅰ卷",
+    "label": "2018·新课标Ⅰ卷",
+    "title": "节选自《晋书·鲁芝传》",
+    "sourceItem": 1,
+    "questionCount": 4
+  },
+  {
+    "id": "2018-02",
+    "year": 2018,
+    "paper": "全国II卷",
+    "label": "2018·全国II卷",
+    "title": "选自《后汉书·王涣列传》",
+    "sourceItem": 2,
+    "questionCount": 4
+  },
+  {
+    "id": "2018-03",
+    "year": 2018,
+    "paper": "全国III卷",
+    "label": "2018·全国III卷",
+    "title": "节选自《宋史·范纯礼传》",
+    "sourceItem": 3,
+    "questionCount": 4
+  },
+  {
+    "id": "2018-04",
+    "year": 2018,
+    "paper": "北京卷",
+    "label": "2018·北京卷",
+    "title": "文言文阅读",
+    "sourceItem": 4,
+    "questionCount": 5
+  },
+  {
+    "id": "2018-05",
+    "year": 2018,
+    "paper": "北京卷",
+    "label": "2018·北京卷",
+    "title": "文言文阅读",
+    "sourceItem": 5,
+    "questionCount": 1
+  },
+  {
+    "id": "2018-06",
+    "year": 2018,
+    "paper": "江苏卷",
+    "label": "2018·江苏卷",
+    "title": "文言文阅读",
+    "sourceItem": 6,
+    "questionCount": 3
+  },
+  {
+    "id": "2018-07",
+    "year": 2018,
+    "paper": "天津卷",
+    "label": "2018·天津卷",
+    "title": "选自《白居易集》",
+    "sourceItem": 7,
+    "questionCount": 5
+  },
+  {
+    "id": "2018-08",
+    "year": 2018,
+    "paper": "浙江卷",
+    "label": "2018·浙江卷",
+    "title": "选自《司马光集》",
+    "sourceItem": 8,
+    "questionCount": 5
+  },
+  {
+    "id": "2018-09",
+    "year": 2018,
+    "paper": "江苏卷",
+    "label": "2018·江苏卷",
+    "title": "选自《小仓山房诗文集》，有删节",
+    "sourceItem": 9,
+    "questionCount": 4
+  },
+  {
+    "id": "2017-01",
+    "year": 2017,
+    "paper": "课标Ⅰ卷",
+    "label": "2017·课标Ⅰ卷",
+    "title": "节选自《宋书·谢弘微传》",
+    "sourceItem": 1,
+    "questionCount": 4
+  },
+  {
+    "id": "2017-02",
+    "year": 2017,
+    "paper": "课标Ⅱ卷",
+    "label": "2017·课标Ⅱ卷",
+    "title": "节选自《后汉书·赵憙传》",
+    "sourceItem": 2,
+    "questionCount": 4
+  },
+  {
+    "id": "2017-03",
+    "year": 2017,
+    "paper": "课标Ⅲ卷",
+    "label": "2017·课标Ⅲ卷",
+    "title": "节选自《宋史·许将传》",
+    "sourceItem": 3,
+    "questionCount": 4
+  },
+  {
+    "id": "2017-04",
+    "year": 2017,
+    "paper": "北京卷",
+    "label": "2017·北京卷",
+    "title": "文言文阅读",
+    "sourceItem": 4,
+    "questionCount": 6
+  },
+  {
+    "id": "2017-05",
+    "year": 2017,
+    "paper": "山东卷",
+    "label": "2017·山东卷",
+    "title": "节选自《陈书·列传第二十六》，有删改",
+    "sourceItem": 5,
+    "questionCount": 5
+  },
+  {
+    "id": "2017-06",
+    "year": 2017,
+    "paper": "天津卷",
+    "label": "2017·天津卷",
+    "title": "文言文阅读",
+    "sourceItem": 6,
+    "questionCount": 6
+  },
+  {
+    "id": "2017-07",
+    "year": 2017,
+    "paper": "江苏卷",
+    "label": "2017·江苏卷",
+    "title": "节选自吴澄《临川王文公集》序",
+    "sourceItem": 7,
+    "questionCount": 1
+  },
+  {
+    "id": "2017-08",
+    "year": 2017,
+    "paper": "浙江卷",
+    "label": "2017·浙江卷",
+    "title": "选自《樊川文集》，有删节",
+    "sourceItem": 8,
+    "questionCount": 5
+  }
+]

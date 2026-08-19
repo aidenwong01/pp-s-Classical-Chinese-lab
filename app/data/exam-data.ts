@@ -1,5 +1,5 @@
 import functionWordGroups from "./exam-function-words.json";
-import paperData from "./exam-papers.json";
+import paperIndexData from "./exam-paper-index.json";
 import realWordGroups from "./exam-real-words.json";
 
 export type ExamExample = {
@@ -22,8 +22,8 @@ export type ExamPaperQuestion = {
   number: number;
   stem: string;
   choices?: string[];
-  answer: string | string[];
-  analysis: string[];
+  answer?: string | string[];
+  analysis?: string[];
 };
 
 export type ExamPaper = {
@@ -33,18 +33,23 @@ export type ExamPaper = {
   label: string;
   title: string;
   sourceItem: number;
-  passages: Array<{ label: string; text: string; source: string }>;
+  heading?: string;
+  passages: Array<{ label: string; text: string; source?: string }>;
   notes: string[];
   questions: ExamPaperQuestion[];
+  answerText?: string[];
+  analysisText?: string[];
   referenceTranslations: Array<{ label: string; text: string }>;
   sourceName: string;
 };
 
+export type ExamPaperIndex = Pick<ExamPaper, "id" | "year" | "paper" | "label" | "title" | "sourceItem"> & { questionCount: number };
+
 export const functionWordExamGroups: FunctionWordExamGroup[] = functionWordGroups;
 export const realWordExamGroups: RealWordExamGroup[] = realWordGroups;
-export const examPapers: ExamPaper[] = paperData;
+export const examPaperIndex: ExamPaperIndex[] = paperIndexData;
 export const totalFunctionWordExamExamples = functionWordExamGroups.reduce((total, group) => total + group.entries.length, 0);
 export const totalDatedFunctionWordExamExamples = functionWordExamGroups.reduce((total, group) => total + group.entries.filter((entry) => entry.sourceLabel).length, 0);
 export const totalRealWordExamExamples = realWordExamGroups.reduce((total, group) => total + group.entries.length, 0);
 export const totalDatedRealWordExamExamples = realWordExamGroups.reduce((total, group) => total + group.entries.filter((entry) => entry.sourceLabel).length, 0);
-export const totalExamPaperQuestions = examPapers.reduce((total, paper) => total + paper.questions.length, 0);
+export const totalExamPaperQuestions = examPaperIndex.reduce((total, paper) => total + paper.questionCount, 0);
