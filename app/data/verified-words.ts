@@ -3,6 +3,7 @@ import exactTextbookLinks from "./textbook-links.json";
 import officialIdiomLinks from "./idiom-links.json";
 import uploadedIdiomGroups from "./uploaded-idioms.json";
 import examRealWordGroups from "./exam-real-words.json";
+import researchEvidenceEntries from "./research-evidence.json";
 import type { ExamExample } from "./exam-data";
 
 export type WordSense = {
@@ -51,8 +52,26 @@ export type VerifiedWord = {
   idiomSourceNote?: string;
   examExamples: ExamExample[];
   examSourceNote?: string;
+  researchEvidence?: ResearchEvidence;
   verificationNotes?: string[];
 };
+
+export type ResearchEvidence = {
+  character: string;
+  originalMeaning: string | null;
+  status: "supported" | "cautious" | "disputed";
+  shapeSummary: string;
+  sourceExcerpt: string;
+  researchNote: string;
+  attestedForms: string[];
+  sourceTitle: string;
+  pdfPage: number;
+  printedPage: number;
+};
+
+const researchEvidenceByCharacter = new Map(
+  (researchEvidenceEntries as ResearchEvidence[]).map((entry) => [entry.character, entry]),
+);
 
 // 全部 120 词、797 条带例句义项均按用户上传的《120实词归档版》顺序抽取。
 // 教材关联只保留已在上传教材 PDF 中逐句核验的条目；其余不自动推断。
@@ -255,6 +274,7 @@ export const verifiedWords: VerifiedWord[] = sourceWords.map((sourceWord) => {
     idiomSourceNote: idiomSourceNoteFor(sourceWord.character),
     examExamples: examExamplesFor(sourceWord.character),
     examSourceNote: examSourceNoteFor(sourceWord.character),
+    researchEvidence: researchEvidenceByCharacter.get(sourceWord.character),
     verificationNotes: verificationNotes.length ? verificationNotes : undefined,
   };
 });
@@ -268,3 +288,5 @@ export const totalIdiomLinks = verifiedWords.reduce((total, word) => total + wor
 export const totalExamExamples = verifiedWords.reduce((total, word) => total + word.examExamples.length, 0);
 export const totalDatedExamExamples = verifiedWords.reduce((total, word) => total + word.examExamples.filter((example) => example.sourceLabel).length, 0);
 export const totalExamCoveredWords = verifiedWords.filter((word) => word.examExamples.length > 0).length;
+export const totalResearchEvidenceWords = verifiedWords.filter((word) => word.researchEvidence).length;
+export const totalResearchQuizWords = verifiedWords.filter((word) => word.researchEvidence?.status === "supported").length;

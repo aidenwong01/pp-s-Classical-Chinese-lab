@@ -239,6 +239,23 @@ button, input { font: inherit; } button { color: inherit; }
 .evidence-boundary, .chain-note { margin-top: 13px; padding: 11px 13px; border: 1px dashed rgba(168,67,54,.22); border-radius: 9px; background: rgba(241,225,220,.22); display: flex; gap: 10px; align-items: center; color: var(--ink-faint); font-size: 9px; }
 .evidence-boundary span, .chain-note span { flex: 0 0 auto; padding: 4px 7px; border-radius: 4px; background: rgba(168,67,54,.09); color: var(--cinnabar); }
 .evidence-boundary p { margin: 0; line-height: 1.5; }
+.research-evidence { margin-top: 13px; padding: 15px 16px; border: 1px solid rgba(51,77,67,.17); border-radius: 11px; background: rgba(227,235,229,.45); }
+.research-evidence.cautious, .research-evidence.disputed { border-color: rgba(168,67,54,.2); background: rgba(241,225,220,.26); }
+.research-evidence header, .research-evidence footer { display: flex; justify-content: space-between; gap: 14px; align-items: flex-start; }
+.research-evidence header div { display: grid; gap: 5px; }
+.research-evidence header span { color: var(--cinnabar); font-size: 8px; letter-spacing: .1em; }
+.research-evidence header strong { font-family: "Songti SC", STSong, serif; font-size: 13px; font-weight: 600; }
+.research-evidence header em { flex: 0 0 auto; padding: 5px 8px; border-radius: 999px; background: rgba(51,77,67,.08); color: var(--pine); font-size: 8px; font-style: normal; }
+.research-evidence.cautious header em, .research-evidence.disputed header em { background: rgba(168,67,54,.08); color: var(--cinnabar); }
+.research-evidence blockquote { margin: 13px 0 8px; padding: 10px 12px; border-left: 2px solid rgba(51,77,67,.3); background: rgba(255,255,255,.4); font-family: "Songti SC", STSong, serif; font-size: 12px; line-height: 1.7; }
+.research-evidence > p { margin: 0; color: var(--ink-soft); font-size: 9px; line-height: 1.7; }
+.research-evidence footer { margin-top: 11px; padding-top: 10px; border-top: 1px solid rgba(51,77,67,.1); color: var(--ink-faint); font-size: 8px; }
+.research-meaning-note { margin-top: 17px; padding: 12px 14px; border-left: 3px solid var(--pine); background: rgba(227,235,229,.44); }
+.research-meaning-note.cautious, .research-meaning-note.disputed { border-left-color: var(--cinnabar); background: rgba(241,225,220,.26); }
+.research-meaning-note span { color: var(--pine); font-family: "Songti SC", STSong, serif; font-size: 13px; }
+.research-meaning-note.cautious span, .research-meaning-note.disputed span { color: var(--cinnabar); }
+.research-meaning-note p { margin: 6px 0; color: var(--ink-soft); font-size: 9px; line-height: 1.65; }
+.research-meaning-note small { color: var(--ink-faint); font-size: 8px; }
 .journey-next { align-self: flex-end; margin-top: 20px; padding: 11px 15px; border: 0; border-radius: 8px; background: var(--pine); color: white; font-size: 10px; cursor: pointer; box-shadow: 0 8px 18px rgba(51,77,67,.14); }
 .journey-next span { margin-left: 10px; }
 .journey-next.secondary { align-self: center; background: var(--paper-deep); color: var(--pine); box-shadow: none; border: 1px solid var(--line); }
@@ -428,6 +445,7 @@ button, input { font: inherit; } button { color: inherit; }
 .review-card-back li small { margin-right: 8px; color: var(--ink-faint); font-family: sans-serif; font-size: 8px; }
 .review-card-back li em { margin-left: 8px; color: var(--cinnabar); font-family: sans-serif; font-size: 7px; font-style: normal; }
 .review-card-back p { margin: 8px 0 0; color: var(--ink-faint); font-size: 8px; line-height: 1.6; }
+.review-card-back > div > small { display: block; margin-top: 5px; color: var(--ink-faint); font-size: 7px; }
 .review-card-back blockquote { margin: 9px 0 0; padding: 11px 13px; border: 1px solid var(--line); border-radius: 9px; background: rgba(255,255,255,.45); font-family: "Songti SC", STSong, serif; font-size: 11px; line-height: 1.7; }
 .review-card-back blockquote small { display: block; margin-top: 6px; color: var(--ink-faint); font-family: sans-serif; font-size: 7px; }
 .review-reveal { align-self: center; min-width: 190px; margin-top: 18px; padding: 11px 18px; border: 0; border-radius: 9px; background: var(--pine); color: white; font-size: 10px; cursor: pointer; box-shadow: 0 9px 20px rgba(51,77,67,.17); }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, type ChangeEvent } from "react";
-import { totalExamCoveredWords, totalExamExamples, totalIdiomCoveredWords, totalIdiomEntries, totalIdiomLinks, totalOfficiallyCheckedIdioms, totalTextbookExamples, totalVerifiedSenses, verifiedWords } from "./data/verified-words";
+import { totalExamCoveredWords, totalExamExamples, totalIdiomCoveredWords, totalIdiomEntries, totalIdiomLinks, totalOfficiallyCheckedIdioms, totalResearchEvidenceWords, totalResearchQuizWords, totalTextbookExamples, totalVerifiedSenses, verifiedWords } from "./data/verified-words";
 import { examPaperIndex, functionWordExamGroups, realWordExamGroups, totalExamPaperQuestions, totalFunctionWordExamExamples, totalRealWordExamExamples, type ExamExample, type ExamPaper } from "./data/exam-data";
 
 type SectionId = "home" | "words" | "texts" | "exam" | "resources";
@@ -119,7 +119,7 @@ function Dashboard({ goTo }: { goTo: (section: SectionId) => void }) {
   return <>
     <section className="hero-panel">
       <div className="hero-copy">
-        <div className="eyebrow"><span />第七轮 · 高考关联资料已接入</div>
+        <div className="eyebrow"><span />文字学核验 · 第一批已接入</div>
         <h1>从一个字出发，走通一条清楚的义脉</h1>
         <p>适合课堂展示与自主复习的文言学习工作台。先观察、再推测，沿着字形、本义、义脉、教材、成语与高考语境逐步验证。</p>
         <div className="hero-actions"><button className="primary-button" onClick={() => goTo("words")} type="button">进入实词实验室 <span>→</span></button><button className="text-button" onClick={() => goTo("resources")} type="button">查看已收录资料</button></div>
@@ -134,7 +134,7 @@ function Dashboard({ goTo }: { goTo: (section: SectionId) => void }) {
     <section className="stat-row" aria-label="资料库概况">
       <div className="stat-card"><strong>33</strong><span>项资料依据</span><small>32 项上传资料 · 1 项公开核验源</small></div>
       <div className="stat-card"><strong>11</strong><span>册语文教材</span><small>初高中教材文件</small></div>
-      <div className="stat-card"><strong>7</strong><span>部文字学著作</span><small>字形与本义的重要依据</small></div>
+      <div className="stat-card"><strong>{totalResearchEvidenceWords}</strong><span>字已建文字学索引</span><small>{totalResearchQuizWords} 字可核验“猜本义”</small></div>
       <div className="stat-card warning"><strong>120</strong><span>个文言实词</span><small>{totalVerifiedSenses} 条带例句义项已据资料接入</small></div>
     </section>
 
@@ -153,7 +153,7 @@ function Dashboard({ goTo }: { goTo: (section: SectionId) => void }) {
         <ul className="guard-list"><li><span>教材</span><p>原句须从已上传教材定位并核验。</p></li><li><span>字形</span><p>古文字形与本义须标明研究依据。</p></li><li><span>高考</span><p>年份、题干、答案与解析逐项核对。</p></li><li><span>缺失</span><p>未找到可靠材料时显示“暂无资料”。</p></li></ul>
       </aside>
     </div>
-    <section className="section-card source-strip"><div className="source-strip-title"><span>本义研究依据</span><small>已收录 · 待建立页码级索引</small></div><div className="source-pills">{researchWorks.slice(0, 6).map((work) => <span key={work}>{work}</span>)}<button type="button" onClick={() => goTo("resources")}>全部资料 +</button></div></section>
+    <section className="section-card source-strip"><div className="source-strip-title"><span>本义研究依据</span><small>首批 {totalResearchEvidenceWords} 字已建立页码级索引</small></div><div className="source-pills">{researchWorks.slice(0, 6).map((work) => <span key={work}>{work}</span>)}<button type="button" onClick={() => goTo("resources")}>全部资料 +</button></div></section>
   </>;
 }
 
@@ -273,8 +273,8 @@ function WordsLab({ initialCharacter }: { initialCharacter: string }) {
 
   return <section className={`workspace-section words-workspace ${focusMode ? "focus-mode" : ""}`}>
     <div className="page-heading">
-      <div><span className="section-kicker">第七轮 · 高考关联资料</span><h1>实词实验室</h1><p>120 个实词已按上传资料顺序完整接入；教材、成语和高考关联分别注明来源，名单差异与原文件异常均明确标注。</p></div>
-      <span className="stage-badge">120 字 · {totalIdiomEntries} 条成语 · {totalExamExamples} 条高考关联</span>
+      <div><span className="section-kicker">文字学核验 · 第一批</span><h1>实词实验室</h1><p>120 个实词已按上传资料顺序完整接入；首批 {totalResearchEvidenceWords} 字已建立文字学著作页码索引，争议结论不设置标准答案。</p></div>
+      <span className="stage-badge">{totalResearchEvidenceWords} 字有专著依据 · {totalResearchQuizWords} 字可判本义</span>
     </div>
     <div className="lab-mode-row">
       <div className="lab-mode-switch"><button type="button" className={viewMode === "journey" ? "active" : ""} onClick={() => setViewMode("journey")}>分步探索</button><button type="button" className={viewMode === "catalog" ? "active" : ""} onClick={() => setViewMode("catalog")}>义项全览</button><button type="button" className={viewMode === "review" ? "active" : ""} onClick={() => setViewMode("review")}>卡片复习</button></div>
@@ -312,7 +312,7 @@ function WordsLab({ initialCharacter }: { initialCharacter: string }) {
         {viewMode !== "review" && <header className="word-hero">
           <div className={`character-block ${focusMode ? "enlarged" : ""}`}><strong>{activeWord.character}</strong><span>{activeWord.pinyin}</span></div>
           <div className="word-meta"><h2>{activeWord.senses.length} 个义项</h2><p>{activeWord.readings ?? `读音：${activeWord.pinyin}`}</p>{activeWord.verificationNotes?.map((note) => <small className="word-verification-note" key={note}>核验：{note}</small>)}</div>
-          <div className="source-status"><span>资料状态</span><strong>实词义项已录入</strong><small>教材原句 · {activeWord.textbookExamples.length ? `已核验 ${activeWord.textbookExamples.length} 条` : "暂无关联"}</small><small>成语 · {activeWord.idiomExamples.length ? `已录入 ${activeWord.idiomExamples.length} 条` : "暂无可靠关联"}</small><small>高考关联 · {activeWord.examExamples.length ? `已录入 ${activeWord.examExamples.length} 条` : "暂无可靠关联"}</small><small>古文字形 · 暂无资料</small></div>
+          <div className="source-status"><span>资料状态</span><strong>实词义项已录入</strong><small>教材原句 · {activeWord.textbookExamples.length ? `已核验 ${activeWord.textbookExamples.length} 条` : "暂无关联"}</small><small>成语 · {activeWord.idiomExamples.length ? `已录入 ${activeWord.idiomExamples.length} 条` : "暂无可靠关联"}</small><small>高考关联 · {activeWord.examExamples.length ? `已录入 ${activeWord.examExamples.length} 条` : "暂无可靠关联"}</small><small>文字学依据 · {activeWord.researchEvidence ? `已核验至 PDF 第 ${activeWord.researchEvidence.pdfPage} 页` : "待建立页码索引"}</small></div>
         </header>}
 
         {viewMode === "review" ? <SpacedReview words={reviewWords} records={reviewRecords} now={reviewClock} onRate={rateReview} onOpenWord={(character) => { chooseWord(character); setViewMode("journey"); }} usingTaughtWords={taughtWords.length > 0} /> : viewMode === "journey" ? <LearningJourney word={activeWord} stage={journeyStage} advance={advanceJourney} guessSelection={guessSelection} setGuessSelection={setGuessSelection} /> : <><div className="sense-toolbar">
@@ -379,6 +379,7 @@ function SpacedReview({ words, records, now, onRate, onOpenWord, usingTaughtWord
     <article className={`review-card ${answerVisible ? "is-revealed" : ""}`}>
       <div className="review-card-front"><small>第 {word.index} 词</small><strong>{word.character}</strong><span>{word.pinyin}</span><p>请先说出本义线索、常见义项，或一条教材原句。</p></div>
       {answerVisible && <div className="review-card-back">
+        {word.researchEvidence?.status === "supported" && word.researchEvidence.originalMeaning && <div><span>文字学本义依据</span><p>{word.researchEvidence.originalMeaning}</p><small>{word.researchEvidence.sourceTitle} · PDF 第 {word.researchEvidence.pdfPage} 页</small></div>}
         <div><span>资料义项</span><ul>{word.senses.slice(0, 4).map((sense, index) => <li key={`${sense.meaning}-${index}`}><small>{sense.grammar}</small>{sense.meaning}{sense.sourceMarksOriginal && <em>资料标注“本意”</em>}</li>)}</ul>{word.senses.length > 4 && <p>另有 {word.senses.length - 4} 个义项，可进入完整学习路径查看。</p>}</div>
         <div><span>教材核验</span>{textbookExample ? <blockquote>{textbookExample.sentence}<small>《{textbookExample.title}》· {textbookExample.volume}</small></blockquote> : <p>暂无已核验教材原句。</p>}</div>
       </div>}
@@ -396,25 +397,34 @@ function LearningJourney({ word, stage, advance, guessSelection, setGuessSelecti
   setGuessSelection: (selection: string | null) => void;
 }) {
   const markedOriginal = word.senses.find((sense) => sense.sourceMarksOriginal);
-  const guessOptions = markedOriginal
-    ? [markedOriginal, ...word.senses.filter((sense) => sense !== markedOriginal).slice(0, 2)]
+  const research = word.researchEvidence;
+  const researchOriginal = research?.status === "supported" ? research.originalMeaning : null;
+  const verifiedOriginal = researchOriginal ?? markedOriginal?.meaning ?? null;
+  const originalSense = verifiedOriginal ? word.senses.find((sense) => sense.meaning === verifiedOriginal) : undefined;
+  const guessOptions = verifiedOriginal
+    ? [originalSense ?? { grammar: "本义研究", meaning: verifiedOriginal }, ...word.senses.filter((sense) => sense.meaning !== verifiedOriginal).slice(0, 2)]
     : word.senses.slice(0, 3);
-  const guessIsCorrect = Boolean(markedOriginal && guessSelection === markedOriginal.meaning);
+  const guessIsCorrect = Boolean(verifiedOriginal && guessSelection === verifiedOriginal);
   const officiallyCheckedCount = word.idiomExamples.filter((example) => example.officialVerification).length;
 
   if (stage === 0) return <div className="journey-panel observation-stage">
-    <div className="journey-heading"><span>01 · 看字形</span><h2>先看，不急着解释</h2><p>观察今天通行的字形。上传资料中的古文字图像尚未建立页码索引，因此这里不绘制、不猜测古文字形。</p></div>
+    <div className="journey-heading"><span>01 · 看字形</span><h2>先看，不急着解释</h2><p>{research ? "该字已经定位到文字学专著原页。当前先呈现原书列举的形体时代与构形说明，不临摹、不重画扫描图。" : "观察今天通行的字形。上传资料中的古文字图像尚未建立页码索引，因此这里不绘制、不猜测古文字形。"}</p></div>
     <div className="observation-board"><div className="grid-paper"><strong>{word.character}</strong></div><div className="observation-prompts"><span>你看到了哪些部件？</span><span>它和哪些字形相近？</span><span>先把猜想留在心里。</span></div></div>
-    <div className="evidence-boundary"><span>暂无资料</span><p>甲骨文、金文、小篆等字形等待文字学著作页码级核验后再展示。</p></div>
+    {research ? <article className={`research-evidence ${research.status}`}>
+      <header><div><span>专著页码已核验</span><strong>{research.attestedForms.join(" · ")}</strong></div><em>{research.status === "supported" ? "可用于本义判定" : research.status === "cautious" ? "结论有保留" : "本义存在争议"}</em></header>
+      <blockquote>{research.sourceExcerpt}</blockquote>
+      <p>{research.shapeSummary}</p>
+      <footer><span>{research.sourceTitle}</span><small>PDF 第 {research.pdfPage} 页 · 书页第 {research.printedPage} 页</small></footer>
+    </article> : <div className="evidence-boundary"><span>暂无资料</span><p>甲骨文、金文、小篆等字形等待文字学著作页码级核验后再展示。</p></div>}
     <button className="journey-next" type="button" onClick={() => advance(1)}>我观察好了，开始猜测 <span>→</span></button>
   </div>;
 
   if (stage === 1) return <div className="journey-panel guess-stage">
-    <div className="journey-heading"><span>02 · 猜本义</span><h2>{markedOriginal ? "哪一个义项最接近资料标注的“本意”？" : "你认为哪一个义项最可能接近本义？"}</h2><p>{markedOriginal ? "本环节只依据上传资料中的明确标注，不用常识补写。答案揭晓后仍会保留资料边界说明。" : "先根据字形和已有义项作出假设。当前资料未明确标注标准答案，你的选择只作为学习猜想，不会被写成已核验结论。"}</p></div>
-    {markedOriginal ? <>
-      <div className="guess-options">{guessOptions.map((sense, index) => <button type="button" key={`${sense.meaning}-${index}`} className={`${guessSelection === sense.meaning ? "selected" : ""} ${guessSelection && sense === markedOriginal ? "correct" : ""}`} onClick={() => setGuessSelection(sense.meaning)}><span>{sense.grammar}</span><strong>{sense.meaning}</strong></button>)}</div>
+    <div className="journey-heading"><span>02 · 猜本义</span><h2>{verifiedOriginal ? "哪一个义项最接近资料标注的“本意”？" : research?.status === "disputed" ? "面对异说，哪一种解释更值得继续核验？" : "你认为哪一个义项最可能接近本义？"}</h2><p>{verifiedOriginal ? `本题依据${research ? `${research.sourceTitle}的页码级核验` : "《120实词归档版》的明确标注"}，不用常识补写。` : research ? "专著已经定位，但当前条目带有保留意见或异说，因此你的选择只作为学习猜想，不判定对错。" : "先根据字形和已有义项作出假设。当前资料未明确标注标准答案，你的选择只作为学习猜想，不会被写成已核验结论。"}</p></div>
+    {verifiedOriginal ? <>
+      <div className="guess-options">{guessOptions.map((sense, index) => <button type="button" key={`${sense.meaning}-${index}`} className={`${guessSelection === sense.meaning ? "selected" : ""} ${guessSelection && sense.meaning === verifiedOriginal ? "correct" : ""}`} onClick={() => setGuessSelection(sense.meaning)}><span>{sense.grammar}</span><strong>{sense.meaning}</strong></button>)}</div>
       {guessSelection && !guessIsCorrect && <div className="guess-feedback wrong"><strong>再想一想</strong><p>这也是资料收录的义项，但没有被该资料标注为“本意”。</p></div>}
-      {guessIsCorrect && <div className="guess-feedback correct"><strong>资料标注：{markedOriginal.meaning}</strong><p>依据《120实词归档版》中的“【本意】”标记。文字学专著的进一步核验尚未完成。</p><button className="journey-next" type="button" onClick={() => advance(2)}>展开全部义项 <span>→</span></button></div>}
+      {guessIsCorrect && <div className="guess-feedback correct"><strong>资料标注：{verifiedOriginal}</strong><p>{research ? `${research.researchNote} 依据：${research.sourceTitle}，PDF 第 ${research.pdfPage} 页。` : "依据《120实词归档版》中的“【本意】”标记；文字学专著的进一步核验尚未完成。"}</p><button className="journey-next" type="button" onClick={() => advance(2)}>展开全部义项 <span>→</span></button></div>}
     </> : <>
       <div className="guess-options">{guessOptions.map((sense, index) => <button type="button" key={`${sense.meaning}-${index}`} className={guessSelection === sense.meaning ? "selected" : ""} onClick={() => setGuessSelection(sense.meaning)}><span>{sense.grammar}</span><strong>{sense.meaning}</strong></button>)}</div>
       {guessSelection ? <div className="guess-feedback neutral"><strong>你的猜想：{guessSelection}</strong><p>已记录为本轮学习假设。由于上传资料尚未给出可核验的本义标注，这里不判定对错。</p><button className="journey-next" type="button" onClick={() => advance(2)}>带着猜想展开义项 <span>→</span></button></div> : <div className="evidence-boundary"><span>待核验</span><p>请选择一个义项作为猜想；文字学专著核验完成后，再补充有依据的答案。</p></div>}
@@ -423,6 +433,7 @@ function LearningJourney({ word, stage, advance, guessSelection, setGuessSelecti
 
   if (stage === 2) return <div className="journey-panel meaning-stage">
     <div className="journey-heading"><span>03 · 理义脉</span><h2>先看义项怎样分布</h2><p>下列顺序沿用上传资料的编排，仅作课堂浏览；连线不代表已经核验的历史演变先后。</p></div>
+    {research && <div className={`research-meaning-note ${research.status}`}><span>{research.originalMeaning ? `本义研究：${research.originalMeaning}` : "本义研究：异说待考"}</span><p>{research.researchNote}</p><small>{research.sourceTitle} · PDF 第 {research.pdfPage} 页</small></div>}
     <div className="meaning-chain">{word.senses.map((sense, index) => <div className="meaning-node" key={`${sense.grammar}-${sense.meaning}`}><i>{index + 1}</i><span>{sense.grammar}</span><strong>{sense.meaning}</strong><small>{sense.reference}</small></div>)}</div>
     <div className="chain-note"><span>注意</span>“义项地图”不等于“词义演变图”。真正的引申关系将在文字学资料核验后补充。</div>
     <button className="journey-next" type="button" onClick={() => advance(3)}>带着义项回到教材 <span>→</span></button>
@@ -649,6 +660,7 @@ function Resources() {
     "高中语文必修上", "高中语文必修下", "高中语文选择性必修上", "高中语文选择性必修中", "高中语文选择性必修下",
   ]);
   const resourceState = (item: string) => {
+    if (item === "邹晓丽《基础汉字形义释源》") return `部分解析 · ${totalResearchEvidenceWords}字页码已核验 / ${totalResearchQuizWords}字可判本义`;
     if (item === "120实词归档版") return `已解析 · 120字 / ${totalVerifiedSenses}条义项已接入`;
     if (item === "文言文实词关联成语120个") return `已解析 · ${totalIdiomEntries}条关联 / 覆盖${totalIdiomCoveredWords}字`;
     if (item === "120个文言实词高考真题关联句翻译辅助") return `已解析 · ${totalExamExamples}条关联 / 覆盖${totalExamCoveredWords}字`;

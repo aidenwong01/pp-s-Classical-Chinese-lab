@@ -21,7 +21,7 @@ test("server-renders the Wenyan learning workspace", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>pp的文言实验室<\/title>/i);
-  assert.match(html, /第七轮 · 高考关联资料已接入/);
+  assert.match(html, /文字学核验 · 第一批已接入/);
   assert.match(html, /1131(?:<!-- -->)?条成语关联已接入/);
   assert.match(html, /60个试卷条目 · 268道题/);
   assert.match(html, /32 项上传资料 · 1 项公开核验源/);
@@ -59,6 +59,26 @@ test("indexes verified ninth-grade first-semester textbook contexts", async () =
   assert.equal(ninthGradeLinks.filter((link) => !link.sentence.includes(link.character)).length, 0);
   assert.equal(ninthGradeLinks.filter((link) => link.pdfPage < 57 || link.pdfPage > 72).length, 0);
   assert.match(page, /"八年级下册", "九年级上册", "九年级下册"/);
+});
+
+test("adds a page-audited first batch of research evidence without forcing disputed meanings", async () => {
+  const [evidenceText, page, verifiedWords] = await Promise.all([
+    readFile(new URL("../app/data/research-evidence.json", import.meta.url), "utf8"),
+    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/data/verified-words.ts", import.meta.url), "utf8"),
+  ]);
+  const evidence = JSON.parse(evidenceText);
+
+  assert.equal(evidence.length, 13);
+  assert.equal(new Set(evidence.map((entry) => entry.character)).size, 13);
+  assert.equal(evidence.filter((entry) => entry.status === "supported").length, 10);
+  assert.deepEqual(evidence.filter((entry) => entry.status === "disputed").map((entry) => entry.character), ["非", "亡"]);
+  assert.deepEqual(evidence.filter((entry) => entry.status === "cautious").map((entry) => entry.character), ["乃"]);
+  assert.equal(evidence.every((entry) => entry.sourceTitle === "邹晓丽《基础汉字形义释源》" && entry.pdfPage > entry.printedPage && entry.sourceExcerpt && entry.shapeSummary), true);
+  assert.equal(evidence.filter((entry) => entry.status !== "supported").every((entry) => entry.status === "disputed" ? entry.originalMeaning === null : true), true);
+  assert.match(page, /争议结论不设置标准答案/);
+  assert.match(page, /PDF 第 \{research\.pdfPage\} 页 · 书页第 \{research\.printedPage\} 页/);
+  assert.match(verifiedWords, /totalResearchQuizWords/);
 });
 
 test("indexes uploaded real-word and function-word exam links without inventing dates", async () => {
